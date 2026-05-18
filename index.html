@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Französisch für Frankreichreise</title>
+  <style>
+    :root {
+      --bg1: #eef8ff;
+      --bg2: #fff7df;
+      --bg3: #fff0f4;
+      --text: #0f172a;
+      --muted: #64748b;
+      --card: rgba(255,255,255,0.86);
+      --line: #e2e8f0;
+      --dark: #111827;
+      --soft: #f8fafc;
+      --amber: #fff7ed;
+      --sky: #eff6ff;
+      --ok: #166534;
+      --bad: #991b1b;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+      min-height: 100vh;
+    }
+
+    .app { max-width: 1180px; margin: 0 auto; padding: 24px; }
+    .hero { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(260px, 0.7fr); gap: 18px; align-items: end; margin-bottom: 20px; }
+    h1 { margin: 8px 0 0; font-size: clamp(2rem, 6vw, 4rem); line-height: 0.96; letter-spacing: -0.06em; }
+    h2 { margin: 0; font-size: 1.35rem; }
+    h3 { margin: 0 0 8px; }
+    p { line-height: 1.6; }
+    .lead { color: #475569; max-width: 720px; font-size: 1.05rem; }
+    .badges, .tabs, .filters, .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge { background: rgba(255,255,255,0.75); border: 1px solid var(--line); border-radius: 999px; padding: 6px 11px; font-size: 0.78rem; font-weight: 800; color: #334155; box-shadow: 0 1px 4px rgba(15,23,42,0.04); }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 28px; padding: 20px; box-shadow: 0 18px 40px rgba(148,163,184,0.24); backdrop-filter: blur(8px); }
+    .score-number { font-size: 2.8rem; font-weight: 950; line-height: 1; margin-top: 4px; }
+    .scorebar { height: 12px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-top: 14px; }
+    .scorebar > div { height: 100%; background: var(--dark); border-radius: 999px; width: 0%; transition: width .25s; }
+    .tabs { background: rgba(255,255,255,0.58); border: 1px solid var(--line); padding: 8px; border-radius: 28px; margin-bottom: 18px; box-shadow: 0 8px 20px rgba(148,163,184,0.13); }
+    button, select { font: inherit; }
+    button { cursor: pointer; border: 0; }
+    .tab { border-radius: 18px; padding: 10px 16px; font-weight: 900; color: #334155; background: rgba(255,255,255,0.78); transition: .15s; }
+    .tab:hover { transform: translateY(-1px); background: white; }
+    .tab.active { color: white; background: var(--dark); box-shadow: 0 8px 18px rgba(15,23,42,0.18); }
+    .grid { display: grid; gap: 16px; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .side-main { grid-template-columns: 280px minmax(0, 1fr); }
+    .main-side { grid-template-columns: minmax(0, 1fr) 340px; }
+    .verb-layout { grid-template-columns: 320px minmax(0, 1fr); }
+    .situation-head { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
+    .icon { font-size: 2.6rem; line-height: 1; }
+    .goal { color: var(--muted); margin: 4px 0 0; font-size: .93rem; }
+    .phrase, .choice, .conj { width: 100%; text-align: left; border-radius: 18px; padding: 13px; background: var(--soft); color: var(--text); margin-top: 10px; transition: .15s; }
+    .phrase:hover, .choice:hover, .conj:hover { background: #eef2f7; transform: translateY(-1px); }
+    .fr { font-weight: 900; }
+    .de { color: var(--muted); font-size: .93rem; margin-top: 3px; }
+    .label { display: block; font-size: .86rem; font-weight: 900; margin: 0 0 8px; }
+    select { width: 100%; border: 1px solid var(--line); border-radius: 18px; background: white; padding: 12px; margin-bottom: 16px; }
+    .big-word { font-size: clamp(2.4rem, 8vw, 4.6rem); font-weight: 950; letter-spacing: -0.05em; margin: 14px 0 0; }
+    .meaning { font-size: clamp(1.7rem, 4vw, 2.4rem); font-weight: 900; color: #475569; margin-top: 12px; }
+    .example { background: var(--amber); border: 1px solid #fed7aa; border-radius: 24px; padding: 16px; margin-top: 28px; }
+    .primary, .secondary { border-radius: 18px; padding: 12px 16px; font-weight: 950; margin-top: 12px; }
+    .primary { background: var(--dark); color: white; box-shadow: 0 10px 22px rgba(15,23,42,0.16); }
+    .secondary { background: white; color: var(--text); border: 1px solid var(--line); box-shadow: 0 8px 16px rgba(148,163,184,0.14); }
+    .tiny-title { text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-size: .78rem; font-weight: 950; }
+    .feedback { margin-top: 18px; border-radius: 18px; background: white; border: 1px solid var(--line); padding: 14px; font-weight: 900; box-shadow: 0 6px 14px rgba(148,163,184,0.12); }
+    .feedback.good { color: var(--ok); }
+    .feedback.bad { color: var(--bad); }
+    .verb-table { display: grid; gap: 12px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .pronoun { color: var(--muted); font-size: .85rem; font-weight: 900; }
+    .form { font-size: 1.55rem; font-weight: 950; margin-top: 3px; }
+    .tip { background: var(--sky); border: 1px solid #bfdbfe; border-radius: 24px; padding: 16px; margin-top: 20px; }
+    footer { margin-top: 24px; color: #475569; }
+    ol { line-height: 1.7; color: #475569; }
+    .hidden { display: none !important; }
+
+    @media (max-width: 860px) {
+      .app { padding: 14px; }
+      .hero, .grid-2, .grid-3, .side-main, .main-side, .verb-layout { grid-template-columns: 1fr; }
+      .verb-table { grid-template-columns: 1fr; }
+      .card { padding: 16px; border-radius: 22px; }
+      .tab { flex: 1 1 auto; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div>
+        <div class="badges">
+          <span class="badge">🇫🇷 Frankreichreise</span>
+          <span class="badge">Eltern + Kind</span>
+          <span class="badge">eine index.html</span>
+        </div>
+        <h1>Französisch für Urlaub, Camping & Strand</h1>
+        <p class="lead">Lerne zuerst Sätze, die ihr wirklich sagen werdet. Vokabeln kommen immer mit Beispielsatz, Verben mit Reise-Konjugationen, und die Übungen sind kurz genug für zwischendurch.</p>
+      </div>
+      <div class="card">
+        <div class="tiny-title">Reisepunkte</div>
+        <div class="score-number" id="score">0</div>
+        <div class="de">Serie: <span id="streak">0</span> richtige Antworten am Stück</div>
+        <div class="scorebar"><div id="scorebar"></div></div>
+      </div>
+    </section>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-tab="situationen">Situationen</button>
+      <button class="tab" data-tab="karten">Vokabelkarten</button>
+      <button class="tab" data-tab="quiz">Quiz</button>
+      <button class="tab" data-tab="verben">Verben</button>
+      <button class="tab" data-tab="dialoge">Mini-Dialoge</button>
+    </nav>
+
+    <section id="situationen" class="panel"></section>
+
+    <section id="karten" class="panel hidden">
+      <div class="grid side-main">
+        <div class="card">
+          <label class="label" for="topicSelect">Thema</label>
+          <select id="topicSelect"></select>
+          <label class="label" for="typeSelect">Wortart</label>
+          <select id="typeSelect"></select>
+          <p class="de">Tipp: Erst Französisch hören, dann laut nachsprechen, dann Karte umdrehen.</p>
+        </div>
+        <div class="card" id="flashcard"></div>
+      </div>
+    </section>
+
+    <section id="quiz" class="panel hidden">
+      <div class="grid main-side">
+        <div class="card" id="quizCard"></div>
+        <div class="card">
+          <h2>Warum dieses Quiz?</h2>
+          <p class="de">Für Reisen zählt Wiedererkennen unter leichtem Druck: Schild, Speisekarte, Rezeption, fremde Aussprache. Das Quiz trainiert schnelle Bedeutung, nicht Grammatikperfektion.</p>
+          <button class="primary" id="newQuiz">Neue Frage</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="verben" class="panel hidden">
+      <div class="grid verb-layout">
+        <div class="card">
+          <label class="label" for="verbSelect">Verb</label>
+          <select id="verbSelect"></select>
+          <label class="label" for="tenseSelect">Zeit / Form</label>
+          <select id="tenseSelect"></select>
+          <p class="de"><strong>Warum wichtig?</strong> <span id="verbReason"></span></p>
+          <div class="example"><strong>Mustersatz:</strong> <span id="verbPattern"></span></div>
+        </div>
+        <div class="card" id="verbCard"></div>
+      </div>
+    </section>
+
+    <section id="dialoge" class="panel hidden">
+      <div class="grid main-side">
+        <div class="card" id="missionCard"></div>
+        <div class="card">
+          <h2>So übt ihr zusammen</h2>
+          <ol>
+            <li>Kind wählt die Antwort aus.</li>
+            <li>Erwachsener spricht den Satz langsam nach.</li>
+            <li>Kind spielt die französische Person.</li>
+            <li>Nach drei richtigen Missionen gibt es eine echte Urlaubsrolle: Bäckerei, Eis, Camping-Rezeption.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <footer class="card">
+      <strong>Lernprinzip:</strong> Erst nützliche Chunks wie „Je voudrais…“, „Où est…“, „Vous pouvez répéter ?“, dann einzelne Wörter. So könnt ihr auch mit wenigen Vokabeln echte Situationen bewältigen.
+    </footer>
+  </main>
+
+  <script>
+    const vocabulary = [
+      { id: 1, type: "Nomen", topic: "Ankommen & Orientierung", fr: "la route", de: "die Straße / Route", example: "Nous cherchons la route vers le camping.", exampleDe: "Wir suchen die Straße zum Campingplatz.", level: "Basis" },
+      { id: 2, type: "Nomen", topic: "Ankommen & Orientierung", fr: "la sortie", de: "die Ausfahrt / der Ausgang", example: "Quelle sortie devons-nous prendre ?", exampleDe: "Welche Ausfahrt müssen wir nehmen?", level: "Basis" },
+      { id: 3, type: "Nomen", topic: "Ankommen & Orientierung", fr: "le plan", de: "der Plan / Stadtplan", example: "Avez-vous un plan de la ville ?", exampleDe: "Haben Sie einen Stadtplan?", level: "Basis" },
+      { id: 4, type: "Nomen", topic: "Ankommen & Orientierung", fr: "l’adresse", de: "die Adresse", example: "Voici l’adresse de notre logement.", exampleDe: "Hier ist die Adresse unserer Unterkunft.", level: "Basis" },
+      { id: 5, type: "Nomen", topic: "Ankommen & Orientierung", fr: "la gare", de: "der Bahnhof", example: "La gare est loin d’ici ?", exampleDe: "Ist der Bahnhof weit von hier?", level: "Basis" },
+      { id: 6, type: "Nomen", topic: "Ankommen & Orientierung", fr: "le parking", de: "der Parkplatz", example: "Où est le parking le plus proche ?", exampleDe: "Wo ist der nächste Parkplatz?", level: "Basis" },
+      { id: 7, type: "Nomen", topic: "Auto & Buchung", fr: "la voiture", de: "das Auto", example: "Nous avons réservé une voiture.", exampleDe: "Wir haben ein Auto reserviert.", level: "Basis" },
+      { id: 8, type: "Nomen", topic: "Auto & Buchung", fr: "le permis de conduire", de: "der Führerschein", example: "Voici mon permis de conduire.", exampleDe: "Hier ist mein Führerschein.", level: "Wichtig" },
+      { id: 9, type: "Nomen", topic: "Auto & Buchung", fr: "l’assurance", de: "die Versicherung", example: "L’assurance est incluse ?", exampleDe: "Ist die Versicherung inklusive?", level: "Wichtig" },
+      { id: 10, type: "Nomen", topic: "Auto & Buchung", fr: "la caution", de: "die Kaution", example: "Quel est le montant de la caution ?", exampleDe: "Wie hoch ist die Kaution?", level: "Wichtig" },
+      { id: 11, type: "Nomen", topic: "Auto & Buchung", fr: "le plein", de: "der volle Tank", example: "Je dois rendre la voiture avec le plein ?", exampleDe: "Muss ich das Auto vollgetankt zurückgeben?", level: "Wichtig" },
+      { id: 12, type: "Nomen", topic: "Auto & Buchung", fr: "les clés", de: "die Schlüssel", example: "Où dois-je rendre les clés ?", exampleDe: "Wo muss ich die Schlüssel zurückgeben?", level: "Basis" },
+      { id: 13, type: "Nomen", topic: "Camping", fr: "le camping", de: "der Campingplatz", example: "Nous cherchons l’accueil du camping.", exampleDe: "Wir suchen die Rezeption des Campingplatzes.", level: "Basis" },
+      { id: 14, type: "Nomen", topic: "Camping", fr: "l’emplacement", de: "der Stellplatz", example: "Nous avons réservé un emplacement.", exampleDe: "Wir haben einen Stellplatz reserviert.", level: "Wichtig" },
+      { id: 15, type: "Nomen", topic: "Camping", fr: "la tente", de: "das Zelt", example: "Nous avons une petite tente.", exampleDe: "Wir haben ein kleines Zelt.", level: "Basis" },
+      { id: 16, type: "Nomen", topic: "Camping", fr: "l’électricité", de: "der Strom", example: "Est-ce qu’il y a l’électricité ?", exampleDe: "Gibt es Strom?", level: "Wichtig" },
+      { id: 17, type: "Nomen", topic: "Camping", fr: "les sanitaires", de: "die Sanitäranlagen", example: "Où sont les sanitaires ?", exampleDe: "Wo sind die Sanitäranlagen?", level: "Wichtig" },
+      { id: 18, type: "Nomen", topic: "Camping", fr: "la piscine", de: "der Pool", example: "La piscine est ouverte jusqu’à quelle heure ?", exampleDe: "Bis wann ist der Pool geöffnet?", level: "Basis" },
+      { id: 19, type: "Nomen", topic: "Restaurant & Café", fr: "une table", de: "ein Tisch", example: "Une table pour deux, s’il vous plaît.", exampleDe: "Einen Tisch für zwei, bitte.", level: "Basis" },
+      { id: 20, type: "Nomen", topic: "Restaurant & Café", fr: "la carte", de: "die Speisekarte", example: "La carte, s’il vous plaît.", exampleDe: "Die Speisekarte, bitte.", level: "Basis" },
+      { id: 21, type: "Nomen", topic: "Restaurant & Café", fr: "l’addition", de: "die Rechnung", example: "L’addition, s’il vous plaît.", exampleDe: "Die Rechnung, bitte.", level: "Basis" },
+      { id: 22, type: "Nomen", topic: "Restaurant & Café", fr: "un verre d’eau", de: "ein Glas Wasser", example: "Un verre d’eau, s’il vous plaît.", exampleDe: "Ein Glas Wasser, bitte.", level: "Basis" },
+      { id: 23, type: "Nomen", topic: "Restaurant & Café", fr: "le menu enfant", de: "das Kindermenü", example: "Avez-vous un menu enfant ?", exampleDe: "Haben Sie ein Kindermenü?", level: "Wichtig" },
+      { id: 24, type: "Nomen", topic: "Restaurant & Café", fr: "une glace", de: "ein Eis", example: "Je voudrais une glace à la vanille.", exampleDe: "Ich hätte gerne ein Vanilleeis.", level: "Basis" },
+      { id: 25, type: "Nomen", topic: "Strand & Freizeit", fr: "la plage", de: "der Strand", example: "La plage est très belle.", exampleDe: "Der Strand ist sehr schön.", level: "Basis" },
+      { id: 26, type: "Nomen", topic: "Strand & Freizeit", fr: "la mer", de: "das Meer", example: "La mer est froide aujourd’hui.", exampleDe: "Das Meer ist heute kalt.", level: "Basis" },
+      { id: 27, type: "Nomen", topic: "Strand & Freizeit", fr: "les vagues", de: "die Wellen", example: "Les vagues sont grandes.", exampleDe: "Die Wellen sind groß.", level: "Basis" },
+      { id: 28, type: "Nomen", topic: "Strand & Freizeit", fr: "la serviette", de: "das Handtuch", example: "J’ai oublié ma serviette.", exampleDe: "Ich habe mein Handtuch vergessen.", level: "Basis" },
+      { id: 29, type: "Nomen", topic: "Strand & Freizeit", fr: "la crème solaire", de: "die Sonnencreme", example: "Tu as mis de la crème solaire ?", exampleDe: "Hast du Sonnencreme aufgetragen?", level: "Wichtig" },
+      { id: 30, type: "Nomen", topic: "Strand & Freizeit", fr: "un château de sable", de: "eine Sandburg", example: "On construit un château de sable ?", exampleDe: "Bauen wir eine Sandburg?", level: "Kind" },
+      { id: 31, type: "Nomen", topic: "Stadt & Einkaufen", fr: "la boulangerie", de: "die Bäckerei", example: "Il y a une boulangerie près d’ici ?", exampleDe: "Gibt es hier in der Nähe eine Bäckerei?", level: "Basis" },
+      { id: 32, type: "Nomen", topic: "Stadt & Einkaufen", fr: "le marché", de: "der Markt", example: "Le marché est ouvert le matin.", exampleDe: "Der Markt ist morgens geöffnet.", level: "Basis" },
+      { id: 33, type: "Nomen", topic: "Stadt & Einkaufen", fr: "le prix", de: "der Preis", example: "Quel est le prix ?", exampleDe: "Wie hoch ist der Preis?", level: "Basis" },
+      { id: 34, type: "Nomen", topic: "Stadt & Einkaufen", fr: "un sac", de: "eine Tasche / Tüte", example: "Un sac, s’il vous plaît.", exampleDe: "Eine Tüte, bitte.", level: "Basis" },
+      { id: 35, type: "Nomen", topic: "Notfall & Gesundheit", fr: "la pharmacie", de: "die Apotheke", example: "Où est la pharmacie la plus proche ?", exampleDe: "Wo ist die nächste Apotheke?", level: "Wichtig" },
+      { id: 36, type: "Nomen", topic: "Notfall & Gesundheit", fr: "le médecin", de: "der Arzt / die Ärztin", example: "Nous avons besoin d’un médecin.", exampleDe: "Wir brauchen einen Arzt / eine Ärztin.", level: "Wichtig" },
+      { id: 37, type: "Verb", topic: "Alltag & Bitten", fr: "être", de: "sein", example: "Je suis avec mon enfant.", exampleDe: "Ich bin mit meinem Kind unterwegs.", level: "Basis" },
+      { id: 38, type: "Verb", topic: "Alltag & Bitten", fr: "avoir", de: "haben", example: "Nous avons une réservation.", exampleDe: "Wir haben eine Reservierung.", level: "Basis" },
+      { id: 39, type: "Verb", topic: "Alltag & Bitten", fr: "vouloir", de: "wollen / möchten", example: "Je voudrais payer par carte.", exampleDe: "Ich möchte mit Karte zahlen.", level: "Basis" },
+      { id: 40, type: "Verb", topic: "Alltag & Bitten", fr: "pouvoir", de: "können / dürfen", example: "Est-ce qu’on peut entrer ?", exampleDe: "Können wir hineingehen?", level: "Basis" },
+      { id: 41, type: "Verb", topic: "Alltag & Bitten", fr: "devoir", de: "müssen / sollen", example: "Nous devons partir demain.", exampleDe: "Wir müssen morgen abreisen.", level: "Wichtig" },
+      { id: 42, type: "Verb", topic: "Buchungen", fr: "réserver", de: "reservieren / buchen", example: "Je voudrais réserver une table.", exampleDe: "Ich möchte einen Tisch reservieren.", level: "Wichtig" },
+      { id: 43, type: "Verb", topic: "Buchungen", fr: "louer", de: "mieten", example: "Nous voulons louer une voiture.", exampleDe: "Wir möchten ein Auto mieten.", level: "Wichtig" },
+      { id: 44, type: "Verb", topic: "Buchungen", fr: "payer", de: "bezahlen", example: "Je peux payer par carte ?", exampleDe: "Kann ich mit Karte bezahlen?", level: "Basis" },
+      { id: 45, type: "Verb", topic: "Orientierung", fr: "chercher", de: "suchen", example: "Nous cherchons la plage.", exampleDe: "Wir suchen den Strand.", level: "Basis" },
+      { id: 46, type: "Verb", topic: "Orientierung", fr: "trouver", de: "finden", example: "J’ai trouvé le parking.", exampleDe: "Ich habe den Parkplatz gefunden.", level: "Basis" },
+      { id: 47, type: "Verb", topic: "Kommunikation", fr: "parler", de: "sprechen", example: "Je parle un peu français.", exampleDe: "Ich spreche ein bisschen Französisch.", level: "Basis" },
+      { id: 48, type: "Verb", topic: "Kommunikation", fr: "comprendre", de: "verstehen", example: "Je ne comprends pas très bien.", exampleDe: "Ich verstehe nicht sehr gut.", level: "Wichtig" },
+      { id: 49, type: "Verb", topic: "Kommunikation", fr: "répéter", de: "wiederholen", example: "Vous pouvez répéter, s’il vous plaît ?", exampleDe: "Können Sie das bitte wiederholen?", level: "Wichtig" },
+      { id: 50, type: "Verb", topic: "Strand & Freizeit", fr: "nager", de: "schwimmen", example: "Tu veux nager ?", exampleDe: "Willst du schwimmen?", level: "Kind" },
+      { id: 51, type: "Verb", topic: "Strand & Freizeit", fr: "jouer", de: "spielen", example: "On peut jouer ici ?", exampleDe: "Kann man hier spielen?", level: "Kind" },
+      { id: 52, type: "Verb", topic: "Stadt & Einkaufen", fr: "acheter", de: "kaufen", example: "Je voudrais acheter du pain.", exampleDe: "Ich möchte Brot kaufen.", level: "Basis" },
+      { id: 53, type: "Adjektiv", topic: "Beschreiben", fr: "petit / petite", de: "klein", example: "Nous avons une petite tente.", exampleDe: "Wir haben ein kleines Zelt.", level: "Basis" },
+      { id: 54, type: "Adjektiv", topic: "Beschreiben", fr: "grand / grande", de: "groß", example: "Les vagues sont grandes.", exampleDe: "Die Wellen sind groß.", level: "Basis" },
+      { id: 55, type: "Adjektiv", topic: "Beschreiben", fr: "chaud / chaude", de: "warm / heiß", example: "Il fait chaud aujourd’hui.", exampleDe: "Es ist heute heiß.", level: "Basis" },
+      { id: 56, type: "Adjektiv", topic: "Beschreiben", fr: "froid / froide", de: "kalt", example: "L’eau est froide.", exampleDe: "Das Wasser ist kalt.", level: "Basis" },
+      { id: 57, type: "Adjektiv", topic: "Beschreiben", fr: "cher / chère", de: "teuer", example: "C’est un peu cher.", exampleDe: "Das ist ein bisschen teuer.", level: "Wichtig" },
+      { id: 58, type: "Adjektiv", topic: "Beschreiben", fr: "gratuit / gratuite", de: "kostenlos", example: "Le parking est gratuit ?", exampleDe: "Ist der Parkplatz kostenlos?", level: "Wichtig" },
+      { id: 59, type: "Adjektiv", topic: "Beschreiben", fr: "ouvert / ouverte", de: "geöffnet", example: "La piscine est ouverte ?", exampleDe: "Ist der Pool geöffnet?", level: "Basis" },
+      { id: 60, type: "Adjektiv", topic: "Beschreiben", fr: "fermé / fermée", de: "geschlossen", example: "Le restaurant est fermé.", exampleDe: "Das Restaurant ist geschlossen.", level: "Basis" },
+      { id: 61, type: "Sonstiges", topic: "Höflichkeit", fr: "bonjour", de: "guten Tag / hallo", example: "Bonjour, nous avons une réservation.", exampleDe: "Guten Tag, wir haben eine Reservierung.", level: "Basis" },
+      { id: 62, type: "Sonstiges", topic: "Höflichkeit", fr: "s’il vous plaît", de: "bitte", example: "La carte, s’il vous plaît.", exampleDe: "Die Speisekarte, bitte.", level: "Basis" },
+      { id: 63, type: "Sonstiges", topic: "Höflichkeit", fr: "merci", de: "danke", example: "Merci beaucoup !", exampleDe: "Vielen Dank!", level: "Basis" },
+      { id: 64, type: "Sonstiges", topic: "Höflichkeit", fr: "excusez-moi", de: "entschuldigen Sie", example: "Excusez-moi, où sont les toilettes ?", exampleDe: "Entschuldigen Sie, wo sind die Toiletten?", level: "Basis" },
+      { id: 65, type: "Sonstiges", topic: "Höflichkeit", fr: "je voudrais", de: "ich hätte gern / ich möchte", example: "Je voudrais deux croissants.", exampleDe: "Ich hätte gerne zwei Croissants.", level: "Basis" },
+      { id: 66, type: "Sonstiges", topic: "Kommunikation", fr: "plus lentement", de: "langsamer", example: "Plus lentement, s’il vous plaît.", exampleDe: "Langsamer, bitte.", level: "Wichtig" },
+      { id: 67, type: "Sonstiges", topic: "Kommunikation", fr: "combien ?", de: "wie viel?", example: "Ça coûte combien ?", exampleDe: "Wie viel kostet das?", level: "Basis" },
+      { id: 68, type: "Sonstiges", topic: "Kommunikation", fr: "où ?", de: "wo?", example: "Où est la plage ?", exampleDe: "Wo ist der Strand?", level: "Basis" }
+    ];
+
+    const verbs = [
+      { infinitive: "être", de: "sein", reason: "für Identität, Zustand, Öffnungszeiten und einfache Aussagen", pattern: "Je suis avec mon enfant. / C’est ouvert ?", tenses: { present: { label: "Präsens", forms: ["je suis", "tu es", "il/elle est", "nous sommes", "vous êtes", "ils/elles sont"] }, nearFuture: { label: "nahe Zukunft", forms: ["je vais être", "tu vas être", "il/elle va être", "nous allons être", "vous allez être", "ils/elles vont être"] }, passeCompose: { label: "Vergangenheit", forms: ["j’ai été", "tu as été", "il/elle a été", "nous avons été", "vous avez été", "ils/elles ont été"] } } },
+      { infinitive: "avoir", de: "haben", reason: "für Reservierungen, Alter, Hunger, Durst und Besitz", pattern: "Nous avons une réservation. / J’ai faim.", tenses: { present: { label: "Präsens", forms: ["j’ai", "tu as", "il/elle a", "nous avons", "vous avez", "ils/elles ont"] }, nearFuture: { label: "nahe Zukunft", forms: ["je vais avoir", "tu vas avoir", "il/elle va avoir", "nous allons avoir", "vous allez avoir", "ils/elles vont avoir"] }, passeCompose: { label: "Vergangenheit", forms: ["j’ai eu", "tu as eu", "il/elle a eu", "nous avons eu", "vous avez eu", "ils/elles ont eu"] } } },
+      { infinitive: "vouloir", de: "wollen / möchten", reason: "für höfliche Wünsche; im Urlaub extrem nützlich", pattern: "Je voudrais une table. / Tu veux une glace ?", tenses: { present: { label: "Präsens", forms: ["je veux", "tu veux", "il/elle veut", "nous voulons", "vous voulez", "ils/elles veulent"] }, polite: { label: "höflich", forms: ["je voudrais", "tu voudrais", "il/elle voudrait", "nous voudrions", "vous voudriez", "ils/elles voudraient"] }, nearFuture: { label: "nahe Zukunft", forms: ["je vais vouloir", "tu vas vouloir", "il/elle va vouloir", "nous allons vouloir", "vous allez vouloir", "ils/elles vont vouloir"] } } },
+      { infinitive: "pouvoir", de: "können / dürfen", reason: "für Fragen nach Erlaubnis, Möglichkeiten und Hilfe", pattern: "Vous pouvez répéter ? / On peut payer par carte ?", tenses: { present: { label: "Präsens", forms: ["je peux", "tu peux", "il/elle peut", "nous pouvons", "vous pouvez", "ils/elles peuvent"] }, polite: { label: "höflich", forms: ["je pourrais", "tu pourrais", "il/elle pourrait", "nous pourrions", "vous pourriez", "ils/elles pourraient"] }, nearFuture: { label: "nahe Zukunft", forms: ["je vais pouvoir", "tu vas pouvoir", "il/elle va pouvoir", "nous allons pouvoir", "vous allez pouvoir", "ils/elles vont pouvoir"] } } },
+      { infinitive: "réserver", de: "reservieren / buchen", reason: "für Camping, Restaurant, Auto und Ausflüge", pattern: "Nous avons réservé un emplacement.", tenses: { present: { label: "Präsens", forms: ["je réserve", "tu réserves", "il/elle réserve", "nous réservons", "vous réservez", "ils/elles réservent"] }, nearFuture: { label: "nahe Zukunft", forms: ["je vais réserver", "tu vas réserver", "il/elle va réserver", "nous allons réserver", "vous allez réserver", "ils/elles vont réserver"] }, passeCompose: { label: "Vergangenheit", forms: ["j’ai réservé", "tu as réservé", "il/elle a réservé", "nous avons réservé", "vous avez réservé", "ils/elles ont réservé"] } } },
+      { infinitive: "payer", de: "bezahlen", reason: "für Kasse, Café, Restaurant und Gebühren", pattern: "Je peux payer par carte ?", tenses: { present: { label: "Präsens", forms: ["je paie", "tu paies", "il/elle paie", "nous payons", "vous payez", "ils/elles paient"] }, nearFuture: { label: "nahe Zukunft", forms: ["je vais payer", "tu vas payer", "il/elle va payer", "nous allons payer", "vous allez payer", "ils/elles vont payer"] }, passeCompose: { label: "Vergangenheit", forms: ["j’ai payé", "tu as payé", "il/elle a payé", "nous avons payé", "vous avez payé", "ils/elles ont payé"] } } }
+    ];
+
+    const situations = [
+      { title: "Auto abholen", icon: "🚗", goal: "Reservierung, Versicherung, Kaution und Rückgabe klären", phrases: [["Bonjour, nous avons réservé une voiture.", "Guten Tag, wir haben ein Auto reserviert."], ["L’assurance est incluse ?", "Ist die Versicherung inklusive?"], ["Quel est le montant de la caution ?", "Wie hoch ist die Kaution?"], ["Je dois rendre la voiture avec le plein ?", "Muss ich das Auto vollgetankt zurückgeben?"], ["Où dois-je rendre les clés ?", "Wo muss ich die Schlüssel zurückgeben?"]] },
+      { title: "Camping ankommen", icon: "⛺", goal: "einchecken, Stellplatz finden, Regeln verstehen", phrases: [["Bonjour, nous avons réservé un emplacement.", "Guten Tag, wir haben einen Stellplatz reserviert."], ["Où est notre emplacement ?", "Wo ist unser Stellplatz?"], ["Est-ce qu’il y a l’électricité ?", "Gibt es Strom?"], ["Où sont les sanitaires ?", "Wo sind die Sanitäranlagen?"], ["La piscine est ouverte jusqu’à quelle heure ?", "Bis wann ist der Pool geöffnet?"]] },
+      { title: "Restaurant & Café", icon: "🥐", goal: "höflich bestellen, nach Kindermenü fragen, zahlen", phrases: [["Une table pour deux, s’il vous plaît.", "Einen Tisch für zwei, bitte."], ["Avez-vous un menu enfant ?", "Haben Sie ein Kindermenü?"], ["Je voudrais une carafe d’eau.", "Ich hätte gerne eine Karaffe Wasser."], ["C’était très bon, merci.", "Es war sehr lecker, danke."], ["L’addition, s’il vous plaît.", "Die Rechnung, bitte."]] },
+      { title: "Small Talk am Strand", icon: "🏖️", goal: "nett Kontakt aufnehmen und mit Kindern spielen", phrases: [["Bonjour, vous êtes d’ici ?", "Hallo, sind Sie von hier?"], ["La plage est très belle.", "Der Strand ist sehr schön."], ["Tu veux jouer ?", "Möchtest du spielen?"], ["On construit un château de sable ?", "Bauen wir eine Sandburg?"], ["La mer est froide aujourd’hui.", "Das Meer ist heute kalt."]] },
+      { title: "In der Stadt", icon: "🏙️", goal: "orientieren, einkaufen, Preise verstehen", phrases: [["Excusez-moi, où est la boulangerie ?", "Entschuldigen Sie, wo ist die Bäckerei?"], ["Je voudrais deux croissants.", "Ich hätte gerne zwei Croissants."], ["Ça coûte combien ?", "Wie viel kostet das?"], ["Vous avez un sac ?", "Haben Sie eine Tüte?"], ["Merci, bonne journée !", "Danke, schönen Tag!"]] },
+      { title: "Wenn man etwas nicht versteht", icon: "💬", goal: "sicher nachfragen statt blockieren", phrases: [["Je parle un peu français.", "Ich spreche ein bisschen Französisch."], ["Je ne comprends pas très bien.", "Ich verstehe nicht sehr gut."], ["Vous pouvez répéter, s’il vous plaît ?", "Können Sie das bitte wiederholen?"], ["Plus lentement, s’il vous plaît.", "Langsamer, bitte."], ["Vous parlez allemand ou anglais ?", "Sprechen Sie Deutsch oder Englisch?"]] }
+    ];
+
+    const miniQuests = [
+      { prompt: "Ihr kommt am Campingplatz an. Was sagst du zuerst?", answer: "Bonjour, nous avons réservé un emplacement.", choices: ["Bonjour, nous avons réservé un emplacement.", "La mer est froide aujourd’hui.", "Je voudrais une glace."] },
+      { prompt: "Du möchtest im Café bezahlen. Was passt?", answer: "L’addition, s’il vous plaît.", choices: ["Où sont les sanitaires ?", "L’addition, s’il vous plaît.", "Tu veux jouer ?"] },
+      { prompt: "Dein Kind möchte mit einem anderen Kind spielen. Was ist einfach und freundlich?", answer: "Tu veux jouer ?", choices: ["Tu veux jouer ?", "Quel est le montant de la caution ?", "Je dois rendre les clés ?"] },
+      { prompt: "Du hast die Antwort nicht verstanden. Was hilft?", answer: "Vous pouvez répéter, s’il vous plaît ?", choices: ["Vous pouvez répéter, s’il vous plaît ?", "Je voudrais deux croissants.", "Nous avons une tente."] },
+      { prompt: "Beim Mietwagen willst du wissen, ob Versicherung dabei ist.", answer: "L’assurance est incluse ?", choices: ["L’assurance est incluse ?", "La plage est belle.", "Ça coûte combien de croissants ?"] }
+    ];
+
+    const pronouns = ["je", "tu", "il/elle", "nous", "vous", "ils/elles"];
+    let state = {
+      tab: "situationen",
+      topic: "Alle",
+      type: "Alle",
+      cardIndex: 0,
+      showBack: false,
+      score: Number(localStorage.getItem("franceScore") || 0),
+      streak: 0,
+      quiz: null,
+      quizFeedback: "",
+      verbPick: 0,
+      tense: "present",
+      questIndex: 0,
+      questFeedback: ""
+    };
+
+    function el(id) { return document.getElementById(id); }
+    function shuffle(array) { return [...array].sort(() => Math.random() - 0.5); }
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"]/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[ch]));
+    }
+    function speak(text) {
+      if (!window.speechSynthesis) return;
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "fr-FR";
+      u.rate = 0.86;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    }
+    function addScore(points) {
+      state.score += points;
+      localStorage.setItem("franceScore", String(state.score));
+      renderScore();
+    }
+    function renderScore() {
+      el("score").textContent = state.score;
+      el("streak").textContent = state.streak;
+      el("scorebar").style.width = Math.min(100, state.score % 100) + "%";
+    }
+    function filteredVocabulary() {
+      return vocabulary.filter(v => (state.topic === "Alle" || v.topic === state.topic) && (state.type === "Alle" || v.type === state.type));
+    }
+    function makeQuiz(pool = vocabulary) {
+      const item = pool[Math.floor(Math.random() * pool.length)];
+      const wrong = shuffle(pool.filter(v => v.id !== item.id)).slice(0, 3).map(v => v.de);
+      return { item, choices: shuffle([item.de, ...wrong]) };
+    }
+
+    function init() {
+      state.quiz = makeQuiz();
+      renderScore();
+      renderTabs();
+      renderSituations();
+      renderFilters();
+      renderFlashcard();
+      renderQuiz();
+      renderVerbSelectors();
+      renderVerbCard();
+      renderMission();
+
+      el("tabs").addEventListener("click", e => {
+        const btn = e.target.closest("button[data-tab]");
+        if (!btn) return;
+        state.tab = btn.dataset.tab;
+        renderTabs();
+      });
+      el("topicSelect").addEventListener("change", e => { state.topic = e.target.value; state.cardIndex = 0; state.showBack = false; renderFlashcard(); });
+      el("typeSelect").addEventListener("change", e => { state.type = e.target.value; state.cardIndex = 0; state.showBack = false; renderFlashcard(); });
+      el("newQuiz").addEventListener("click", () => { state.quizFeedback = ""; state.quiz = makeQuiz(filteredVocabulary().length >= 4 ? filteredVocabulary() : vocabulary); renderQuiz(); });
+      el("verbSelect").addEventListener("change", e => { state.verbPick = Number(e.target.value); state.tense = Object.keys(verbs[state.verbPick].tenses)[0]; renderVerbSelectors(); renderVerbCard(); });
+      el("tenseSelect").addEventListener("change", e => { state.tense = e.target.value; renderVerbCard(); });
+    }
+
+    function renderTabs() {
+      document.querySelectorAll(".tab").forEach(btn => btn.classList.toggle("active", btn.dataset.tab === state.tab));
+      document.querySelectorAll(".panel").forEach(panel => panel.classList.toggle("hidden", panel.id !== state.tab));
+    }
+
+    function renderSituations() {
+      el("situationen").innerHTML = `<div class="grid grid-3">${situations.map(s => `
+        <article class="card">
+          <div class="situation-head">
+            <div class="icon">${s.icon}</div>
+            <div><h2>${escapeHtml(s.title)}</h2><p class="goal">Ziel: ${escapeHtml(s.goal)}</p></div>
+          </div>
+          ${s.phrases.map(([fr, de]) => `<button class="phrase" data-say="${escapeHtml(fr)}"><div class="fr">${escapeHtml(fr)}</div><div class="de">${escapeHtml(de)}</div></button>`).join("")}
+        </article>`).join("")}</div>`;
+      el("situationen").querySelectorAll("[data-say]").forEach(b => b.addEventListener("click", () => speak(b.dataset.say)));
+    }
+
+    function renderFilters() {
+      const topics = ["Alle", ...Array.from(new Set(vocabulary.map(v => v.topic)))];
+      const types = ["Alle", "Nomen", "Verb", "Adjektiv", "Sonstiges"];
+      el("topicSelect").innerHTML = topics.map(t => `<option>${escapeHtml(t)}</option>`).join("");
+      el("typeSelect").innerHTML = types.map(t => `<option>${escapeHtml(t)}</option>`).join("");
+    }
+
+    function renderFlashcard() {
+      const pool = filteredVocabulary();
+      if (!pool.length) { el("flashcard").innerHTML = "<p>Keine Karten gefunden.</p>"; return; }
+      const card = pool[state.cardIndex % pool.length];
+      el("flashcard").innerHTML = `
+        <div class="badges"><span class="badge">${escapeHtml(card.type)}</span><span class="badge">${escapeHtml(card.topic)}</span><span class="badge">${escapeHtml(card.level)}</span></div>
+        <button class="primary" id="speakCard">🔊 anhören</button>
+        <div class="big-word">${escapeHtml(card.fr)}</div>
+        ${state.showBack ? `<div class="meaning">${escapeHtml(card.de)}</div>` : ""}
+        <div class="example"><div class="fr">${escapeHtml(card.example)}</div>${state.showBack ? `<div class="de">${escapeHtml(card.exampleDe)}</div>` : ""}</div>
+        <div class="actions">
+          <button class="secondary" id="flipCard">${state.showBack ? "Vorderseite" : "Umdrehen"}</button>
+          <button class="primary" id="nextCard">Nächste Karte</button>
+          <button class="secondary" id="knownCard">Konnte ich ✅</button>
+        </div>`;
+      el("speakCard").onclick = () => speak(card.fr);
+      el("flipCard").onclick = () => { state.showBack = !state.showBack; renderFlashcard(); };
+      el("nextCard").onclick = () => { state.showBack = false; state.cardIndex = (state.cardIndex + 1) % pool.length; renderFlashcard(); };
+      el("knownCard").onclick = () => { addScore(1); state.showBack = false; state.cardIndex = (state.cardIndex + 1) % pool.length; renderFlashcard(); };
+    }
+
+    function renderQuiz() {
+      const q = state.quiz;
+      el("quizCard").innerHTML = `
+        <div class="badges"><span class="badge">${escapeHtml(q.item.type)}</span><span class="badge">${escapeHtml(q.item.topic)}</span></div>
+        <div class="tiny-title" style="margin-top:16px">Was bedeutet?</div>
+        <button class="big-word" style="background:transparent;padding:0;text-align:left" id="speakQuiz">${escapeHtml(q.item.fr)} 🔊</button>
+        <div class="grid grid-2" style="margin-top:26px">
+          ${q.choices.map(c => `<button class="choice" data-choice="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join("")}
+        </div>
+        ${state.quizFeedback ? `<div class="feedback ${state.quizFeedback.good ? "good" : "bad"}">${escapeHtml(state.quizFeedback.text)}</div>` : ""}`;
+      el("speakQuiz").onclick = () => speak(q.item.fr);
+      el("quizCard").querySelectorAll("[data-choice]").forEach(btn => btn.onclick = () => {
+        const ok = btn.dataset.choice === q.item.de;
+        if (ok) { addScore(2); state.streak += 1; } else { state.streak = 0; }
+        state.quizFeedback = { good: ok, text: ok ? "Richtig!" : `Fast: ${q.item.fr} = ${q.item.de}` };
+        state.quiz = makeQuiz(filteredVocabulary().length >= 4 ? filteredVocabulary() : vocabulary);
+        renderScore();
+        renderQuiz();
+      });
+    }
+
+    function renderVerbSelectors() {
+      el("verbSelect").innerHTML = verbs.map((v, i) => `<option value="${i}" ${i === state.verbPick ? "selected" : ""}>${escapeHtml(v.infinitive)} – ${escapeHtml(v.de)}</option>`).join("");
+      const verb = verbs[state.verbPick];
+      el("tenseSelect").innerHTML = Object.entries(verb.tenses).map(([key, val]) => `<option value="${key}" ${key === state.tense ? "selected" : ""}>${escapeHtml(val.label)}</option>`).join("");
+      el("verbReason").textContent = verb.reason;
+      el("verbPattern").textContent = verb.pattern;
+    }
+
+    function renderVerbCard() {
+      const verb = verbs[state.verbPick];
+      const tenseObj = verb.tenses[state.tense] || Object.values(verb.tenses)[0];
+      el("verbCard").innerHTML = `
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:start;flex-wrap:wrap">
+          <div><div class="tiny-title">${escapeHtml(tenseObj.label)}</div><div class="big-word" style="margin-top:4px">${escapeHtml(verb.infinitive)}</div></div>
+          <button class="primary" id="speakVerbSentence">🔊 Satz</button>
+        </div>
+        <div class="verb-table" style="margin-top:18px">
+          ${tenseObj.forms.map((form, i) => `<button class="conj" data-say="${escapeHtml(form)}"><div class="pronoun">${escapeHtml(pronouns[i])}</div><div class="form">${escapeHtml(form)}</div></button>`).join("")}
+        </div>
+        <div class="tip"><h3>Reise-Fokus</h3><p class="de">Für den Urlaub reichen oft drei Formen besonders gut: <strong>je</strong> für dich, <strong>nous/on</strong> für euch zusammen, <strong>vous</strong> für höfliche Fragen.</p></div>`;
+      el("speakVerbSentence").onclick = () => speak(verb.pattern.split(" / ")[0]);
+      el("verbCard").querySelectorAll("[data-say]").forEach(b => b.onclick = () => speak(b.dataset.say));
+    }
+
+    function renderMission() {
+      const q = miniQuests[state.questIndex];
+      el("missionCard").innerHTML = `
+        <div class="tiny-title">Mini-Mission</div>
+        <h2 style="font-size:2rem;margin-top:8px">${escapeHtml(q.prompt)}</h2>
+        <div style="margin-top:18px">${q.choices.map(c => `<button class="choice" data-mission="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join("")}</div>
+        ${state.questFeedback ? `<div class="feedback ${state.questFeedback.good ? "good" : "bad"}">${escapeHtml(state.questFeedback.text)}</div>` : ""}
+        <button class="primary" id="nextMission">Nächste Mission</button>`;
+      el("missionCard").querySelectorAll("[data-mission]").forEach(btn => btn.onclick = () => {
+        const ok = btn.dataset.mission === q.answer;
+        if (ok) { addScore(3); state.streak += 1; } else { state.streak = 0; }
+        state.questFeedback = { good: ok, text: ok ? "Perfekt – genau das könnt ihr vor Ort sagen." : `Nicht ganz. Besser: ${q.answer}` };
+        speak(btn.dataset.mission);
+        renderScore();
+        renderMission();
+      });
+      el("nextMission").onclick = () => { state.questIndex = (state.questIndex + 1) % miniQuests.length; state.questFeedback = ""; renderMission(); };
+    }
+
+    init();
+  </script>
+</body>
+</html>

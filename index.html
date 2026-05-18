@@ -1,638 +1,403 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Französisch für Frankreichreise</title>
-  <style>
-    :root {
-      --bg1: #eef8ff;
-      --bg2: #fff7df;
-      --bg3: #fff0f4;
-      --text: #0f172a;
-      --muted: #64748b;
-      --card: rgba(255,255,255,0.86);
-      --line: #e2e8f0;
-      --dark: #111827;
-      --soft: #f8fafc;
-      --amber: #fff7ed;
-      --sky: #eff6ff;
-      --ok: #166534;
-      --bad: #991b1b;
-    }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text);
-      background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
-      min-height: 100vh;
-    }
-
-    .app { max-width: 1180px; margin: 0 auto; padding: 24px; }
-    .hero { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(260px, 0.7fr); gap: 18px; align-items: end; margin-bottom: 20px; }
-    h1 { margin: 8px 0 0; font-size: clamp(2rem, 6vw, 4rem); line-height: 0.96; letter-spacing: -0.06em; }
-    h2 { margin: 0; font-size: 1.35rem; }
-    h3 { margin: 0 0 8px; }
-    p { line-height: 1.6; }
-    .lead { color: #475569; max-width: 720px; font-size: 1.05rem; }
-    .badges, .tabs, .filters, .actions { display: flex; gap: 8px; flex-wrap: wrap; }
-    .badge { background: rgba(255,255,255,0.75); border: 1px solid var(--line); border-radius: 999px; padding: 6px 11px; font-size: 0.78rem; font-weight: 800; color: #334155; box-shadow: 0 1px 4px rgba(15,23,42,0.04); }
-    .card { background: var(--card); border: 1px solid var(--line); border-radius: 28px; padding: 20px; box-shadow: 0 18px 40px rgba(148,163,184,0.24); backdrop-filter: blur(8px); }
-    .score-number { font-size: 2.8rem; font-weight: 950; line-height: 1; margin-top: 4px; }
-    .scorebar { height: 12px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-top: 14px; }
-    .scorebar > div { height: 100%; background: var(--dark); border-radius: 999px; width: 0%; transition: width .25s; }
-    .tabs { background: rgba(255,255,255,0.58); border: 1px solid var(--line); padding: 8px; border-radius: 28px; margin-bottom: 18px; box-shadow: 0 8px 20px rgba(148,163,184,0.13); }
-    button, select { font: inherit; }
-    button { cursor: pointer; border: 0; }
-    .tab { border-radius: 18px; padding: 10px 16px; font-weight: 900; color: #334155; background: rgba(255,255,255,0.78); transition: .15s; }
-    .tab:hover { transform: translateY(-1px); background: white; }
-    .tab.active { color: white; background: var(--dark); box-shadow: 0 8px 18px rgba(15,23,42,0.18); }
-    .grid { display: grid; gap: 16px; }
-    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .side-main { grid-template-columns: 280px minmax(0, 1fr); }
-    .main-side { grid-template-columns: minmax(0, 1fr) 340px; }
-    .verb-layout { grid-template-columns: 320px minmax(0, 1fr); }
-    .situation-head { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
-    .icon { font-size: 2.6rem; line-height: 1; }
-    .goal { color: var(--muted); margin: 4px 0 0; font-size: .93rem; }
-    .phrase, .choice, .conj { width: 100%; text-align: left; border-radius: 18px; padding: 13px; background: var(--soft); color: var(--text); margin-top: 10px; transition: .15s; }
-    .phrase:hover, .choice:hover, .conj:hover { background: #eef2f7; transform: translateY(-1px); }
-    .fr { font-weight: 900; }
-    .de { color: var(--muted); font-size: .93rem; margin-top: 3px; }
-    .label { display: block; font-size: .86rem; font-weight: 900; margin: 0 0 8px; }
-    select { width: 100%; border: 1px solid var(--line); border-radius: 18px; background: white; padding: 12px; margin-bottom: 16px; }
-    .big-word { font-size: clamp(2.4rem, 8vw, 4.6rem); font-weight: 950; letter-spacing: -0.05em; margin: 14px 0 0; }
-    .meaning { font-size: clamp(1.7rem, 4vw, 2.4rem); font-weight: 900; color: #475569; margin-top: 12px; }
-    .example { background: var(--amber); border: 1px solid #fed7aa; border-radius: 24px; padding: 16px; margin-top: 28px; }
-    .primary, .secondary { border-radius: 18px; padding: 12px 16px; font-weight: 950; margin-top: 12px; }
-    .primary { background: var(--dark); color: white; box-shadow: 0 10px 22px rgba(15,23,42,0.16); }
-    .secondary { background: white; color: var(--text); border: 1px solid var(--line); box-shadow: 0 8px 16px rgba(148,163,184,0.14); }
-    .tiny-title { text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-size: .78rem; font-weight: 950; }
-    .feedback { margin-top: 18px; border-radius: 18px; background: white; border: 1px solid var(--line); padding: 14px; font-weight: 900; box-shadow: 0 6px 14px rgba(148,163,184,0.12); }
-    .feedback.good { color: var(--ok); }
-    .feedback.bad { color: var(--bad); }
-    .verb-table { display: grid; gap: 12px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .pronoun { color: var(--muted); font-size: .85rem; font-weight: 900; }
-    .form { font-size: 1.55rem; font-weight: 950; margin-top: 3px; }
-    .tip { background: var(--sky); border: 1px solid #bfdbfe; border-radius: 24px; padding: 16px; margin-top: 20px; }
-    footer { margin-top: 24px; color: #475569; }
-    ol { line-height: 1.7; color: #475569; }
-    .hidden { display: none !important; }
-
-    @media (max-width: 860px) {
-      .app { padding: 14px; }
-      .hero, .grid-2, .grid-3, .side-main, .main-side, .verb-layout { grid-template-columns: 1fr; }
-      .verb-table { grid-template-columns: 1fr; }
-      .card { padding: 16px; border-radius: 22px; }
-      .tab { flex: 1 1 auto; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Französisch lernen für die Frankreichreise</title>
+<style>
+:root {
+  --bg1:#eff8ff; --bg2:#fff8df; --bg3:#fff0f5; --text:#0f172a; --muted:#64748b;
+  --card:rgba(255,255,255,.88); --line:#e2e8f0; --dark:#111827; --soft:#f8fafc;
+  --amber:#fff7ed; --sky:#eff6ff; --green:#166534; --red:#991b1b;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; min-height:100vh; color:var(--text);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
+}
+.app { max-width:1200px; margin:0 auto; padding:24px; }
+.hero { display:grid; grid-template-columns:minmax(0,1.6fr) minmax(260px,.7fr); gap:18px; align-items:end; margin-bottom:18px; }
+h1 { margin:8px 0 0; font-size:clamp(2rem,6vw,4.1rem); line-height:.96; letter-spacing:-.06em; }
+h2 { margin:0; font-size:1.35rem; }
+p { line-height:1.6; }
+.lead { color:#475569; max-width:760px; font-size:1.05rem; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:28px; padding:20px; box-shadow:0 18px 40px rgba(148,163,184,.24); backdrop-filter:blur(8px); }
+.badges,.tabs,.actions,.filters { display:flex; gap:8px; flex-wrap:wrap; }
+.badge { background:rgba(255,255,255,.78); border:1px solid var(--line); border-radius:999px; padding:6px 11px; font-size:.78rem; font-weight:850; color:#334155; }
+.tabs { background:rgba(255,255,255,.58); border:1px solid var(--line); padding:8px; border-radius:28px; margin-bottom:18px; box-shadow:0 8px 20px rgba(148,163,184,.13); }
+button,select,input { font:inherit; }
+button { cursor:pointer; border:0; }
+.tab { border-radius:18px; padding:10px 16px; font-weight:900; color:#334155; background:rgba(255,255,255,.78); transition:.15s; }
+.tab:hover,.choice:hover,.phrase:hover,.conj:hover,.situation-tile:hover { transform:translateY(-1px); }
+.tab.active { color:white; background:var(--dark); box-shadow:0 8px 18px rgba(15,23,42,.18); }
+.grid { display:grid; gap:16px; }
+.grid-2 { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.grid-3 { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.side-main { grid-template-columns:300px minmax(0,1fr); }
+.verb-layout { grid-template-columns:330px minmax(0,1fr); }
+.hidden { display:none!important; }
+select,input { width:100%; border:1px solid var(--line); border-radius:18px; background:white; padding:12px; margin-bottom:14px; }
+label { display:block; font-weight:900; font-size:.86rem; margin-bottom:8px; }
+.muted { color:var(--muted); }
+.tiny { text-transform:uppercase; letter-spacing:.08em; color:var(--muted); font-size:.78rem; font-weight:950; }
+.big-word { font-size:clamp(2.5rem,8vw,4.7rem); font-weight:950; letter-spacing:-.05em; margin:14px 0 0; }
+.meaning { font-size:clamp(1.65rem,4vw,2.35rem); font-weight:900; color:#475569; margin-top:12px; }
+.example { background:var(--amber); border:1px solid #fed7aa; border-radius:24px; padding:16px; margin-top:24px; }
+.primary,.secondary { border-radius:18px; padding:12px 16px; font-weight:950; margin-top:12px; }
+.primary { background:var(--dark); color:white; box-shadow:0 10px 22px rgba(15,23,42,.16); }
+.secondary { background:white; color:var(--text); border:1px solid var(--line); box-shadow:0 8px 16px rgba(148,163,184,.14); }
+.score-number { font-size:2.6rem; font-weight:950; line-height:1; margin-top:4px; }
+.progress { height:12px; background:#e2e8f0; border-radius:999px; overflow:hidden; margin-top:14px; }
+.progress div { height:100%; background:var(--dark); width:0%; transition:width .25s; }
+.choice,.conj,.situation-tile { width:100%; text-align:left; border-radius:20px; padding:16px; background:var(--soft); color:var(--text); transition:.15s; border:1px solid #edf2f7; }
+.choice { margin-top:10px; font-weight:850; }
+.choice.wrong { color:var(--red); outline:2px solid #fecaca; }
+.choice.correct { color:var(--green); outline:2px solid #bbf7d0; }
+.fr { font-weight:950; }
+.de { color:var(--muted); font-size:.94rem; margin-top:4px; }
+.verb-table { display:grid; gap:12px; grid-template-columns:repeat(3,minmax(0,1fr)); }
+.form { font-size:1.45rem; font-weight:950; margin-top:4px; }
+.tip { background:var(--sky); border:1px solid #bfdbfe; border-radius:24px; padding:16px; margin-top:20px; }
+.icon { font-size:2.5rem; line-height:1; }
+.situation-tile { min-height:170px; display:flex; flex-direction:column; justify-content:space-between; }
+.dialog-head { display:flex; gap:14px; align-items:flex-start; }
+.npc { background:#f0f9ff; border:1px solid #bae6fd; border-radius:24px; padding:18px; font-size:1.18rem; font-weight:850; margin:18px 0; }
+.feedback { margin-top:14px; border-radius:18px; background:white; border:1px solid var(--line); padding:14px; font-weight:900; }
+.feedback.good { color:var(--green); }
+.feedback.bad { color:var(--red); }
+.footer { margin-top:24px; }
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px; }
+.stat { background:white; border:1px solid var(--line); border-radius:18px; padding:12px; }
+@media (max-width:900px) {
+  .app { padding:14px; }
+  .hero,.grid-2,.grid-3,.side-main,.verb-layout { grid-template-columns:1fr; }
+  .verb-table { grid-template-columns:1fr; }
+  .card { padding:16px; border-radius:22px; }
+  .tab { flex:1 1 auto; }
+}
+</style>
 </head>
 <body>
-  <main class="app">
-    <section class="hero">
-      <div>
-        <div class="badges">
-          <span class="badge">🇫🇷 Frankreichreise</span>
-          <span class="badge">Eltern + Kind</span>
-          <span class="badge">eine index.html</span>
-        </div>
-        <h1>Französisch für Urlaub, Camping & Strand</h1>
-        <p class="lead">Lerne zuerst Sätze, die ihr wirklich sagen werdet. Vokabeln kommen immer mit Beispielsatz, Verben mit Reise-Konjugationen, und die Übungen sind kurz genug für zwischendurch.</p>
+<main class="app">
+  <section class="hero">
+    <div>
+      <div class="badges">
+        <span class="badge">🇫🇷 Französisch</span>
       </div>
+      <h1>Französisch lernen für den Urlaub</h1>
+      <p class="lead">Wähle eins der drei Lernformate aus: Vokabelkarten, Verbtrainer, interaktive Situationen. Viel Spaß.</p>
+    </div>
+    <div class="card">
+      <div class="tiny">Fortschritt heute</div>
+      <div class="score-number" id="score">0</div>
+      <div class="muted">richtige Dialogantworten / bekannte Karten</div>
+      <div class="progress"><div id="scorebar"></div></div>
+      <button class="secondary" id="resetProgress">Fortschritt zurücksetzen</button>
+    </div>
+  </section>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-tab="karten">Vokabelkarten</button>
+    <button class="tab" data-tab="verben">Verbtrainer</button>
+    <button class="tab" data-tab="situationen">Situationen</button>
+  </nav>
+
+  <section id="karten" class="panel">
+    <div class="grid side-main">
+      <aside class="card">
+        <label for="topicSelect">Thema</label>
+        <select id="topicSelect"></select>
+        <label for="typeSelect">Art</label>
+        <select id="typeSelect"></select>
+        <label for="searchInput">Suche</label>
+        <input id="searchInput" placeholder="z. B. Strand, bezahlen, allergy…" />
+        <button class="primary" id="reshuffle">Neu mischen</button>
+        <div class="stats">
+          <div class="stat"><div class="tiny">Karten</div><strong id="cardCount">0</strong></div>
+          <div class="stat"><div class="tiny">Position</div><strong id="cardPos">1</strong></div>
+          <div class="stat"><div class="tiny">Modus</div><strong>Zufall</strong></div>
+        </div>
+        <p class="muted">Die Reihenfolge wird beim Start und beim Button „Neu mischen“ zufällig gesetzt. Filter mischen die passende Auswahl neu.</p>
+      </aside>
+      <article class="card" id="flashcard"></article>
+    </div>
+  </section>
+
+  <section id="verben" class="panel hidden">
+    <div class="grid verb-layout">
+      <aside class="card">
+        <label for="verbSearch">Verb suchen</label>
+        <input id="verbSearch" placeholder="z. B. payer, gehen, bezahlen…" />
+        <label for="verbSelect">Verb</label>
+        <select id="verbSelect"></select>
+        <label for="tenseSelect">Zeit / Form</label>
+        <select id="tenseSelect">
+          <option value="present">Präsens</option>
+          <option value="nearFuture">Nahe Zukunft</option>
+          <option value="passe">Passé composé</option>
+          <option value="polite">Höfliche Reiseform</option>
+        </select>
+        <p class="muted">Der Trainer zeigt bewusst die wichtigsten Reiseformen: <b>je</b>, <b>tu</b>, <b>nous/on</b> und <b>vous</b> sind im Urlaub am nützlichsten.</p>
+      </aside>
+      <article class="card" id="verbCard"></article>
+    </div>
+  </section>
+
+  <section id="situationen" class="panel hidden">
+    <div id="situationList"></div>
+    <div id="dialogView" class="hidden"></div>
+  </section>
+
+  <footer class="card footer">
+    <strong>Lernidee:</strong> Erst hören, dann laut antworten. Bei den Situationen geht es nicht um Übersetzen Wort für Wort, sondern um eine passende, höfliche und realistische Reaktion.
+  </footer>
+</main>
+
+<script>
+const vocabulary = [{"id":1,"type":"Nomen","topic":"Unterkunft","fr":"la réservation","de":"die Reservierung","example":"Nous avons une réservation au nom de Weisbrodt.","exampleDe":"Wir haben eine Reservierung auf den Namen Weisbrodt."},{"id":2,"type":"Nomen","topic":"Unterkunft","fr":"l'arrivée","de":"die Ankunft","example":"Notre arrivée est prévue vers dix-sept heures.","exampleDe":"Unsere Ankunft ist gegen siebzehn Uhr geplant."},{"id":3,"type":"Nomen","topic":"Unterkunft","fr":"le départ","de":"die Abreise","example":"Le départ est possible jusqu'à quelle heure ?","exampleDe":"Bis wann ist die Abreise möglich?"},{"id":4,"type":"Nomen","topic":"Unterkunft","fr":"l'accueil","de":"die Rezeption / der Empfang","example":"L'accueil est encore ouvert ?","exampleDe":"Ist die Rezeption noch geöffnet?"},{"id":5,"type":"Nomen","topic":"Unterkunft","fr":"la chambre","de":"das Zimmer","example":"La chambre est prête ?","exampleDe":"Ist das Zimmer fertig?"},{"id":6,"type":"Nomen","topic":"Unterkunft","fr":"la clé","de":"der Schlüssel","example":"Où devons-nous rendre la clé ?","exampleDe":"Wo müssen wir den Schlüssel abgeben?"},{"id":7,"type":"Nomen","topic":"Unterkunft","fr":"la carte d'identité","de":"der Personalausweis","example":"Voici ma carte d'identité.","exampleDe":"Hier ist mein Personalausweis."},{"id":8,"type":"Nomen","topic":"Unterkunft","fr":"le passeport","de":"der Reisepass","example":"Faut-il montrer le passeport de mon enfant ?","exampleDe":"Muss ich den Reisepass meines Kindes zeigen?"},{"id":9,"type":"Nomen","topic":"Unterkunft","fr":"la nuit","de":"die Nacht","example":"Nous restons trois nuits.","exampleDe":"Wir bleiben drei Nächte."},{"id":10,"type":"Nomen","topic":"Unterkunft","fr":"le petit déjeuner","de":"das Frühstück","example":"Le petit déjeuner est inclus ?","exampleDe":"Ist das Frühstück inklusive?"},{"id":11,"type":"Nomen","topic":"Unterkunft","fr":"le drap","de":"das Bettlaken","example":"Il manque un drap dans la chambre.","exampleDe":"Im Zimmer fehlt ein Bettlaken."},{"id":12,"type":"Nomen","topic":"Unterkunft","fr":"la couverture","de":"die Decke","example":"Avez-vous une couverture supplémentaire ?","exampleDe":"Haben Sie eine zusätzliche Decke?"},{"id":13,"type":"Nomen","topic":"Unterkunft","fr":"l'oreiller","de":"das Kopfkissen","example":"Il nous manque un oreiller.","exampleDe":"Uns fehlt ein Kopfkissen."},{"id":14,"type":"Nomen","topic":"Unterkunft","fr":"la serviette","de":"das Handtuch","example":"Peut-on avoir deux serviettes propres ?","exampleDe":"Können wir zwei saubere Handtücher bekommen?"},{"id":15,"type":"Nomen","topic":"Unterkunft","fr":"la douche","de":"die Dusche","example":"La douche ne fonctionne pas très bien.","exampleDe":"Die Dusche funktioniert nicht sehr gut."},{"id":16,"type":"Nomen","topic":"Unterkunft","fr":"le savon","de":"die Seife","example":"Il n'y a plus de savon.","exampleDe":"Es gibt keine Seife mehr."},{"id":17,"type":"Nomen","topic":"Unterkunft","fr":"le chauffage","de":"die Heizung","example":"Le chauffage ne marche pas.","exampleDe":"Die Heizung funktioniert nicht."},{"id":18,"type":"Nomen","topic":"Unterkunft","fr":"la climatisation","de":"die Klimaanlage","example":"La climatisation est trop forte.","exampleDe":"Die Klimaanlage ist zu stark."},{"id":19,"type":"Nomen","topic":"Unterkunft","fr":"le bruit","de":"der Lärm","example":"Il y a beaucoup de bruit la nuit.","exampleDe":"Nachts gibt es viel Lärm."},{"id":20,"type":"Nomen","topic":"Unterkunft","fr":"le calme","de":"die Ruhe","example":"Nous préférons un endroit calme.","exampleDe":"Wir bevorzugen einen ruhigen Ort."},{"id":21,"type":"Nomen","topic":"Camping","fr":"le camping","de":"der Campingplatz","example":"Nous cherchons l'accueil du camping.","exampleDe":"Wir suchen die Rezeption des Campingplatzes."},{"id":22,"type":"Nomen","topic":"Camping","fr":"l'emplacement","de":"der Stellplatz","example":"Nous avons réservé un emplacement avec électricité.","exampleDe":"Wir haben einen Stellplatz mit Strom reserviert."},{"id":23,"type":"Nomen","topic":"Camping","fr":"la tente","de":"das Zelt","example":"Nous avons une petite tente familiale.","exampleDe":"Wir haben ein kleines Familienzelt."},{"id":24,"type":"Nomen","topic":"Camping","fr":"la borne électrique","de":"die Stromsäule","example":"Où est la borne électrique ?","exampleDe":"Wo ist die Stromsäule?"},{"id":25,"type":"Nomen","topic":"Camping","fr":"la rallonge","de":"das Verlängerungskabel","example":"Nous avons besoin d'une rallonge.","exampleDe":"Wir brauchen ein Verlängerungskabel."},{"id":26,"type":"Nomen","topic":"Camping","fr":"l'électricité","de":"der Strom","example":"L'électricité est incluse dans le prix ?","exampleDe":"Ist Strom im Preis enthalten?"},{"id":27,"type":"Nomen","topic":"Camping","fr":"l'ombre","de":"der Schatten","example":"Y a-t-il un emplacement à l'ombre ?","exampleDe":"Gibt es einen Stellplatz im Schatten?"},{"id":28,"type":"Nomen","topic":"Camping","fr":"le soleil","de":"die Sonne","example":"L'emplacement est en plein soleil.","exampleDe":"Der Stellplatz liegt in voller Sonne."},{"id":29,"type":"Nomen","topic":"Camping","fr":"les sanitaires","de":"die Sanitäranlagen","example":"Où sont les sanitaires les plus proches ?","exampleDe":"Wo sind die nächsten Sanitäranlagen?"},{"id":30,"type":"Nomen","topic":"Camping","fr":"la machine à laver","de":"die Waschmaschine","example":"Vous avez une machine à laver ?","exampleDe":"Haben Sie eine Waschmaschine?"},{"id":31,"type":"Nomen","topic":"Camping","fr":"le sèche-linge","de":"der Trockner","example":"Le sèche-linge est payant ?","exampleDe":"Ist der Trockner kostenpflichtig?"},{"id":32,"type":"Nomen","topic":"Camping","fr":"les déchets","de":"der Müll","example":"Où doit-on mettre les déchets ?","exampleDe":"Wo sollen wir den Müll hinbringen?"},{"id":33,"type":"Nomen","topic":"Camping","fr":"le tri","de":"die Mülltrennung","example":"Comment fonctionne le tri ici ?","exampleDe":"Wie funktioniert hier die Mülltrennung?"},{"id":34,"type":"Nomen","topic":"Camping","fr":"le règlement","de":"die Platzordnung","example":"Y a-t-il un règlement du camping ?","exampleDe":"Gibt es eine Campingplatzordnung?"},{"id":35,"type":"Nomen","topic":"Camping","fr":"le bracelet","de":"das Armband","example":"Faut-il porter le bracelet à la piscine ?","exampleDe":"Muss man das Armband am Pool tragen?"},{"id":36,"type":"Nomen","topic":"Camping","fr":"la barrière","de":"die Schranke","example":"À quelle heure la barrière ferme ?","exampleDe":"Um wie viel Uhr schließt die Schranke?"},{"id":37,"type":"Nomen","topic":"Camping","fr":"le code","de":"der Code","example":"Quel est le code de la barrière ?","exampleDe":"Wie lautet der Code für die Schranke?"},{"id":38,"type":"Nomen","topic":"Camping","fr":"la piscine","de":"der Pool","example":"La piscine est ouverte jusqu'à quelle heure ?","exampleDe":"Bis wann ist der Pool geöffnet?"},{"id":39,"type":"Nomen","topic":"Camping","fr":"l'aire de jeux","de":"der Spielplatz","example":"Où est l'aire de jeux ?","exampleDe":"Wo ist der Spielplatz?"},{"id":40,"type":"Nomen","topic":"Camping","fr":"le voisin","de":"der Nachbar","example":"Nos voisins sont très gentils.","exampleDe":"Unsere Nachbarn sind sehr nett."},{"id":41,"type":"Nomen","topic":"Auto","fr":"la voiture","de":"das Auto","example":"Nous avons réservé une voiture pour une semaine.","exampleDe":"Wir haben ein Auto für eine Woche reserviert."},{"id":42,"type":"Nomen","topic":"Auto","fr":"le permis de conduire","de":"der Führerschein","example":"Voici mon permis de conduire.","exampleDe":"Hier ist mein Führerschein."},{"id":43,"type":"Nomen","topic":"Auto","fr":"l'assurance","de":"die Versicherung","example":"L'assurance est incluse ?","exampleDe":"Ist die Versicherung inklusive?"},{"id":44,"type":"Nomen","topic":"Auto","fr":"la caution","de":"die Kaution","example":"Quel est le montant de la caution ?","exampleDe":"Wie hoch ist die Kaution?"},{"id":45,"type":"Nomen","topic":"Auto","fr":"le plein","de":"der volle Tank","example":"Je dois rendre la voiture avec le plein ?","exampleDe":"Muss ich das Auto vollgetankt zurückgeben?"},{"id":46,"type":"Nomen","topic":"Auto","fr":"l'essence","de":"das Benzin","example":"Où est la station-service la plus proche ?","exampleDe":"Wo ist die nächste Tankstelle?"},{"id":47,"type":"Nomen","topic":"Auto","fr":"le diesel","de":"der Diesel","example":"Cette voiture prend du diesel ?","exampleDe":"Dieses Auto braucht Diesel?"},{"id":48,"type":"Nomen","topic":"Auto","fr":"la station-service","de":"die Tankstelle","example":"La station-service est ouverte la nuit ?","exampleDe":"Ist die Tankstelle nachts geöffnet?"},{"id":49,"type":"Nomen","topic":"Auto","fr":"le parking","de":"der Parkplatz","example":"Où est le parking le plus proche ?","exampleDe":"Wo ist der nächste Parkplatz?"},{"id":50,"type":"Nomen","topic":"Auto","fr":"le ticket de parking","de":"das Parkticket","example":"Il faut prendre un ticket de parking.","exampleDe":"Man muss ein Parkticket ziehen."},{"id":51,"type":"Nomen","topic":"Auto","fr":"le péage","de":"die Mautstelle","example":"Le péage accepte les cartes ?","exampleDe":"Akzeptiert die Mautstelle Karten?"},{"id":52,"type":"Nomen","topic":"Auto","fr":"l'autoroute","de":"die Autobahn","example":"Nous prenons l'autoroute jusqu'à Bordeaux.","exampleDe":"Wir nehmen die Autobahn bis Bordeaux."},{"id":53,"type":"Nomen","topic":"Auto","fr":"la sortie","de":"die Ausfahrt","example":"Quelle sortie devons-nous prendre ?","exampleDe":"Welche Ausfahrt müssen wir nehmen?"},{"id":54,"type":"Nomen","topic":"Auto","fr":"le rond-point","de":"der Kreisverkehr","example":"Prenez la deuxième sortie au rond-point.","exampleDe":"Nehmen Sie im Kreisverkehr die zweite Ausfahrt."},{"id":55,"type":"Nomen","topic":"Auto","fr":"le feu","de":"die Ampel","example":"Tournez à gauche au feu.","exampleDe":"Biegen Sie an der Ampel links ab."},{"id":56,"type":"Nomen","topic":"Auto","fr":"la limitation de vitesse","de":"die Geschwindigkeitsbegrenzung","example":"Quelle est la limitation de vitesse ici ?","exampleDe":"Welche Geschwindigkeitsbegrenzung gilt hier?"},{"id":57,"type":"Nomen","topic":"Auto","fr":"l'amende","de":"das Bußgeld","example":"J'espère que nous n'aurons pas d'amende.","exampleDe":"Ich hoffe, wir bekommen kein Bußgeld."},{"id":58,"type":"Nomen","topic":"Auto","fr":"le constat","de":"der Unfallbericht","example":"En cas d'accident, il faut remplir un constat.","exampleDe":"Bei einem Unfall muss man einen Unfallbericht ausfüllen."},{"id":59,"type":"Nomen","topic":"Auto","fr":"la rayure","de":"der Kratzer","example":"Il y a déjà une rayure sur la porte.","exampleDe":"An der Tür ist bereits ein Kratzer."},{"id":60,"type":"Nomen","topic":"Auto","fr":"le coffre","de":"der Kofferraum","example":"Le coffre est assez grand pour nos bagages.","exampleDe":"Der Kofferraum ist groß genug für unser Gepäck."},{"id":61,"type":"Nomen","topic":"Restaurant & Café","fr":"la table","de":"der Tisch","example":"Une table pour deux, s'il vous plaît.","exampleDe":"Einen Tisch für zwei, bitte."},{"id":62,"type":"Nomen","topic":"Restaurant & Café","fr":"la carte","de":"die Speisekarte","example":"La carte, s'il vous plaît.","exampleDe":"Die Speisekarte, bitte."},{"id":63,"type":"Nomen","topic":"Restaurant & Café","fr":"le menu enfant","de":"das Kindermenü","example":"Avez-vous un menu enfant ?","exampleDe":"Haben Sie ein Kindermenü?"},{"id":64,"type":"Nomen","topic":"Restaurant & Café","fr":"l'addition","de":"die Rechnung","example":"L'addition, s'il vous plaît.","exampleDe":"Die Rechnung, bitte."},{"id":65,"type":"Nomen","topic":"Restaurant & Café","fr":"la carafe d'eau","de":"die Karaffe Leitungswasser","example":"Une carafe d'eau, s'il vous plaît.","exampleDe":"Eine Karaffe Wasser, bitte."},{"id":66,"type":"Nomen","topic":"Restaurant & Café","fr":"l'eau plate","de":"stilles Wasser","example":"Une bouteille d'eau plate, s'il vous plaît.","exampleDe":"Eine Flasche stilles Wasser, bitte."},{"id":67,"type":"Nomen","topic":"Restaurant & Café","fr":"l'eau gazeuse","de":"Sprudelwasser","example":"Vous avez de l'eau gazeuse ?","exampleDe":"Haben Sie Sprudelwasser?"},{"id":68,"type":"Nomen","topic":"Restaurant & Café","fr":"le verre","de":"das Glas","example":"Un verre d'eau pour mon enfant, s'il vous plaît.","exampleDe":"Ein Glas Wasser für mein Kind, bitte."},{"id":69,"type":"Nomen","topic":"Restaurant & Café","fr":"l'assiette","de":"der Teller","example":"Une petite assiette en plus, s'il vous plaît.","exampleDe":"Einen kleinen Teller zusätzlich, bitte."},{"id":70,"type":"Nomen","topic":"Restaurant & Café","fr":"la fourchette","de":"die Gabel","example":"Il manque une fourchette.","exampleDe":"Es fehlt eine Gabel."},{"id":71,"type":"Nomen","topic":"Restaurant & Café","fr":"le couteau","de":"das Messer","example":"Un couteau, s'il vous plaît.","exampleDe":"Ein Messer, bitte."},{"id":72,"type":"Nomen","topic":"Restaurant & Café","fr":"la cuillère","de":"der Löffel","example":"Vous avez une petite cuillère ?","exampleDe":"Haben Sie einen kleinen Löffel?"},{"id":73,"type":"Nomen","topic":"Restaurant & Café","fr":"la serviette","de":"die Serviette","example":"Une serviette en papier, s'il vous plaît.","exampleDe":"Eine Papierserviette, bitte."},{"id":74,"type":"Nomen","topic":"Restaurant & Café","fr":"le plat du jour","de":"das Tagesgericht","example":"Quel est le plat du jour ?","exampleDe":"Was ist das Tagesgericht?"},{"id":75,"type":"Nomen","topic":"Restaurant & Café","fr":"l'entrée","de":"die Vorspeise","example":"Nous partageons une entrée.","exampleDe":"Wir teilen uns eine Vorspeise."},{"id":76,"type":"Nomen","topic":"Restaurant & Café","fr":"le dessert","de":"der Nachtisch","example":"Quel dessert recommandez-vous ?","exampleDe":"Welchen Nachtisch empfehlen Sie?"},{"id":77,"type":"Nomen","topic":"Restaurant & Café","fr":"la glace","de":"das Eis","example":"Mon enfant voudrait une glace.","exampleDe":"Mein Kind möchte ein Eis."},{"id":78,"type":"Nomen","topic":"Restaurant & Café","fr":"la crêpe","de":"der Crêpe","example":"Je voudrais une crêpe au sucre.","exampleDe":"Ich hätte gerne einen Crêpe mit Zucker."},{"id":79,"type":"Nomen","topic":"Restaurant & Café","fr":"le café","de":"der Kaffee","example":"Un café allongé, s'il vous plaît.","exampleDe":"Einen verlängerten Kaffee, bitte."},{"id":80,"type":"Nomen","topic":"Restaurant & Café","fr":"le pourboire","de":"das Trinkgeld","example":"Le service est compris ?","exampleDe":"Ist die Bedienung inbegriffen?"},{"id":81,"type":"Nomen","topic":"Bäckerei & Markt","fr":"la baguette","de":"das Baguette","example":"Une baguette bien cuite, s'il vous plaît.","exampleDe":"Ein gut gebackenes Baguette, bitte."},{"id":82,"type":"Nomen","topic":"Bäckerei & Markt","fr":"le croissant","de":"das Croissant","example":"Deux croissants, s'il vous plaît.","exampleDe":"Zwei Croissants, bitte."},{"id":83,"type":"Nomen","topic":"Bäckerei & Markt","fr":"le pain au chocolat","de":"das Schokobrötchen","example":"Un pain au chocolat pour mon enfant.","exampleDe":"Ein Schokobrötchen für mein Kind."},{"id":84,"type":"Nomen","topic":"Bäckerei & Markt","fr":"la brioche","de":"die Brioche","example":"La brioche a l'air délicieuse.","exampleDe":"Die Brioche sieht lecker aus."},{"id":85,"type":"Nomen","topic":"Bäckerei & Markt","fr":"la tarte","de":"die Tarte","example":"Cette tarte est faite maison ?","exampleDe":"Ist diese Tarte hausgemacht?"},{"id":86,"type":"Nomen","topic":"Bäckerei & Markt","fr":"les fraises","de":"die Erdbeeren","example":"Je voudrais une barquette de fraises.","exampleDe":"Ich hätte gerne eine Schale Erdbeeren."},{"id":87,"type":"Nomen","topic":"Bäckerei & Markt","fr":"les tomates","de":"die Tomaten","example":"Ces tomates viennent de la région ?","exampleDe":"Sind diese Tomaten aus der Region?"},{"id":88,"type":"Nomen","topic":"Bäckerei & Markt","fr":"les pommes","de":"die Äpfel","example":"Un kilo de pommes, s'il vous plaît.","exampleDe":"Ein Kilo Äpfel, bitte."},{"id":89,"type":"Nomen","topic":"Bäckerei & Markt","fr":"le fromage","de":"der Käse","example":"Je voudrais goûter ce fromage.","exampleDe":"Ich möchte diesen Käse probieren."},{"id":90,"type":"Nomen","topic":"Bäckerei & Markt","fr":"le saucisson","de":"die Salami / Trockenwurst","example":"Ce saucisson est très fort ?","exampleDe":"Ist diese Salami sehr würzig?"},{"id":91,"type":"Nomen","topic":"Bäckerei & Markt","fr":"le miel","de":"der Honig","example":"Ce miel est local ?","exampleDe":"Ist dieser Honig aus der Region?"},{"id":92,"type":"Nomen","topic":"Bäckerei & Markt","fr":"la confiture","de":"die Marmelade","example":"Avez-vous de la confiture d'abricots ?","exampleDe":"Haben Sie Aprikosenmarmelade?"},{"id":93,"type":"Nomen","topic":"Bäckerei & Markt","fr":"le kilo","de":"das Kilo","example":"Combien ça coûte le kilo ?","exampleDe":"Wie viel kostet das Kilo?"},{"id":94,"type":"Nomen","topic":"Bäckerei & Markt","fr":"la barquette","de":"die Schale","example":"Une barquette de framboises, s'il vous plaît.","exampleDe":"Eine Schale Himbeeren, bitte."},{"id":95,"type":"Nomen","topic":"Bäckerei & Markt","fr":"le morceau","de":"das Stück","example":"Un petit morceau, s'il vous plaît.","exampleDe":"Ein kleines Stück, bitte."},{"id":96,"type":"Nomen","topic":"Strand & Freizeit","fr":"la plage","de":"der Strand","example":"La plage est très belle aujourd'hui.","exampleDe":"Der Strand ist heute sehr schön."},{"id":97,"type":"Nomen","topic":"Strand & Freizeit","fr":"la mer","de":"das Meer","example":"La mer est calme ce matin.","exampleDe":"Das Meer ist heute Morgen ruhig."},{"id":98,"type":"Nomen","topic":"Strand & Freizeit","fr":"les vagues","de":"die Wellen","example":"Les vagues sont assez fortes.","exampleDe":"Die Wellen sind ziemlich stark."},{"id":99,"type":"Nomen","topic":"Strand & Freizeit","fr":"le sable","de":"der Sand","example":"Le sable est très chaud.","exampleDe":"Der Sand ist sehr heiß."},{"id":100,"type":"Nomen","topic":"Strand & Freizeit","fr":"la crème solaire","de":"die Sonnencreme","example":"Tu as mis de la crème solaire ?","exampleDe":"Hast du Sonnencreme aufgetragen?"},{"id":101,"type":"Nomen","topic":"Strand & Freizeit","fr":"les lunettes de soleil","de":"die Sonnenbrille","example":"Où sont mes lunettes de soleil ?","exampleDe":"Wo ist meine Sonnenbrille?"},{"id":102,"type":"Nomen","topic":"Strand & Freizeit","fr":"le chapeau","de":"der Hut","example":"Mets ton chapeau, s'il te plaît.","exampleDe":"Setz bitte deinen Hut auf."},{"id":103,"type":"Nomen","topic":"Strand & Freizeit","fr":"le parasol","de":"der Sonnenschirm","example":"On peut louer un parasol ?","exampleDe":"Kann man einen Sonnenschirm mieten?"},{"id":104,"type":"Nomen","topic":"Strand & Freizeit","fr":"la serviette de plage","de":"das Strandtuch","example":"J'ai oublié ma serviette de plage.","exampleDe":"Ich habe mein Strandtuch vergessen."},{"id":105,"type":"Nomen","topic":"Strand & Freizeit","fr":"le maillot de bain","de":"die Badesachen","example":"N'oublie pas ton maillot de bain.","exampleDe":"Vergiss deine Badesachen nicht."},{"id":106,"type":"Nomen","topic":"Strand & Freizeit","fr":"la bouée","de":"der Schwimmring","example":"Tu veux prendre la bouée ?","exampleDe":"Willst du den Schwimmring mitnehmen?"},{"id":107,"type":"Nomen","topic":"Strand & Freizeit","fr":"le seau","de":"der Eimer","example":"Où est le seau ?","exampleDe":"Wo ist der Eimer?"},{"id":108,"type":"Nomen","topic":"Strand & Freizeit","fr":"la pelle","de":"die Schaufel","example":"La pelle est dans le sac.","exampleDe":"Die Schaufel ist in der Tasche."},{"id":109,"type":"Nomen","topic":"Strand & Freizeit","fr":"le château de sable","de":"die Sandburg","example":"On construit un château de sable ?","exampleDe":"Bauen wir eine Sandburg?"},{"id":110,"type":"Nomen","topic":"Strand & Freizeit","fr":"les coquillages","de":"die Muscheln","example":"On cherche des coquillages ?","exampleDe":"Suchen wir Muscheln?"},{"id":111,"type":"Nomen","topic":"Strand & Freizeit","fr":"le maître-nageur","de":"der Bademeister","example":"Où est le maître-nageur ?","exampleDe":"Wo ist der Bademeister?"},{"id":112,"type":"Nomen","topic":"Strand & Freizeit","fr":"le drapeau rouge","de":"die rote Flagge","example":"Le drapeau rouge signifie baignade interdite.","exampleDe":"Die rote Flagge bedeutet Badeverbot."},{"id":113,"type":"Nomen","topic":"Strand & Freizeit","fr":"le courant","de":"die Strömung","example":"Attention, il y a du courant.","exampleDe":"Vorsicht, es gibt Strömung."},{"id":114,"type":"Nomen","topic":"Strand & Freizeit","fr":"la marée","de":"die Gezeiten / Tide","example":"À quelle heure est la marée basse ?","exampleDe":"Um wie viel Uhr ist Ebbe?"},{"id":115,"type":"Nomen","topic":"Strand & Freizeit","fr":"le coucher de soleil","de":"der Sonnenuntergang","example":"Le coucher de soleil est magnifique.","exampleDe":"Der Sonnenuntergang ist wunderschön."},{"id":116,"type":"Nomen","topic":"Stadt & Orientierung","fr":"le centre-ville","de":"die Innenstadt","example":"Comment aller au centre-ville ?","exampleDe":"Wie kommt man in die Innenstadt?"},{"id":117,"type":"Nomen","topic":"Stadt & Orientierung","fr":"la rue","de":"die Straße","example":"Cette rue est piétonne.","exampleDe":"Diese Straße ist eine Fußgängerzone."},{"id":118,"type":"Nomen","topic":"Stadt & Orientierung","fr":"la place","de":"der Platz","example":"Le marché est sur la place.","exampleDe":"Der Markt ist auf dem Platz."},{"id":119,"type":"Nomen","topic":"Stadt & Orientierung","fr":"la gare","de":"der Bahnhof","example":"La gare est loin d'ici ?","exampleDe":"Ist der Bahnhof weit von hier?"},{"id":120,"type":"Nomen","topic":"Stadt & Orientierung","fr":"l'arrêt de bus","de":"die Bushaltestelle","example":"Où est l'arrêt de bus ?","exampleDe":"Wo ist die Bushaltestelle?"},{"id":121,"type":"Nomen","topic":"Stadt & Orientierung","fr":"le billet","de":"die Fahrkarte","example":"Où peut-on acheter un billet ?","exampleDe":"Wo kann man eine Fahrkarte kaufen?"},{"id":122,"type":"Nomen","topic":"Stadt & Orientierung","fr":"le plan","de":"der Plan / Stadtplan","example":"Avez-vous un plan de la ville ?","exampleDe":"Haben Sie einen Stadtplan?"},{"id":123,"type":"Nomen","topic":"Stadt & Orientierung","fr":"l'adresse","de":"die Adresse","example":"Voici l'adresse de notre logement.","exampleDe":"Hier ist die Adresse unserer Unterkunft."},{"id":124,"type":"Nomen","topic":"Stadt & Orientierung","fr":"le musée","de":"das Museum","example":"Le musée est ouvert aujourd'hui ?","exampleDe":"Ist das Museum heute geöffnet?"},{"id":125,"type":"Nomen","topic":"Stadt & Orientierung","fr":"l'église","de":"die Kirche","example":"L'église est très ancienne.","exampleDe":"Die Kirche ist sehr alt."},{"id":126,"type":"Nomen","topic":"Stadt & Orientierung","fr":"la vieille ville","de":"die Altstadt","example":"Nous voulons visiter la vieille ville.","exampleDe":"Wir möchten die Altstadt besichtigen."},{"id":127,"type":"Nomen","topic":"Stadt & Orientierung","fr":"la librairie","de":"die Buchhandlung","example":"Y a-t-il une librairie près d'ici ?","exampleDe":"Gibt es hier in der Nähe eine Buchhandlung?"},{"id":128,"type":"Nomen","topic":"Stadt & Orientierung","fr":"la boulangerie","de":"die Bäckerei","example":"La boulangerie est à droite.","exampleDe":"Die Bäckerei ist rechts."},{"id":129,"type":"Nomen","topic":"Stadt & Orientierung","fr":"la pharmacie","de":"die Apotheke","example":"La pharmacie est ouverte le dimanche ?","exampleDe":"Ist die Apotheke sonntags geöffnet?"},{"id":130,"type":"Nomen","topic":"Stadt & Orientierung","fr":"le supermarché","de":"der Supermarkt","example":"Le supermarché ferme à quelle heure ?","exampleDe":"Um wie viel Uhr schließt der Supermarkt?"},{"id":131,"type":"Nomen","topic":"Stadt & Orientierung","fr":"la poste","de":"die Post","example":"Où est la poste ?","exampleDe":"Wo ist die Post?"},{"id":132,"type":"Nomen","topic":"Stadt & Orientierung","fr":"le distributeur","de":"der Geldautomat","example":"Je cherche un distributeur.","exampleDe":"Ich suche einen Geldautomaten."},{"id":133,"type":"Nomen","topic":"Stadt & Orientierung","fr":"le pont","de":"die Brücke","example":"Traversez le pont, puis tournez à gauche.","exampleDe":"Überqueren Sie die Brücke und biegen Sie dann links ab."},{"id":134,"type":"Nomen","topic":"Stadt & Orientierung","fr":"le port","de":"der Hafen","example":"Le port est très animé le soir.","exampleDe":"Der Hafen ist abends sehr lebendig."},{"id":135,"type":"Nomen","topic":"Stadt & Orientierung","fr":"le parc","de":"der Park","example":"On peut faire une pause dans le parc.","exampleDe":"Wir können im Park eine Pause machen."},{"id":136,"type":"Nomen","topic":"Einkaufen & Bezahlen","fr":"la carte bancaire","de":"die Bankkarte","example":"Je peux payer par carte bancaire ?","exampleDe":"Kann ich mit Bankkarte bezahlen?"},{"id":137,"type":"Nomen","topic":"Einkaufen & Bezahlen","fr":"l'argent liquide","de":"das Bargeld","example":"Vous acceptez l'argent liquide ?","exampleDe":"Akzeptieren Sie Bargeld?"},{"id":138,"type":"Nomen","topic":"Einkaufen & Bezahlen","fr":"le reçu","de":"der Beleg","example":"Je peux avoir le reçu ?","exampleDe":"Kann ich den Beleg bekommen?"},{"id":139,"type":"Nomen","topic":"Einkaufen & Bezahlen","fr":"la monnaie","de":"das Wechselgeld","example":"Voici votre monnaie.","exampleDe":"Hier ist Ihr Wechselgeld."},{"id":140,"type":"Nomen","topic":"Einkaufen & Bezahlen","fr":"la caisse","de":"die Kasse","example":"La caisse est au fond du magasin.","exampleDe":"Die Kasse ist hinten im Laden."},{"id":141,"type":"Nomen","topic":"Einkaufen & Bezahlen","fr":"le prix","de":"der Preis","example":"Quel est le prix ?","exampleDe":"Wie hoch ist der Preis?"},{"id":142,"type":"Nomen","topic":"Einkaufen & Bezahlen","fr":"la réduction","de":"der Rabatt","example":"Y a-t-il une réduction pour les enfants ?","exampleDe":"Gibt es einen Rabatt für Kinder?"},{"id":143,"type":"Nomen","topic":"Einkaufen & Bezahlen","fr":"l'entrée gratuite","de":"der freie Eintritt","example":"L'entrée est gratuite pour les enfants ?","exampleDe":"Ist der Eintritt für Kinder kostenlos?"},{"id":144,"type":"Nomen","topic":"Einkaufen & Bezahlen","fr":"la taille","de":"die Größe","example":"Vous avez une autre taille ?","exampleDe":"Haben Sie eine andere Größe?"},{"id":145,"type":"Nomen","topic":"Einkaufen & Bezahlen","fr":"la couleur","de":"die Farbe","example":"Mon enfant aime cette couleur.","exampleDe":"Mein Kind mag diese Farbe."},{"id":146,"type":"Nomen","topic":"Einkaufen & Bezahlen","fr":"le sac","de":"die Tasche / Tüte","example":"Un sac, s'il vous plaît.","exampleDe":"Eine Tüte, bitte."},{"id":147,"type":"Nomen","topic":"Einkaufen & Bezahlen","fr":"le cadeau","de":"das Geschenk","example":"C'est un cadeau pour mon enfant.","exampleDe":"Das ist ein Geschenk für mein Kind."},{"id":148,"type":"Nomen","topic":"Einkaufen & Bezahlen","fr":"la carte postale","de":"die Postkarte","example":"Je voudrais trois cartes postales.","exampleDe":"Ich hätte gerne drei Postkarten."},{"id":149,"type":"Nomen","topic":"Einkaufen & Bezahlen","fr":"le timbre","de":"die Briefmarke","example":"Avez-vous des timbres pour l'Allemagne ?","exampleDe":"Haben Sie Briefmarken nach Deutschland?"},{"id":150,"type":"Nomen","topic":"Einkaufen & Bezahlen","fr":"le magasin","de":"das Geschäft","example":"Ce magasin est ouvert le soir ?","exampleDe":"Ist dieses Geschäft abends geöffnet?"},{"id":151,"type":"Nomen","topic":"Zeit & Planung","fr":"aujourd'hui","de":"heute","example":"Aujourd'hui, nous allons à la plage.","exampleDe":"Heute gehen wir an den Strand."},{"id":152,"type":"Nomen","topic":"Zeit & Planung","fr":"demain","de":"morgen","example":"Demain, nous visitons la ville.","exampleDe":"Morgen besichtigen wir die Stadt."},{"id":153,"type":"Nomen","topic":"Zeit & Planung","fr":"hier","de":"gestern","example":"Hier, nous avons mangé au restaurant.","exampleDe":"Gestern haben wir im Restaurant gegessen."},{"id":154,"type":"Nomen","topic":"Zeit & Planung","fr":"le matin","de":"der Morgen / vormittags","example":"Le marché est ouvert le matin.","exampleDe":"Der Markt ist vormittags geöffnet."},{"id":155,"type":"Nomen","topic":"Zeit & Planung","fr":"l'après-midi","de":"der Nachmittag","example":"Nous revenons l'après-midi.","exampleDe":"Wir kommen am Nachmittag zurück."},{"id":156,"type":"Nomen","topic":"Zeit & Planung","fr":"le soir","de":"der Abend","example":"Le soir, il fait plus frais.","exampleDe":"Abends ist es kühler."},{"id":157,"type":"Nomen","topic":"Zeit & Planung","fr":"la semaine","de":"die Woche","example":"Nous restons une semaine en France.","exampleDe":"Wir bleiben eine Woche in Frankreich."},{"id":158,"type":"Nomen","topic":"Zeit & Planung","fr":"le jour férié","de":"der Feiertag","example":"C'est un jour férié aujourd'hui ?","exampleDe":"Ist heute ein Feiertag?"},{"id":159,"type":"Nomen","topic":"Zeit & Planung","fr":"les horaires","de":"die Öffnungszeiten","example":"Quels sont les horaires d'ouverture ?","exampleDe":"Wie sind die Öffnungszeiten?"},{"id":160,"type":"Nomen","topic":"Zeit & Planung","fr":"le retard","de":"die Verspätung","example":"Nous avons un peu de retard.","exampleDe":"Wir haben etwas Verspätung."},{"id":161,"type":"Nomen","topic":"Zeit & Planung","fr":"la pause","de":"die Pause","example":"On fait une pause ?","exampleDe":"Machen wir eine Pause?"},{"id":162,"type":"Nomen","topic":"Zeit & Planung","fr":"le rendez-vous","de":"der Termin / Treffpunkt","example":"Nous avons rendez-vous à dix heures.","exampleDe":"Wir haben um zehn Uhr einen Termin / Treffpunkt."},{"id":163,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"l'aide","de":"die Hilfe","example":"J'ai besoin d'aide.","exampleDe":"Ich brauche Hilfe."},{"id":164,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"les toilettes","de":"die Toilette","example":"Où sont les toilettes ?","exampleDe":"Wo sind die Toiletten?"},{"id":165,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"le médecin","de":"der Arzt / die Ärztin","example":"Nous avons besoin d'un médecin.","exampleDe":"Wir brauchen einen Arzt / eine Ärztin."},{"id":166,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"la pharmacie","de":"die Apotheke","example":"Où est la pharmacie la plus proche ?","exampleDe":"Wo ist die nächste Apotheke?"},{"id":167,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"la fièvre","de":"das Fieber","example":"Mon enfant a de la fièvre.","exampleDe":"Mein Kind hat Fieber."},{"id":168,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"la douleur","de":"der Schmerz","example":"Où avez-vous mal ?","exampleDe":"Wo haben Sie Schmerzen?"},{"id":169,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"le ventre","de":"der Bauch","example":"Mon enfant a mal au ventre.","exampleDe":"Mein Kind hat Bauchschmerzen."},{"id":170,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"la tête","de":"der Kopf","example":"J'ai mal à la tête.","exampleDe":"Ich habe Kopfschmerzen."},{"id":171,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"la gorge","de":"der Hals","example":"J'ai mal à la gorge.","exampleDe":"Ich habe Halsschmerzen."},{"id":172,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"le pansement","de":"das Pflaster","example":"Avez-vous un pansement ?","exampleDe":"Haben Sie ein Pflaster?"},{"id":173,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"la piqûre","de":"der Stich","example":"C'est une piqûre d'insecte.","exampleDe":"Das ist ein Insektenstich."},{"id":174,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"la brûlure","de":"die Verbrennung","example":"C'est une petite brûlure.","exampleDe":"Das ist eine kleine Verbrennung."},{"id":175,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"le coup de soleil","de":"der Sonnenbrand","example":"Mon enfant a un coup de soleil.","exampleDe":"Mein Kind hat einen Sonnenbrand."},{"id":176,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"l'allergie","de":"die Allergie","example":"Mon enfant a une allergie.","exampleDe":"Mein Kind hat eine Allergie."},{"id":177,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"les noix","de":"die Nüsse","example":"Est-ce qu'il y a des noix dedans ?","exampleDe":"Sind da Nüsse drin?"},{"id":178,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"le lait","de":"die Milch","example":"Est-ce qu'il y a du lait dedans ?","exampleDe":"Ist da Milch drin?"},{"id":179,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"le gluten","de":"das Gluten","example":"Est-ce que ce plat contient du gluten ?","exampleDe":"Enthält dieses Gericht Gluten?"},{"id":180,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"urgent","de":"dringend","example":"C'est urgent, s'il vous plaît.","exampleDe":"Es ist dringend, bitte."},{"id":181,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"la police","de":"die Polizei","example":"Il faut appeler la police ?","exampleDe":"Muss man die Polizei rufen?"},{"id":182,"type":"Nomen","topic":"Notfall & Gesundheit","fr":"les objets trouvés","de":"das Fundbüro","example":"Où sont les objets trouvés ?","exampleDe":"Wo ist das Fundbüro?"},{"id":183,"type":"Nomen","topic":"Richtungen","fr":"gauche","de":"links","example":"Tournez à gauche au prochain croisement.","exampleDe":"Biegen Sie an der nächsten Kreuzung links ab."},{"id":184,"type":"Nomen","topic":"Richtungen","fr":"droite","de":"rechts","example":"La boulangerie est à droite.","exampleDe":"Die Bäckerei ist rechts."},{"id":185,"type":"Nomen","topic":"Richtungen","fr":"tout droit","de":"geradeaus","example":"Continuez tout droit pendant deux minutes.","exampleDe":"Gehen Sie zwei Minuten geradeaus weiter."},{"id":186,"type":"Nomen","topic":"Richtungen","fr":"près de","de":"in der Nähe von","example":"C'est près de la gare.","exampleDe":"Es ist in der Nähe des Bahnhofs."},{"id":187,"type":"Nomen","topic":"Richtungen","fr":"loin de","de":"weit weg von","example":"Le camping est loin de la plage ?","exampleDe":"Ist der Campingplatz weit vom Strand entfernt?"},{"id":188,"type":"Nomen","topic":"Richtungen","fr":"en face de","de":"gegenüber von","example":"La pharmacie est en face de la mairie.","exampleDe":"Die Apotheke ist gegenüber vom Rathaus."},{"id":189,"type":"Nomen","topic":"Richtungen","fr":"à côté de","de":"neben","example":"Le restaurant est à côté de la boulangerie.","exampleDe":"Das Restaurant ist neben der Bäckerei."},{"id":190,"type":"Nomen","topic":"Richtungen","fr":"derrière","de":"hinter","example":"Le parking est derrière l'église.","exampleDe":"Der Parkplatz ist hinter der Kirche."},{"id":191,"type":"Nomen","topic":"Richtungen","fr":"devant","de":"vor","example":"On se retrouve devant l'accueil.","exampleDe":"Wir treffen uns vor der Rezeption."},{"id":192,"type":"Nomen","topic":"Richtungen","fr":"au fond","de":"ganz hinten","example":"Les toilettes sont au fond à gauche.","exampleDe":"Die Toiletten sind hinten links."},{"id":193,"type":"Nomen","topic":"Höflichkeit","fr":"bonjour","de":"guten Tag / hallo","example":"Bonjour, nous avons une réservation.","exampleDe":"Guten Tag, wir haben eine Reservierung."},{"id":194,"type":"Nomen","topic":"Höflichkeit","fr":"bonsoir","de":"guten Abend","example":"Bonsoir, une table pour deux, s'il vous plaît.","exampleDe":"Guten Abend, einen Tisch für zwei, bitte."},{"id":195,"type":"Nomen","topic":"Höflichkeit","fr":"au revoir","de":"auf Wiedersehen","example":"Au revoir, merci beaucoup.","exampleDe":"Auf Wiedersehen, vielen Dank."},{"id":196,"type":"Nomen","topic":"Höflichkeit","fr":"s'il vous plaît","de":"bitte","example":"La carte, s'il vous plaît.","exampleDe":"Die Speisekarte, bitte."},{"id":197,"type":"Nomen","topic":"Höflichkeit","fr":"s'il te plaît","de":"bitte (zu Kind / vertraut)","example":"Mets ton chapeau, s'il te plaît.","exampleDe":"Setz bitte deinen Hut auf."},{"id":198,"type":"Nomen","topic":"Höflichkeit","fr":"merci","de":"danke","example":"Merci pour votre aide.","exampleDe":"Danke für Ihre Hilfe."},{"id":199,"type":"Nomen","topic":"Höflichkeit","fr":"merci beaucoup","de":"vielen Dank","example":"Merci beaucoup, bonne journée !","exampleDe":"Vielen Dank, schönen Tag!"},{"id":200,"type":"Nomen","topic":"Höflichkeit","fr":"excusez-moi","de":"entschuldigen Sie","example":"Excusez-moi, où sont les toilettes ?","exampleDe":"Entschuldigen Sie, wo sind die Toiletten?"},{"id":201,"type":"Nomen","topic":"Höflichkeit","fr":"pardon","de":"Entschuldigung","example":"Pardon, je n'ai pas compris.","exampleDe":"Entschuldigung, ich habe nicht verstanden."},{"id":202,"type":"Nomen","topic":"Höflichkeit","fr":"bonne journée","de":"schönen Tag","example":"Merci, bonne journée !","exampleDe":"Danke, schönen Tag!"},{"id":203,"type":"Nomen","topic":"Höflichkeit","fr":"bonne soirée","de":"schönen Abend","example":"Merci, bonne soirée !","exampleDe":"Danke, schönen Abend!"},{"id":204,"type":"Nomen","topic":"Höflichkeit","fr":"à bientôt","de":"bis bald","example":"Au revoir, à bientôt !","exampleDe":"Tschüss, bis bald!"},{"id":205,"type":"Sonstiges","topic":"Satzbausteine","fr":"je voudrais…","de":"ich hätte gern / ich möchte …","example":"Je voudrais une table à l'ombre.","exampleDe":"Ich hätte gern einen Tisch im Schatten."},{"id":206,"type":"Sonstiges","topic":"Satzbausteine","fr":"je cherche…","de":"ich suche …","example":"Je cherche les toilettes.","exampleDe":"Ich suche die Toiletten."},{"id":207,"type":"Sonstiges","topic":"Satzbausteine","fr":"j'ai besoin de…","de":"ich brauche …","example":"J'ai besoin d'aide.","exampleDe":"Ich brauche Hilfe."},{"id":208,"type":"Sonstiges","topic":"Satzbausteine","fr":"je peux avoir… ?","de":"kann ich … bekommen?","example":"Je peux avoir un verre d'eau ?","exampleDe":"Kann ich ein Glas Wasser bekommen?"},{"id":209,"type":"Sonstiges","topic":"Satzbausteine","fr":"est-ce que… ?","de":"Frage-Einleitung","example":"Est-ce que c'est ouvert aujourd'hui ?","exampleDe":"Ist es heute geöffnet?"},{"id":210,"type":"Sonstiges","topic":"Satzbausteine","fr":"il y a…","de":"es gibt …","example":"Il y a une pharmacie près d'ici ?","exampleDe":"Gibt es eine Apotheke in der Nähe?"},{"id":211,"type":"Sonstiges","topic":"Satzbausteine","fr":"il n'y a pas…","de":"es gibt kein / keine …","example":"Il n'y a pas d'électricité sur notre emplacement.","exampleDe":"Auf unserem Stellplatz gibt es keinen Strom."},{"id":212,"type":"Sonstiges","topic":"Satzbausteine","fr":"c'est où ?","de":"wo ist das?","example":"La caisse, c'est où ?","exampleDe":"Wo ist die Kasse?"},{"id":213,"type":"Sonstiges","topic":"Satzbausteine","fr":"c'est combien ?","de":"wie viel kostet das?","example":"Cette glace, c'est combien ?","exampleDe":"Wie viel kostet dieses Eis?"},{"id":214,"type":"Sonstiges","topic":"Satzbausteine","fr":"pour mon enfant","de":"für mein Kind","example":"C'est pour mon enfant.","exampleDe":"Das ist für mein Kind."},{"id":215,"type":"Sonstiges","topic":"Satzbausteine","fr":"pour nous deux","de":"für uns beide","example":"C'est pour nous deux.","exampleDe":"Das ist für uns beide."},{"id":216,"type":"Sonstiges","topic":"Satzbausteine","fr":"avec…","de":"mit …","example":"Avec du sucre, s'il vous plaît.","exampleDe":"Mit Zucker, bitte."},{"id":217,"type":"Sonstiges","topic":"Satzbausteine","fr":"sans…","de":"ohne …","example":"Sans oignons, s'il vous plaît.","exampleDe":"Ohne Zwiebeln, bitte."},{"id":218,"type":"Sonstiges","topic":"Satzbausteine","fr":"un peu","de":"ein bisschen","example":"Je parle un peu français.","exampleDe":"Ich spreche ein bisschen Französisch."},{"id":219,"type":"Sonstiges","topic":"Satzbausteine","fr":"beaucoup","de":"viel / sehr","example":"Merci beaucoup.","exampleDe":"Vielen Dank."},{"id":220,"type":"Sonstiges","topic":"Satzbausteine","fr":"trop","de":"zu / zu viel","example":"C'est trop chaud pour mon enfant.","exampleDe":"Das ist zu heiß für mein Kind."},{"id":221,"type":"Sonstiges","topic":"Satzbausteine","fr":"encore","de":"noch / nochmal","example":"Encore une fois, s'il vous plaît.","exampleDe":"Noch einmal, bitte."},{"id":222,"type":"Sonstiges","topic":"Satzbausteine","fr":"d'accord","de":"einverstanden / okay","example":"D'accord, merci.","exampleDe":"Okay, danke."},{"id":223,"type":"Sonstiges","topic":"Satzbausteine","fr":"ce n'est pas grave","de":"nicht schlimm","example":"Ce n'est pas grave, merci quand même.","exampleDe":"Nicht schlimm, trotzdem danke."},{"id":224,"type":"Sonstiges","topic":"Satzbausteine","fr":"je ne comprends pas","de":"ich verstehe nicht","example":"Je ne comprends pas très bien.","exampleDe":"Ich verstehe nicht sehr gut."},{"id":225,"type":"Sonstiges","topic":"Satzbausteine","fr":"plus lentement","de":"langsamer","example":"Plus lentement, s'il vous plaît.","exampleDe":"Langsamer, bitte."},{"id":226,"type":"Sonstiges","topic":"Satzbausteine","fr":"vous pouvez répéter ?","de":"können Sie wiederholen?","example":"Vous pouvez répéter, s'il vous plaît ?","exampleDe":"Können Sie das bitte wiederholen?"},{"id":227,"type":"Sonstiges","topic":"Satzbausteine","fr":"vous parlez allemand ?","de":"sprechen Sie Deutsch?","example":"Vous parlez allemand ou anglais ?","exampleDe":"Sprechen Sie Deutsch oder Englisch?"},{"id":228,"type":"Sonstiges","topic":"Satzbausteine","fr":"comment dit-on… ?","de":"wie sagt man …?","example":"Comment dit-on « playground » en français ?","exampleDe":"Wie sagt man „Spielplatz“ auf Französisch?"},{"id":229,"type":"Sonstiges","topic":"Satzbausteine","fr":"qu'est-ce que ça veut dire ?","de":"was bedeutet das?","example":"Qu'est-ce que ça veut dire ?","exampleDe":"Was bedeutet das?"},{"id":230,"type":"Sonstiges","topic":"Satzbausteine","fr":"à quelle heure ?","de":"um wie viel Uhr?","example":"À quelle heure ouvre la piscine ?","exampleDe":"Um wie viel Uhr öffnet der Pool?"},{"id":231,"type":"Sonstiges","topic":"Satzbausteine","fr":"combien de temps ?","de":"wie lange?","example":"Combien de temps faut-il pour aller à la plage ?","exampleDe":"Wie lange dauert es, zum Strand zu gehen?"},{"id":232,"type":"Sonstiges","topic":"Satzbausteine","fr":"c'est possible ?","de":"ist das möglich?","example":"C'est possible de changer d'emplacement ?","exampleDe":"Ist es möglich, den Stellplatz zu wechseln?"},{"id":233,"type":"Sonstiges","topic":"Satzbausteine","fr":"ça marche","de":"das klappt / okay","example":"Ça marche, merci.","exampleDe":"Okay, danke."},{"id":234,"type":"Sonstiges","topic":"Satzbausteine","fr":"je suis désolé(e)","de":"es tut mir leid","example":"Je suis désolé, nous sommes en retard.","exampleDe":"Es tut mir leid, wir sind zu spät."},{"id":235,"type":"Verb","topic":"Verben im Infinitiv","fr":"être","de":"sein","example":"Je suis avec mon enfant.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":236,"type":"Verb","topic":"Verben im Infinitiv","fr":"avoir","de":"haben","example":"Nous avons une réservation.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":237,"type":"Verb","topic":"Verben im Infinitiv","fr":"aller","de":"gehen / fahren","example":"Nous allons à la plage.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":238,"type":"Verb","topic":"Verben im Infinitiv","fr":"faire","de":"machen / tun","example":"Nous faisons une pause.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":239,"type":"Verb","topic":"Verben im Infinitiv","fr":"dire","de":"sagen","example":"Comment dit-on cela en français ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":240,"type":"Verb","topic":"Verben im Infinitiv","fr":"pouvoir","de":"können / dürfen","example":"Vous pouvez répéter ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":241,"type":"Verb","topic":"Verben im Infinitiv","fr":"vouloir","de":"wollen / möchten","example":"Je voudrais une table à l'ombre.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":242,"type":"Verb","topic":"Verben im Infinitiv","fr":"devoir","de":"müssen / sollen","example":"Nous devons partir demain.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":243,"type":"Verb","topic":"Verben im Infinitiv","fr":"prendre","de":"nehmen","example":"Je prends une crêpe au sucre.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":244,"type":"Verb","topic":"Verben im Infinitiv","fr":"mettre","de":"stellen / legen / anziehen / auftragen","example":"Mets de la crème solaire.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":245,"type":"Verb","topic":"Verben im Infinitiv","fr":"venir","de":"kommen","example":"Nous venons d'Allemagne.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":246,"type":"Verb","topic":"Verben im Infinitiv","fr":"revenir","de":"zurückkommen","example":"Nous revenons plus tard.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":247,"type":"Verb","topic":"Verben im Infinitiv","fr":"partir","de":"abreisen / losfahren","example":"Nous partons demain matin.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":248,"type":"Verb","topic":"Verben im Infinitiv","fr":"sortir","de":"hinausgehen / ausgehen","example":"Nous sortons ce soir.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":249,"type":"Verb","topic":"Verben im Infinitiv","fr":"dormir","de":"schlafen","example":"Mon enfant dort déjà.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":250,"type":"Verb","topic":"Verben im Infinitiv","fr":"lire","de":"lesen","example":"Je lis la carte.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":251,"type":"Verb","topic":"Verben im Infinitiv","fr":"écrire","de":"schreiben","example":"J'écris l'adresse.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":252,"type":"Verb","topic":"Verben im Infinitiv","fr":"voir","de":"sehen","example":"Je vois le panneau.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":253,"type":"Verb","topic":"Verben im Infinitiv","fr":"savoir","de":"wissen","example":"Je ne sais pas.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":254,"type":"Verb","topic":"Verben im Infinitiv","fr":"connaître","de":"kennen","example":"Vous connaissez un bon restaurant ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":255,"type":"Verb","topic":"Verben im Infinitiv","fr":"boire","de":"trinken","example":"Je bois de l'eau.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":256,"type":"Verb","topic":"Verben im Infinitiv","fr":"manger","de":"essen","example":"Nous mangeons au restaurant.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":257,"type":"Verb","topic":"Verben im Infinitiv","fr":"acheter","de":"kaufen","example":"Je voudrais acheter du pain.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":258,"type":"Verb","topic":"Verben im Infinitiv","fr":"payer","de":"bezahlen","example":"Je peux payer par carte ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":259,"type":"Verb","topic":"Verben im Infinitiv","fr":"réserver","de":"reservieren / buchen","example":"Je voudrais réserver une table.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":260,"type":"Verb","topic":"Verben im Infinitiv","fr":"louer","de":"mieten","example":"Nous voulons louer une voiture.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":261,"type":"Verb","topic":"Verben im Infinitiv","fr":"chercher","de":"suchen","example":"Je cherche la pharmacie.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":262,"type":"Verb","topic":"Verben im Infinitiv","fr":"trouver","de":"finden","example":"J'ai trouvé le parking.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":263,"type":"Verb","topic":"Verben im Infinitiv","fr":"parler","de":"sprechen","example":"Je parle un peu français.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":264,"type":"Verb","topic":"Verben im Infinitiv","fr":"comprendre","de":"verstehen","example":"Je ne comprends pas très bien.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":265,"type":"Verb","topic":"Verben im Infinitiv","fr":"répéter","de":"wiederholen","example":"Vous pouvez répéter ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":266,"type":"Verb","topic":"Verben im Infinitiv","fr":"demander","de":"fragen / bitten","example":"Je vais demander à l'accueil.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":267,"type":"Verb","topic":"Verben im Infinitiv","fr":"aider","de":"helfen","example":"Vous pouvez nous aider ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":268,"type":"Verb","topic":"Verben im Infinitiv","fr":"appeler","de":"anrufen / rufen","example":"Pouvez-vous appeler un médecin ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":269,"type":"Verb","topic":"Verben im Infinitiv","fr":"attendre","de":"warten","example":"On attend ici ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":270,"type":"Verb","topic":"Verben im Infinitiv","fr":"choisir","de":"auswählen","example":"Tu peux choisir un parfum.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":271,"type":"Verb","topic":"Verben im Infinitiv","fr":"goûter","de":"probieren","example":"Je peux goûter ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":272,"type":"Verb","topic":"Verben im Infinitiv","fr":"aimer","de":"mögen / lieben","example":"Mon enfant aime la plage.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":273,"type":"Verb","topic":"Verben im Infinitiv","fr":"préférer","de":"bevorzugen / lieber mögen","example":"Je préfère une table à l'ombre.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":274,"type":"Verb","topic":"Verben im Infinitiv","fr":"ouvrir","de":"öffnen","example":"À quelle heure ouvrez-vous ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":275,"type":"Verb","topic":"Verben im Infinitiv","fr":"fermer","de":"schließen","example":"Vous fermez à quelle heure ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":276,"type":"Verb","topic":"Verben im Infinitiv","fr":"arriver","de":"ankommen","example":"Nous arrivons vers cinq heures.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":277,"type":"Verb","topic":"Verben im Infinitiv","fr":"rester","de":"bleiben","example":"Nous restons trois nuits.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":278,"type":"Verb","topic":"Verben im Infinitiv","fr":"entrer","de":"hineingehen","example":"On peut entrer ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":279,"type":"Verb","topic":"Verben im Infinitiv","fr":"retourner","de":"zurückgehen / zurückfahren","example":"Nous retournons au camping.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":280,"type":"Verb","topic":"Verben im Infinitiv","fr":"continuer","de":"weitergehen / weitermachen","example":"Continuez tout droit.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":281,"type":"Verb","topic":"Verben im Infinitiv","fr":"tourner","de":"abbiegen","example":"Tournez à droite.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":282,"type":"Verb","topic":"Verben im Infinitiv","fr":"traverser","de":"überqueren","example":"Traversez le pont.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":283,"type":"Verb","topic":"Verben im Infinitiv","fr":"monter","de":"hochgehen / einsteigen","example":"On monte dans le bus.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":284,"type":"Verb","topic":"Verben im Infinitiv","fr":"descendre","de":"hinuntergehen / aussteigen","example":"Nous descendons ici.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":285,"type":"Verb","topic":"Verben im Infinitiv","fr":"porter","de":"tragen","example":"Je porte le sac.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":286,"type":"Verb","topic":"Verben im Infinitiv","fr":"laisser","de":"lassen","example":"On laisse la voiture ici ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":287,"type":"Verb","topic":"Verben im Infinitiv","fr":"oublier","de":"vergessen","example":"J'ai oublié ma serviette.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":288,"type":"Verb","topic":"Verben im Infinitiv","fr":"perdre","de":"verlieren","example":"J'ai perdu mon téléphone.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":289,"type":"Verb","topic":"Verben im Infinitiv","fr":"retrouver","de":"wiederfinden","example":"J'espère retrouver mes clés.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":290,"type":"Verb","topic":"Verben im Infinitiv","fr":"envoyer","de":"schicken","example":"Je dois envoyer un message.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":291,"type":"Verb","topic":"Verben im Infinitiv","fr":"recevoir","de":"bekommen / empfangen","example":"Je n'ai pas reçu la confirmation.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":292,"type":"Verb","topic":"Verben im Infinitiv","fr":"donner","de":"geben","example":"Vous pouvez me donner un plan ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":293,"type":"Verb","topic":"Verben im Infinitiv","fr":"montrer","de":"zeigen","example":"Je peux vous montrer la réservation.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":294,"type":"Verb","topic":"Verben im Infinitiv","fr":"expliquer","de":"erklären","example":"Vous pouvez expliquer plus lentement ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":295,"type":"Verb","topic":"Verben im Infinitiv","fr":"changer","de":"wechseln / ändern","example":"On peut changer d'emplacement ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":296,"type":"Verb","topic":"Verben im Infinitiv","fr":"annuler","de":"stornieren","example":"Je dois annuler la réservation.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":297,"type":"Verb","topic":"Verben im Infinitiv","fr":"confirmer","de":"bestätigen","example":"Je voudrais confirmer notre réservation.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":298,"type":"Verb","topic":"Verben im Infinitiv","fr":"remplir","de":"ausfüllen","example":"Je dois remplir ce formulaire ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":299,"type":"Verb","topic":"Verben im Infinitiv","fr":"signer","de":"unterschreiben","example":"Où dois-je signer ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":300,"type":"Verb","topic":"Verben im Infinitiv","fr":"vérifier","de":"prüfen","example":"Je vais vérifier l'adresse.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":301,"type":"Verb","topic":"Verben im Infinitiv","fr":"réparer","de":"reparieren","example":"Pouvez-vous réparer la douche ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":302,"type":"Verb","topic":"Verben im Infinitiv","fr":"fonctionner","de":"funktionieren","example":"La climatisation ne fonctionne pas.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":303,"type":"Verb","topic":"Verben im Infinitiv","fr":"marcher","de":"gehen / funktionieren","example":"Ça marche, merci.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":304,"type":"Verb","topic":"Verben im Infinitiv","fr":"coûter","de":"kosten","example":"Combien ça coûte ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":305,"type":"Verb","topic":"Verben im Infinitiv","fr":"valoir","de":"wert sein / gelten","example":"Ce ticket est valable aujourd'hui ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":306,"type":"Verb","topic":"Verben im Infinitiv","fr":"utiliser","de":"benutzen","example":"On peut utiliser les toilettes ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":307,"type":"Verb","topic":"Verben im Infinitiv","fr":"toucher","de":"berühren","example":"Ne touche pas, s'il te plaît.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":308,"type":"Verb","topic":"Verben im Infinitiv","fr":"regarder","de":"anschauen","example":"Regarde les vagues !","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":309,"type":"Verb","topic":"Verben im Infinitiv","fr":"écouter","de":"zuhören / anhören","example":"Écoute la question.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":310,"type":"Verb","topic":"Verben im Infinitiv","fr":"jouer","de":"spielen","example":"Tu veux jouer ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":311,"type":"Verb","topic":"Verben im Infinitiv","fr":"nager","de":"schwimmen","example":"On peut nager ici ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":312,"type":"Verb","topic":"Verben im Infinitiv","fr":"courir","de":"laufen / rennen","example":"Ne cours pas près de la piscine.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":313,"type":"Verb","topic":"Verben im Infinitiv","fr":"tomber","de":"fallen","example":"Attention, tu vas tomber.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":314,"type":"Verb","topic":"Verben im Infinitiv","fr":"se blesser","de":"sich verletzen","example":"Mon enfant s'est blessé.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":315,"type":"Verb","topic":"Verben im Infinitiv","fr":"se perdre","de":"sich verlaufen","example":"Je ne veux pas me perdre.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":316,"type":"Verb","topic":"Verben im Infinitiv","fr":"se reposer","de":"sich ausruhen","example":"On se repose un peu.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":317,"type":"Verb","topic":"Verben im Infinitiv","fr":"se baigner","de":"baden","example":"On peut se baigner ici ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":318,"type":"Verb","topic":"Verben im Infinitiv","fr":"se promener","de":"spazieren gehen","example":"Nous nous promenons en ville.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":319,"type":"Verb","topic":"Verben im Infinitiv","fr":"préparer","de":"vorbereiten","example":"Je prépare le sac de plage.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":320,"type":"Verb","topic":"Verben im Infinitiv","fr":"apporter","de":"mitbringen","example":"J'apporte les serviettes.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":321,"type":"Verb","topic":"Verben im Infinitiv","fr":"emmener","de":"mitnehmen","example":"J'emmène mon enfant à la piscine.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":322,"type":"Verb","topic":"Verben im Infinitiv","fr":"protéger","de":"schützen","example":"Il faut protéger la peau du soleil.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":323,"type":"Verb","topic":"Verben im Infinitiv","fr":"sécher","de":"trocknen","example":"La serviette sèche au soleil.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":324,"type":"Verb","topic":"Verben im Infinitiv","fr":"laver","de":"waschen","example":"Je dois laver les vêtements.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":325,"type":"Verb","topic":"Verben im Infinitiv","fr":"ranger","de":"aufräumen / einräumen","example":"On range la tente.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":326,"type":"Verb","topic":"Verben im Infinitiv","fr":"installer","de":"aufbauen / einrichten","example":"Nous installons la tente.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":327,"type":"Verb","topic":"Verben im Infinitiv","fr":"démonter","de":"abbauen","example":"Nous démontons la tente demain.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":328,"type":"Verb","topic":"Verben im Infinitiv","fr":"conduire","de":"fahren","example":"Je conduis jusqu'au camping.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":329,"type":"Verb","topic":"Verben im Infinitiv","fr":"garer","de":"parken","example":"Où puis-je garer la voiture ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":330,"type":"Verb","topic":"Verben im Infinitiv","fr":"démarrer","de":"starten","example":"La voiture ne démarre pas.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":331,"type":"Verb","topic":"Verben im Infinitiv","fr":"rendre","de":"zurückgeben","example":"Je dois rendre les clés.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":332,"type":"Verb","topic":"Verben im Infinitiv","fr":"visiter","de":"besichtigen","example":"Nous visitons la vieille ville.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":333,"type":"Verb","topic":"Verben im Infinitiv","fr":"photographier","de":"fotografieren","example":"Je peux photographier ici ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":334,"type":"Verb","topic":"Verben im Infinitiv","fr":"entrainer","de":"trainieren / üben","example":"Nous entraînons les phrases utiles.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":335,"type":"Verb","topic":"Verben im Infinitiv","fr":"apprendre","de":"lernen","example":"Nous apprenons le français pour le voyage.","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."},{"id":336,"type":"Verb","topic":"Verben im Infinitiv","fr":"essayer","de":"versuchen / anprobieren","example":"Je peux essayer cette taille ?","exampleDe":"Übe dieses Verb zusätzlich im Verbtrainer."}];
+const verbs = [{"inf":"être","de":"sein","kind":"unregelmäßig","example":"Je suis avec mon enfant."},{"inf":"avoir","de":"haben","kind":"unregelmäßig","example":"Nous avons une réservation."},{"inf":"aller","de":"gehen / fahren","kind":"unregelmäßig","example":"Nous allons à la plage."},{"inf":"faire","de":"machen / tun","kind":"unregelmäßig","example":"Nous faisons une pause."},{"inf":"dire","de":"sagen","kind":"unregelmäßig","example":"Comment dit-on cela en français ?"},{"inf":"pouvoir","de":"können / dürfen","kind":"unregelmäßig","example":"Vous pouvez répéter ?"},{"inf":"vouloir","de":"wollen / möchten","kind":"unregelmäßig","example":"Je voudrais une table à l'ombre."},{"inf":"devoir","de":"müssen / sollen","kind":"unregelmäßig","example":"Nous devons partir demain."},{"inf":"prendre","de":"nehmen","kind":"unregelmäßig","example":"Je prends une crêpe au sucre."},{"inf":"mettre","de":"stellen / legen / anziehen / auftragen","kind":"unregelmäßig","example":"Mets de la crème solaire."},{"inf":"venir","de":"kommen","kind":"unregelmäßig","example":"Nous venons d'Allemagne."},{"inf":"revenir","de":"zurückkommen","kind":"unregelmäßig","example":"Nous revenons plus tard."},{"inf":"partir","de":"abreisen / losfahren","kind":"unregelmäßig","example":"Nous partons demain matin."},{"inf":"sortir","de":"hinausgehen / ausgehen","kind":"unregelmäßig","example":"Nous sortons ce soir."},{"inf":"dormir","de":"schlafen","kind":"unregelmäßig","example":"Mon enfant dort déjà."},{"inf":"lire","de":"lesen","kind":"unregelmäßig","example":"Je lis la carte."},{"inf":"écrire","de":"schreiben","kind":"unregelmäßig","example":"J'écris l'adresse."},{"inf":"voir","de":"sehen","kind":"unregelmäßig","example":"Je vois le panneau."},{"inf":"savoir","de":"wissen","kind":"unregelmäßig","example":"Je ne sais pas."},{"inf":"connaître","de":"kennen","kind":"unregelmäßig","example":"Vous connaissez un bon restaurant ?"},{"inf":"boire","de":"trinken","kind":"unregelmäßig","example":"Je bois de l'eau."},{"inf":"manger","de":"essen","kind":"regelmäßig","example":"Nous mangeons au restaurant."},{"inf":"acheter","de":"kaufen","kind":"regelmäßig","example":"Je voudrais acheter du pain."},{"inf":"payer","de":"bezahlen","kind":"regelmäßig","example":"Je peux payer par carte ?"},{"inf":"réserver","de":"reservieren / buchen","kind":"regelmäßig","example":"Je voudrais réserver une table."},{"inf":"louer","de":"mieten","kind":"regelmäßig","example":"Nous voulons louer une voiture."},{"inf":"chercher","de":"suchen","kind":"regelmäßig","example":"Je cherche la pharmacie."},{"inf":"trouver","de":"finden","kind":"regelmäßig","example":"J'ai trouvé le parking."},{"inf":"parler","de":"sprechen","kind":"regelmäßig","example":"Je parle un peu français."},{"inf":"comprendre","de":"verstehen","kind":"unregelmäßig","example":"Je ne comprends pas très bien."},{"inf":"répéter","de":"wiederholen","kind":"regelmäßig","example":"Vous pouvez répéter ?"},{"inf":"demander","de":"fragen / bitten","kind":"regelmäßig","example":"Je vais demander à l'accueil."},{"inf":"aider","de":"helfen","kind":"regelmäßig","example":"Vous pouvez nous aider ?"},{"inf":"appeler","de":"anrufen / rufen","kind":"regelmäßig","example":"Pouvez-vous appeler un médecin ?"},{"inf":"attendre","de":"warten","kind":"regelmäßig","example":"On attend ici ?"},{"inf":"choisir","de":"auswählen","kind":"regelmäßig","example":"Tu peux choisir un parfum."},{"inf":"goûter","de":"probieren","kind":"regelmäßig","example":"Je peux goûter ?"},{"inf":"aimer","de":"mögen / lieben","kind":"regelmäßig","example":"Mon enfant aime la plage."},{"inf":"préférer","de":"bevorzugen / lieber mögen","kind":"regelmäßig","example":"Je préfère une table à l'ombre."},{"inf":"ouvrir","de":"öffnen","kind":"unregelmäßig","example":"À quelle heure ouvrez-vous ?"},{"inf":"fermer","de":"schließen","kind":"regelmäßig","example":"Vous fermez à quelle heure ?"},{"inf":"arriver","de":"ankommen","kind":"regelmäßig","example":"Nous arrivons vers cinq heures."},{"inf":"rester","de":"bleiben","kind":"regelmäßig","example":"Nous restons trois nuits."},{"inf":"entrer","de":"hineingehen","kind":"regelmäßig","example":"On peut entrer ?"},{"inf":"retourner","de":"zurückgehen / zurückfahren","kind":"regelmäßig","example":"Nous retournons au camping."},{"inf":"continuer","de":"weitergehen / weitermachen","kind":"regelmäßig","example":"Continuez tout droit."},{"inf":"tourner","de":"abbiegen","kind":"regelmäßig","example":"Tournez à droite."},{"inf":"traverser","de":"überqueren","kind":"regelmäßig","example":"Traversez le pont."},{"inf":"monter","de":"hochgehen / einsteigen","kind":"regelmäßig","example":"On monte dans le bus."},{"inf":"descendre","de":"hinuntergehen / aussteigen","kind":"unregelmäßig","example":"Nous descendons ici."},{"inf":"porter","de":"tragen","kind":"regelmäßig","example":"Je porte le sac."},{"inf":"laisser","de":"lassen","kind":"regelmäßig","example":"On laisse la voiture ici ?"},{"inf":"oublier","de":"vergessen","kind":"regelmäßig","example":"J'ai oublié ma serviette."},{"inf":"perdre","de":"verlieren","kind":"regelmäßig","example":"J'ai perdu mon téléphone."},{"inf":"retrouver","de":"wiederfinden","kind":"unregelmäßig","example":"J'espère retrouver mes clés."},{"inf":"envoyer","de":"schicken","kind":"regelmäßig","example":"Je dois envoyer un message."},{"inf":"recevoir","de":"bekommen / empfangen","kind":"unregelmäßig","example":"Je n'ai pas reçu la confirmation."},{"inf":"donner","de":"geben","kind":"regelmäßig","example":"Vous pouvez me donner un plan ?"},{"inf":"montrer","de":"zeigen","kind":"regelmäßig","example":"Je peux vous montrer la réservation."},{"inf":"expliquer","de":"erklären","kind":"regelmäßig","example":"Vous pouvez expliquer plus lentement ?"},{"inf":"changer","de":"wechseln / ändern","kind":"regelmäßig","example":"On peut changer d'emplacement ?"},{"inf":"annuler","de":"stornieren","kind":"regelmäßig","example":"Je dois annuler la réservation."},{"inf":"confirmer","de":"bestätigen","kind":"regelmäßig","example":"Je voudrais confirmer notre réservation."},{"inf":"remplir","de":"ausfüllen","kind":"regelmäßig","example":"Je dois remplir ce formulaire ?"},{"inf":"signer","de":"unterschreiben","kind":"regelmäßig","example":"Où dois-je signer ?"},{"inf":"vérifier","de":"prüfen","kind":"regelmäßig","example":"Je vais vérifier l'adresse."},{"inf":"réparer","de":"reparieren","kind":"regelmäßig","example":"Pouvez-vous réparer la douche ?"},{"inf":"fonctionner","de":"funktionieren","kind":"regelmäßig","example":"La climatisation ne fonctionne pas."},{"inf":"marcher","de":"gehen / funktionieren","kind":"regelmäßig","example":"Ça marche, merci."},{"inf":"coûter","de":"kosten","kind":"regelmäßig","example":"Combien ça coûte ?"},{"inf":"valoir","de":"wert sein / gelten","kind":"unregelmäßig","example":"Ce ticket est valable aujourd'hui ?"},{"inf":"utiliser","de":"benutzen","kind":"regelmäßig","example":"On peut utiliser les toilettes ?"},{"inf":"toucher","de":"berühren","kind":"regelmäßig","example":"Ne touche pas, s'il te plaît."},{"inf":"regarder","de":"anschauen","kind":"regelmäßig","example":"Regarde les vagues !"},{"inf":"écouter","de":"zuhören / anhören","kind":"regelmäßig","example":"Écoute la question."},{"inf":"jouer","de":"spielen","kind":"regelmäßig","example":"Tu veux jouer ?"},{"inf":"nager","de":"schwimmen","kind":"regelmäßig","example":"On peut nager ici ?"},{"inf":"courir","de":"laufen / rennen","kind":"unregelmäßig","example":"Ne cours pas près de la piscine."},{"inf":"tomber","de":"fallen","kind":"regelmäßig","example":"Attention, tu vas tomber."},{"inf":"se blesser","de":"sich verletzen","kind":"reflexiv","example":"Mon enfant s'est blessé."},{"inf":"se perdre","de":"sich verlaufen","kind":"reflexiv","example":"Je ne veux pas me perdre."},{"inf":"se reposer","de":"sich ausruhen","kind":"reflexiv","example":"On se repose un peu."},{"inf":"se baigner","de":"baden","kind":"reflexiv","example":"On peut se baigner ici ?"},{"inf":"se promener","de":"spazieren gehen","kind":"reflexiv","example":"Nous nous promenons en ville."},{"inf":"préparer","de":"vorbereiten","kind":"regelmäßig","example":"Je prépare le sac de plage."},{"inf":"apporter","de":"mitbringen","kind":"regelmäßig","example":"J'apporte les serviettes."},{"inf":"emmener","de":"mitnehmen","kind":"regelmäßig","example":"J'emmène mon enfant à la piscine."},{"inf":"protéger","de":"schützen","kind":"regelmäßig","example":"Il faut protéger la peau du soleil."},{"inf":"sécher","de":"trocknen","kind":"regelmäßig","example":"La serviette sèche au soleil."},{"inf":"laver","de":"waschen","kind":"regelmäßig","example":"Je dois laver les vêtements."},{"inf":"ranger","de":"aufräumen / einräumen","kind":"regelmäßig","example":"On range la tente."},{"inf":"installer","de":"aufbauen / einrichten","kind":"regelmäßig","example":"Nous installons la tente."},{"inf":"démonter","de":"abbauen","kind":"regelmäßig","example":"Nous démontons la tente demain."},{"inf":"conduire","de":"fahren","kind":"unregelmäßig","example":"Je conduis jusqu'au camping."},{"inf":"garer","de":"parken","kind":"regelmäßig","example":"Où puis-je garer la voiture ?"},{"inf":"démarrer","de":"starten","kind":"regelmäßig","example":"La voiture ne démarre pas."},{"inf":"rendre","de":"zurückgeben","kind":"regelmäßig","example":"Je dois rendre les clés."},{"inf":"visiter","de":"besichtigen","kind":"regelmäßig","example":"Nous visitons la vieille ville."},{"inf":"photographier","de":"fotografieren","kind":"regelmäßig","example":"Je peux photographier ici ?"},{"inf":"entrainer","de":"trainieren / üben","kind":"regelmäßig","example":"Nous entraînons les phrases utiles."},{"inf":"apprendre","de":"lernen","kind":"unregelmäßig","example":"Nous apprenons le français pour le voyage."},{"inf":"essayer","de":"versuchen / anprobieren","kind":"regelmäßig","example":"Je peux essayer cette taille ?"}];
+const dialogs = [{"title":"Auto abholen","icon":"🚗","goal":"Reservierung, Kaution, Versicherung und Rückgabe klären","steps":[["Bonjour, vous avez une réservation ?","Oui, nous avons réservé une voiture au nom de Weisbrodt.",["Je voudrais une glace à la vanille.","La plage est très belle aujourd'hui."]],["Puis-je voir votre permis de conduire ?","Bien sûr, voici mon permis de conduire.",["Nous cherchons les sanitaires.","Je parle avec mon enfant."]],["Voulez-vous ajouter une assurance supplémentaire ?","L'assurance de base est-elle déjà incluse ?",["Où sont les coquillages ?","Je voudrais deux croissants."]],["La caution est de 600 euros.","D'accord. Est-ce qu'elle est seulement bloquée sur la carte ?",["C'est pour emporter, merci.","Tu veux jouer au ballon ?"]],["Vous devez rendre la voiture avec le plein.","Très bien. Où se trouve la station-service la plus proche ?",["Le menu enfant est délicieux.","Je peux avoir un pansement ?"]],["Vous rapportez les clés ici demain soir.","Parfait, nous rendrons la voiture ici demain soir.",["Nous restons à la plage.","Il y a beaucoup de vagues."]]]},{"title":"Ankunft am Camping","icon":"⛺","goal":"Einchecken, Stellplatz, Regeln und Infrastruktur verstehen","steps":[["Bonjour, bienvenue au camping. Vous avez réservé ?","Bonjour, oui, nous avons réservé un emplacement avec électricité.",["Une table pour deux, s'il vous plaît.","Je peux goûter ce fromage ?"]],["Vous restez combien de nuits ?","Nous restons trois nuits, jusqu'à vendredi matin.",["La voiture ne démarre pas.","Je voudrais une carte postale."]],["Vous préférez être près de la piscine ou au calme ?","Si possible, nous préférons un emplacement calme et un peu à l'ombre.",["Je prends une crêpe au sucre.","Le péage accepte les cartes ?"]],["Voici le plan du camping.","Merci. Où sont les sanitaires les plus proches ?",["Vous avez des timbres ?","Mon enfant aime le chocolat."]],["La barrière ferme à vingt-trois heures.","D'accord. Quel est le code pour entrer après la fermeture ?",["C'est une piqûre d'insecte.","La mer est froide aujourd'hui."]],["La piscine est ouverte de dix heures à dix-neuf heures.","Très bien, merci pour toutes les informations.",["Où est la vieille ville ?","Je voudrais annuler le dessert."]]]},{"title":"Restaurant mit Kind","icon":"🍽️","goal":"Reservieren, nachfragen, bestellen und bezahlen","steps":[["Bonsoir, vous avez réservé ?","Bonsoir, oui, nous avons réservé une table pour deux personnes.",["Je cherche un distributeur.","Nous démontons la tente demain."]],["Vous voulez être en terrasse ou à l'intérieur ?","En terrasse, si c'est possible, mais pas en plein soleil.",["Je voudrais un ticket de parking.","Le drapeau rouge signifie baignade interdite."]],["Voici la carte.","Merci. Avez-vous un menu enfant ?",["Où est la borne électrique ?","J'ai perdu mon téléphone."]],["Qu'est-ce que vous prenez ?","Je prends le plat du jour, et mon enfant prend des frites.",["On peut louer un parasol ?","La pharmacie est en face de la mairie."]],["Vous voulez de l'eau ?","Oui, une carafe d'eau, s'il vous plaît.",["Je suis venu d'Allemagne.","Nous avons besoin d'une rallonge."]],["Vous avez terminé ?","Oui, c'était très bon. L'addition, s'il vous plaît.",["Le supermarché ferme à quelle heure ?","On cherche des coquillages ?"]]]},{"title":"Café & Croissant","icon":"🥐","goal":"kurz und höflich im Café oder in der Bäckerei bestellen","steps":[["Bonjour, qu'est-ce que vous désirez ?","Bonjour, je voudrais deux croissants et un café, s'il vous plaît.",["Où est le maître-nageur ?","La douche est cassée."]],["Vous prenez sur place ou à emporter ?","Sur place, s'il vous plaît.",["Je dois remplir ce formulaire.","Tournez à droite au feu."]],["Vous voulez un café court ou allongé ?","Un café allongé, s'il vous plaît.",["C'est urgent, s'il vous plaît.","Nous avons réservé un emplacement."]],["Et pour votre enfant ?","Un chocolat chaud, si vous en avez.",["Il faut appeler la police ?","Je voudrais changer d'emplacement."]],["Ça fera huit euros cinquante.","Je peux payer par carte ?",["La mer est calme ce matin.","Vous connaissez un bon restaurant ?"]]]},{"title":"Eis kaufen","icon":"🍦","goal":"Kind bestellt selbst ein Eis","steps":[["Bonjour, tu voudrais quoi ?","Bonjour, je voudrais une glace, s'il vous plaît.",["Je dois rendre la voiture.","Où est le distributeur ?"]],["Quel parfum ?","Une boule à la vanille et une boule à la fraise.",["La caution est trop élevée.","Nous restons trois nuits."]],["Dans un cornet ou dans un pot ?","Dans un cornet, s'il vous plaît.",["Je n'ai pas reçu la confirmation.","Continuez tout droit."]],["Tu veux de la chantilly ?","Non merci, sans chantilly.",["C'est une petite brûlure.","La barrière ferme à vingt-trois heures."]],["Voilà, ça fait quatre euros.","Merci beaucoup, au revoir !",["Il y a du courant.","Je préfère un endroit calme."]]]},{"title":"Auf dem Markt","icon":"🍓","goal":"probieren, Mengen sagen, lokale Produkte kaufen","steps":[["Bonjour, vous voulez goûter ?","Oui, je peux goûter ce fromage, s'il vous plaît ?",["Je cherche les toilettes.","On peut nager ici ?"]],["Il est de la région.","Très bien. Je voudrais un petit morceau.",["La voiture est garée derrière l'église.","Mon enfant a de la fièvre."]],["Vous voulez autre chose ?","Oui, une barquette de fraises, s'il vous plaît.",["À quelle heure ouvre la piscine ?","Vous pouvez appeler un médecin ?"]],["Ça fera douze euros.","D'accord. Je peux payer par carte ?",["Je voudrais une couverture supplémentaire.","Le coffre est assez grand."]],["Merci, bonne journée !","Merci beaucoup, bonne journée à vous aussi !",["Sans lait, s'il vous plaît.","Nous arrivons vers cinq heures."]]]},{"title":"Weg zum Strand","icon":"🧭","goal":"nach dem Weg fragen und Richtungen verstehen","steps":[["Bonjour, vous cherchez quelque chose ?","Oui, excusez-moi, comment aller à la plage ?",["Je voudrais une carafe d'eau.","Nous avons une allergie."]],["Vous allez tout droit jusqu'au rond-point.","D'accord, tout droit jusqu'au rond-point.",["C'est pour emporter.","Mon enfant dort déjà."]],["Puis vous prenez la deuxième sortie.","La deuxième sortie, très bien.",["Je peux goûter la brioche ?","La climatisation est trop forte."]],["Après le pont, la plage est à gauche.","Après le pont à gauche, merci.",["Où doit-on mettre les déchets ?","Il manque une fourchette."]],["Il faut environ dix minutes à pied.","Parfait, merci pour votre aide.",["Je dois signer ici ?","Une table en terrasse, s'il vous plaît."]]]},{"title":"Toilette mit Kind","icon":"🚻","goal":"schnell und höflich fragen","steps":[["Bonjour, vous cherchez quelque chose ?","Excusez-moi, où sont les toilettes ?",["Je voudrais réserver une voiture.","Le coucher de soleil est magnifique."]],["Elles sont au fond à gauche.","Merci. C'est pour mon enfant.",["J'ai oublié ma serviette de plage.","Le service est compris ?"]],["Il faut demander le code à la caisse.","D'accord, je vais demander le code à la caisse.",["Nous voulons visiter la vieille ville.","Tu peux choisir un parfum."]],["Le code est 2580.","Merci beaucoup, c'est très gentil.",["Cette rue est piétonne.","La piscine est ouverte jusqu'à dix-neuf heures."]]]},{"title":"Apotheke","icon":"💊","goal":"Schmerzen, Fieber, Sonnenbrand oder Allergie erklären","steps":[["Bonjour, qu'est-ce qui se passe ?","Bonjour, mon enfant a mal au ventre depuis ce matin.",["Je cherche un parasol.","Nous avons réservé une table."]],["Il a aussi de la fièvre ?","Oui, un peu. Il a 38 degrés.",["Où peut-on acheter un billet ?","Je voudrais deux timbres."]],["Il a mangé quelque chose de spécial ?","Je ne sais pas, mais il a peut-être trop mangé hier soir.",["Je dois rendre les clés.","Le parking est derrière l'église."]],["Je vous donne quelque chose pour la douleur.","Merci. Quelle dose faut-il donner à un enfant ?",["Une boule à la fraise.","Le sable est très chaud."]],["Si ça ne va pas mieux, appelez un médecin.","D'accord, merci pour votre conseil.",["On joue au ballon ?","La barrière ferme à vingt-trois heures."]]]},{"title":"Problem an der Unterkunft","icon":"🛠️","goal":"ein Problem ruhig beschreiben und Lösung erbitten","steps":[["Bonjour, je peux vous aider ?","Bonjour, il y a un petit problème dans notre chambre.",["Je peux payer par carte ?","On cherche des coquillages."]],["Quel est le problème ?","La douche ne fonctionne pas et il manque une serviette.",["Je voudrais une crêpe au sucre.","La mer est très calme."]],["Je vais envoyer quelqu'un.","Merci. Est-ce que quelqu'un peut venir aujourd'hui ?",["Tournez à droite au feu.","C'est un jour férié aujourd'hui ?"]],["Oui, dans l'après-midi.","Très bien, nous serons là vers quinze heures.",["Je préfère la vanille.","Le ticket est valable aujourd'hui."]],["Désolé pour le dérangement.","Ce n'est pas grave, merci de votre aide.",["Nous sommes près du port.","Sans oignons, s'il vous plaît."]]]},{"title":"Andere Kinder am Spielplatz","icon":"🛝","goal":"einfache Sätze für Kontakt und Spiel","steps":[["Salut ! Tu parles français ?","Un peu. Je m'appelle Ulli, et toi ?",["L'assurance est incluse ?","Je dois laver les vêtements."]],["Tu veux jouer ?","Oui, avec plaisir. On joue au ballon ?",["J'ai perdu mon téléphone.","Le plat du jour est bon."]],["D'accord, tu commences ?","Oui, d'accord. Après, c'est à toi.",["Où est la pharmacie la plus proche ?","Nous avons réservé un emplacement."]],["Tu restes longtemps ici ?","Nous restons encore quelques jours au camping.",["Je peux avoir le reçu ?","La voiture ne démarre pas."]],["À demain peut-être !","Oui, à demain, au revoir !",["La table est sale.","Je préfère un endroit calme."]]]},{"title":"Supermarkt","icon":"🛒","goal":"Einkaufen, Beleg, Zutaten und Kasse","steps":[["Bonjour, vous cherchez quelque chose ?","Oui, je cherche de l'eau plate et du pain.",["Nous arrivons vers cinq heures.","Il y a beaucoup de vagues."]],["L'eau est au fond, le pain à gauche.","Merci. Et où sont les fruits ?",["Je voudrais une table en terrasse.","Le drapeau rouge veut dire baignade interdite."]],["Les fruits sont près de la caisse.","Très bien, merci beaucoup.",["Pouvez-vous réparer la douche ?","On peut se baigner ici ?"]],["Vous avez la carte du magasin ?","Non, je suis de passage en vacances.",["J'ai mal à la gorge.","Nous démontons la tente demain."]],["Vous voulez le ticket ?","Oui, le reçu, s'il vous plaît.",["C'est une jolie ville.","Une crêpe salée, s'il vous plaît."]]]},{"title":"Museum / Eintritt","icon":"🏛️","goal":"Öffnungszeiten, Eintritt und Kinderrabatt klären","steps":[["Bonjour, vous voulez visiter le musée ?","Oui, nous voudrions visiter le musée cet après-midi.",["Je dois rendre les clés.","Où est la borne électrique ?"]],["Vous êtes deux adultes ?","Non, un adulte et un enfant.",["Le café est allongé.","Mon enfant aime les coquillages."]],["L'entrée est gratuite pour les enfants de moins de douze ans.","Parfait. Et combien coûte l'entrée adulte ?",["La station-service est ouverte ?","On cherche une boulangerie."]],["Le musée ferme à dix-huit heures.","Très bien, nous avons assez de temps.",["Je peux avoir un pansement ?","Le pain est bien cuit."]],["Vous pouvez commencer par la salle à droite.","Merci, nous allons commencer par là.",["Sans lait, s'il vous plaît.","La douche ne fonctionne pas."]]]},{"title":"Telefon verloren","icon":"📱","goal":"Fundbüro, Beschreibung und Kontakt erklären","steps":[["Bonjour, je peux vous aider ?","Oui, j'ai perdu mon téléphone.",["Je voudrais une glace.","La plage est à gauche."]],["Où l'avez-vous perdu ?","Je pense que je l'ai perdu près de la piscine.",["Nous restons trois nuits.","Le marché est sur la place."]],["Vous pouvez le décrire ?","Oui, c'est un téléphone noir avec une coque bleue.",["Avez-vous un menu enfant ?","Tournez à droite au feu."]],["Laissez-moi vérifier les objets trouvés.","Merci, c'est très important pour moi.",["Je prends une crêpe.","Il y a du courant."]],["Nous n'avons rien pour le moment.","D'accord. Puis-je laisser mon adresse e-mail ?",["C'est trop chaud.","On joue au ballon ?"]]]},{"title":"Strandregeln","icon":"🏖️","goal":"Sicherheit am Strand verstehen","steps":[["Bonjour, vous avez une question ?","Oui, que signifie le drapeau rouge ?",["Je voudrais réserver une table.","La vieille ville est jolie."]],["Le drapeau rouge signifie baignade interdite.","D'accord, donc on ne peut pas nager aujourd'hui.",["Je peux avoir le reçu ?","Le coffre est assez grand."]],["Il y a beaucoup de courant.","Merci, nous resterons près du bord.",["Une baguette bien cuite.","La chambre est prête ?"]],["Vous pouvez jouer sur le sable, bien sûr.","Très bien, nous allons construire un château de sable.",["Je dois appeler un médecin.","L'assurance est incluse ?"]]]},{"title":"Allergie im Restaurant","icon":"🥜","goal":"Zutaten sicher abklären","steps":[["Vous avez choisi ?","Oui, mais mon enfant a une allergie aux noix.",["Je cherche la gare.","On peut se baigner ici ?"]],["Je vais demander en cuisine.","Merci beaucoup. Est-ce qu'il y a des noix dans ce dessert ?",["La barrière ferme à onze heures.","Je voudrais un ticket de parking."]],["Oui, ce dessert contient des noix.","Alors nous prendrons autre chose, sans noix.",["Nous installons la tente.","La plage est en face."]],["La glace à la vanille est sans noix.","Parfait, une glace à la vanille pour mon enfant.",["Où doit-on mettre les déchets ?","Je peux goûter le fromage ?"]]]},{"title":"Postkarten kaufen","icon":"📮","goal":"Postkarten und Briefmarken nach Deutschland kaufen","steps":[["Bonjour, vous cherchez quelque chose ?","Oui, je voudrais trois cartes postales, s'il vous plaît.",["Mon enfant a mal au ventre.","Je prends le plat du jour."]],["Vous avez besoin de timbres ?","Oui, des timbres pour l'Allemagne.",["Il y a du courant.","Nous voulons louer un parasol."]],["Il faut des timbres internationaux.","D'accord, je prends trois timbres internationaux.",["La douche est cassée.","Tournez à gauche après le pont."]],["Ça fera six euros.","Je peux payer en espèces ?",["Une carafe d'eau, s'il vous plaît.","Le camping est calme."]]]},{"title":"Tagesplanung","icon":"🌦️","goal":"über Wetter, Zeit und Plan sprechen","steps":[["Qu'est-ce que vous faites aujourd'hui ?","Aujourd'hui, nous allons d'abord au marché, puis à la plage.",["Je dois rendre la voiture avec le plein.","Mon enfant a une allergie."]],["Il va faire très chaud cet après-midi.","Alors nous irons à la plage plutôt le matin.",["Je peux avoir une autre taille ?","Le musée ferme à dix-huit heures."]],["Et demain ?","Demain, nous voulons visiter la vieille ville.",["Une boule à la vanille.","Le sèche-linge est payant ?"]],["Bonne idée, il y aura moins de monde le matin.","Parfait, nous partirons tôt.",["J'ai oublié mon maillot de bain.","C'est une petite brûlure."]]]}];
+
+const irregularPresent = {
+  "être":["je suis","tu es","il/elle est","nous sommes","vous êtes","ils/elles sont"],
+  "avoir":["j'ai","tu as","il/elle a","nous avons","vous avez","ils/elles ont"],
+  "aller":["je vais","tu vas","il/elle va","nous allons","vous allez","ils/elles vont"],
+  "faire":["je fais","tu fais","il/elle fait","nous faisons","vous faites","ils/elles font"],
+  "dire":["je dis","tu dis","il/elle dit","nous disons","vous dites","ils/elles disent"],
+  "pouvoir":["je peux","tu peux","il/elle peut","nous pouvons","vous pouvez","ils/elles peuvent"],
+  "vouloir":["je veux","tu veux","il/elle veut","nous voulons","vous voulez","ils/elles veulent"],
+  "devoir":["je dois","tu dois","il/elle doit","nous devons","vous devez","ils/elles doivent"],
+  "prendre":["je prends","tu prends","il/elle prend","nous prenons","vous prenez","ils/elles prennent"],
+  "comprendre":["je comprends","tu comprends","il/elle comprend","nous comprenons","vous comprenez","ils/elles comprennent"],
+  "apprendre":["j'apprends","tu apprends","il/elle apprend","nous apprenons","vous apprenez","ils/elles apprennent"],
+  "mettre":["je mets","tu mets","il/elle met","nous mettons","vous mettez","ils/elles mettent"],
+  "venir":["je viens","tu viens","il/elle vient","nous venons","vous venez","ils/elles viennent"],
+  "revenir":["je reviens","tu reviens","il/elle revient","nous revenons","vous revenez","ils/elles reviennent"],
+  "partir":["je pars","tu pars","il/elle part","nous partons","vous partez","ils/elles partent"],
+  "sortir":["je sors","tu sors","il/elle sort","nous sortons","vous sortez","ils/elles sortent"],
+  "dormir":["je dors","tu dors","il/elle dort","nous dormons","vous dormez","ils/elles dorment"],
+  "lire":["je lis","tu lis","il/elle lit","nous lisons","vous lisez","ils/elles lisent"],
+  "écrire":["j'écris","tu écris","il/elle écrit","nous écrivons","vous écrivez","ils/elles écrivent"],
+  "voir":["je vois","tu vois","il/elle voit","nous voyons","vous voyez","ils/elles voient"],
+  "savoir":["je sais","tu sais","il/elle sait","nous savons","vous savez","ils/elles savent"],
+  "connaître":["je connais","tu connais","il/elle connaît","nous connaissons","vous connaissez","ils/elles connaissent"],
+  "boire":["je bois","tu bois","il/elle boit","nous buvons","vous buvez","ils/elles boivent"],
+  "ouvrir":["j'ouvre","tu ouvres","il/elle ouvre","nous ouvrons","vous ouvrez","ils/elles ouvrent"],
+  "descendre":["je descends","tu descends","il/elle descend","nous descendons","vous descendez","ils/elles descendent"],
+  "recevoir":["je reçois","tu reçois","il/elle reçoit","nous recevons","vous recevez","ils/elles reçoivent"],
+  "valoir":["je vaux","tu vaux","il/elle vaut","nous valons","vous valez","ils/elles valent"],
+  "courir":["je cours","tu cours","il/elle court","nous courons","vous courez","ils/elles courent"],
+  "conduire":["je conduis","tu conduis","il/elle conduit","nous conduisons","vous conduisez","ils/elles conduisent"]
+};
+const irregularParticiple = {
+  "être":"été","avoir":"eu","faire":"fait","dire":"dit","prendre":"pris","mettre":"mis","venir":"venu","revenir":"revenu","partir":"parti","sortir":"sorti","dormir":"dormi","lire":"lu","écrire":"écrit","voir":"vu","savoir":"su","connaître":"connu","boire":"bu","ouvrir":"ouvert","recevoir":"reçu","conduire":"conduit","apprendre":"appris","comprendre":"compris"
+};
+const etrePasse = new Set(["aller","venir","revenir","partir","sortir","arriver","entrer","retourner","monter","descendre","tomber"]);
+
+let state = {
+  tab:"karten", score:Number(localStorage.getItem("franceScore2")||0),
+  topic:"Alle", type:"Alle", search:"", cardIndex:0, showBack:false, deck:[],
+  verbSearch:"", verbIndex:0, tense:"present",
+  activeDialog:null, dialogStep:0, dialogFeedback:null, lockNext:false
+};
+
+function el(id){ return document.getElementById(id); }
+function esc(s){ return String(s).replace(/[&<>"]/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[ch])); }
+function shuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function speak(text){ if(!window.speechSynthesis) return; const u=new SpeechSynthesisUtterance(text); u.lang="fr-FR"; u.rate=.86; window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); }
+function score(points){ state.score += points; localStorage.setItem("franceScore2", String(state.score)); renderScore(); }
+function renderScore(){ el("score").textContent=state.score; el("scorebar").style.width=Math.min(100,state.score%100)+"%"; }
+
+function init(){
+  setupTabs(); setupCards(); setupVerbs(); renderSituations(); renderScore();
+  el("resetProgress").onclick=()=>{ state.score=0; localStorage.setItem("franceScore2","0"); renderScore(); };
+}
+function setupTabs(){
+  el("tabs").onclick=e=>{ const b=e.target.closest("[data-tab]"); if(!b)return; state.tab=b.dataset.tab; document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===state.tab)); document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("hidden",x.id!==state.tab)); };
+}
+
+function setupCards(){
+  const topics=["Alle",...Array.from(new Set(vocabulary.map(v=>v.topic))).sort()];
+  const types=["Alle","Nomen","Verb","Sonstiges"];
+  el("topicSelect").innerHTML=topics.map(t=>`<option>${esc(t)}</option>`).join("");
+  el("typeSelect").innerHTML=types.map(t=>`<option>${esc(t)}</option>`).join("");
+  el("topicSelect").onchange=e=>{ state.topic=e.target.value; rebuildDeck(); };
+  el("typeSelect").onchange=e=>{ state.type=e.target.value; rebuildDeck(); };
+  el("searchInput").oninput=e=>{ state.search=e.target.value.trim().toLowerCase(); rebuildDeck(); };
+  el("reshuffle").onclick=()=>rebuildDeck();
+  rebuildDeck();
+}
+function filteredVocab(){
+  return vocabulary.filter(v => 
+    (state.topic==="Alle" || v.topic===state.topic) &&
+    (state.type==="Alle" || v.type===state.type) &&
+    (!state.search || (v.fr+" "+v.de+" "+v.example+" "+v.topic).toLowerCase().includes(state.search))
+  );
+}
+function rebuildDeck(){
+  state.deck=shuffle(filteredVocab()); state.cardIndex=0; state.showBack=false; renderCard();
+}
+function renderCard(){
+  const box=el("flashcard");
+  el("cardCount").textContent=state.deck.length;
+  el("cardPos").textContent=state.deck.length ? (state.cardIndex+1) : 0;
+  if(!state.deck.length){ box.innerHTML="<p>Keine passenden Karten gefunden.</p>"; return; }
+  const c=state.deck[state.cardIndex];
+  box.innerHTML=`
+    <div class="badges"><span class="badge">${esc(c.type)}</span><span class="badge">${esc(c.topic)}</span><span class="badge">zufällig</span></div>
+    <button class="primary" id="speakCard">🔊 anhören</button>
+    <div class="big-word">${esc(c.fr)}</div>
+    ${state.showBack?`<div class="meaning">${esc(c.de)}</div>`:""}
+    <div class="example"><div class="fr">${esc(c.example)}</div>${state.showBack?`<div class="de">${esc(c.exampleDe)}</div>`:""}</div>
+    <div class="actions">
+      <button class="secondary" id="flipCard">${state.showBack?"Vorderseite":"Umdrehen"}</button>
+      <button class="primary" id="nextCard">Nächste Zufallskarte</button>
+      <button class="secondary" id="knownCard">Konnte ich ✅</button>
+    </div>`;
+  el("speakCard").onclick=()=>speak(c.fr);
+  el("flipCard").onclick=()=>{state.showBack=!state.showBack; renderCard();};
+  el("nextCard").onclick=()=>{state.showBack=false; state.cardIndex=(state.cardIndex+1)%state.deck.length; renderCard();};
+  el("knownCard").onclick=()=>{score(1); state.showBack=false; state.cardIndex=(state.cardIndex+1)%state.deck.length; renderCard();};
+}
+
+function setupVerbs(){
+  el("verbSearch").oninput=e=>{ state.verbSearch=e.target.value.trim().toLowerCase(); renderVerbSelect(); renderVerbCard(); };
+  el("verbSelect").onchange=e=>{ state.verbIndex=Number(e.target.value); renderVerbCard(); };
+  el("tenseSelect").onchange=e=>{ state.tense=e.target.value; renderVerbCard(); };
+  renderVerbSelect(); renderVerbCard();
+}
+function verbList(){
+  return verbs.map((v,i)=>({...v, realIndex:i})).filter(v=>!state.verbSearch || (v.inf+" "+v.de+" "+v.example).toLowerCase().includes(state.verbSearch));
+}
+function renderVerbSelect(){
+  const list=verbList();
+  if(!list.find(v=>v.realIndex===state.verbIndex) && list[0]) state.verbIndex=list[0].realIndex;
+  el("verbSelect").innerHTML=list.map(v=>`<option value="${v.realIndex}" ${v.realIndex===state.verbIndex?"selected":""}>${esc(v.inf)} – ${esc(v.de)}</option>`).join("");
+}
+function startsWithVowel(s){ return /^[aeiouhéèêàâîïôûù]/i.test(s); }
+function regularPresent(inf){
+  if(inf.startsWith("se ")) return reflexivePresent(inf);
+  if(irregularPresent[inf]) return irregularPresent[inf];
+  if(inf.endsWith("er")){
+    const st=inf.slice(0,-2);
+    let nous=st+"ons"; if(inf.endsWith("ger")) nous=st+"eons"; if(inf.endsWith("cer")) nous=st.slice(0,-1)+"çons";
+    return [(startsWithVowel(st)?"j'":"je ")+st+"e","tu "+st+"es","il/elle "+st+"e","nous "+nous,"vous "+st+"ez","ils/elles "+st+"ent"];
+  }
+  if(inf.endsWith("ir")){ const st=inf.slice(0,-2); return ["je "+st+"is","tu "+st+"is","il/elle "+st+"it","nous "+st+"issons","vous "+st+"issez","ils/elles "+st+"issent"]; }
+  if(inf.endsWith("re")){ const st=inf.slice(0,-2); return ["je "+st+"s","tu "+st+"s","il/elle "+st,"nous "+st+"ons","vous "+st+"ez","ils/elles "+st+"ent"]; }
+  return ["je "+inf,"tu "+inf,"il/elle "+inf,"nous "+inf,"vous "+inf,"ils/elles "+inf];
+}
+function reflexivePresent(inf){
+  const base=inf.replace(/^se /,"");
+  const f=regularPresent(base);
+  return [f[0].replace(/^je /,"je me ").replace(/^j'/,"je m'"), f[1].replace(/^tu /,"tu te "), f[2].replace(/^il\/elle /,"il/elle se "), f[3].replace(/^nous /,"nous nous "), f[4].replace(/^vous /,"vous vous "), f[5].replace(/^ils\/elles /,"ils/elles se ")];
+}
+function participle(inf){
+  if(inf.startsWith("se ")) return participle(inf.replace(/^se /,""));
+  if(irregularParticiple[inf]) return irregularParticiple[inf];
+  if(inf.endsWith("er")) return inf.slice(0,-2)+"é";
+  if(inf.endsWith("ir")) return inf.slice(0,-2)+"i";
+  if(inf.endsWith("re")) return inf.slice(0,-2)+"u";
+  return inf;
+}
+function formsFor(v,tense){
+  const inf=v.inf;
+  if(tense==="present") return regularPresent(inf);
+  if(tense==="nearFuture"){
+    const aller=["je vais","tu vas","il/elle va","nous allons","vous allez","ils/elles vont"];
+    return aller.map(a=>a+" "+inf);
+  }
+  if(tense==="polite"){
+    if(inf==="vouloir") return ["je voudrais","tu voudrais","il/elle voudrait","nous voudrions","vous voudriez","ils/elles voudraient"];
+    if(inf==="pouvoir") return ["je pourrais","tu pourrais","il/elle pourrait","nous pourrions","vous pourriez","ils/elles pourraient"];
+    return ["je voudrais "+inf,"tu voudrais "+inf,"il/elle voudrait "+inf,"nous voudrions "+inf,"vous voudriez "+inf,"ils/elles voudraient "+inf];
+  }
+  const pp=participle(inf);
+  if(inf.startsWith("se ")){
+    return ["je me suis "+pp,"tu t'es "+pp,"il/elle s'est "+pp,"nous nous sommes "+pp,"vous vous êtes "+pp,"ils/elles se sont "+pp];
+  }
+  if(etrePasse.has(inf)){
+    return ["je suis "+pp,"tu es "+pp,"il/elle est "+pp,"nous sommes "+pp+"s","vous êtes "+pp+"(s)","ils/elles sont "+pp+"s"];
+  }
+  return ["j'ai "+pp,"tu as "+pp,"il/elle a "+pp,"nous avons "+pp,"vous avez "+pp,"ils/elles ont "+pp];
+}
+function renderVerbCard(){
+  const v=verbs[state.verbIndex] || verbs[0];
+  const forms=formsFor(v,state.tense);
+  const labels={present:"Präsens",nearFuture:"Nahe Zukunft",passe:"Passé composé",polite:"Höfliche Reiseform"};
+  el("verbCard").innerHTML=`
+    <div class="badges"><span class="badge">${esc(v.kind)}</span><span class="badge">${esc(labels[state.tense])}</span></div>
+    <button class="primary" id="speakVerbExample">🔊 Beispielsatz</button>
+    <div class="big-word">${esc(v.inf)}</div>
+    <div class="meaning">${esc(v.de)}</div>
+    <div class="example"><div class="fr">${esc(v.example)}</div><div class="de">Reisesatz zum Mitsprechen</div></div>
+    <div class="verb-table" style="margin-top:18px">
+      ${forms.map((f,i)=>`<button class="conj" data-say="${esc(f)}"><div class="tiny">${["je","tu","il/elle","nous","vous","ils/elles"][i]}</div><div class="form">${esc(f)}</div></button>`).join("")}
+    </div>
+    <div class="tip"><strong>Übetipp:</strong> Sprecht besonders die <b>je</b>-Form für eigene Wünsche und die <b>vous</b>-Form für höfliche Fragen laut nach.</div>`;
+  el("speakVerbExample").onclick=()=>speak(v.example);
+  el("verbCard").querySelectorAll("[data-say]").forEach(b=>b.onclick=()=>speak(b.dataset.say));
+}
+
+function renderSituations(){
+  const list=el("situationList");
+  list.innerHTML=`<div class="grid grid-3">${dialogs.map((d,i)=>`
+    <button class="situation-tile" data-dialog="${i}">
+      <div><div class="icon">${d.icon}</div><h2>${esc(d.title)}</h2><p class="muted">${esc(d.goal)}</p></div>
+      <div class="badges"><span class="badge">${d.steps.length} Schritte</span><span class="badge">Dialog</span></div>
+    </button>`).join("")}</div>`;
+  list.querySelectorAll("[data-dialog]").forEach(b=>b.onclick=()=>startDialog(Number(b.dataset.dialog)));
+}
+function startDialog(i){
+  state.activeDialog=i; state.dialogStep=0; state.dialogFeedback=null; state.lockNext=false;
+  el("situationList").classList.add("hidden"); el("dialogView").classList.remove("hidden"); renderDialog();
+}
+function renderDialog(){
+  const d=dialogs[state.activeDialog], step=d.steps[state.dialogStep];
+  if(!step){
+    el("dialogView").innerHTML=`
       <div class="card">
-        <div class="tiny-title">Reisepunkte</div>
-        <div class="score-number" id="score">0</div>
-        <div class="de">Serie: <span id="streak">0</span> richtige Antworten am Stück</div>
-        <div class="scorebar"><div id="scorebar"></div></div>
+        <div class="dialog-head"><div class="icon">${d.icon}</div><div><h2>${esc(d.title)} geschafft!</h2><p class="muted">Ihr habt den ganzen Dialog durchgespielt.</p></div></div>
+        <div class="actions"><button class="primary" id="again">Nochmal üben</button><button class="secondary" id="backSituations">Zur Übersicht</button></div>
+      </div>`;
+    el("again").onclick=()=>startDialog(state.activeDialog);
+    el("backSituations").onclick=backToSituations;
+    return;
+  }
+  const [npc, correct, wrongs]=step;
+  const choices=shuffle([correct,...wrongs]);
+  el("dialogView").innerHTML=`
+    <div class="card">
+      <div class="dialog-head"><div class="icon">${d.icon}</div><div><h2>${esc(d.title)}</h2><p class="muted">${esc(d.goal)} · Schritt ${state.dialogStep+1} von ${d.steps.length}</p></div></div>
+      <div class="progress"><div style="width:${Math.round((state.dialogStep/d.steps.length)*100)}%"></div></div>
+      <div class="npc"><div class="tiny">Dein Gegenüber sagt</div>${esc(npc)}</div>
+      <div class="tiny">Welche Antwort passt?</div>
+      ${choices.map(c=>`<button class="choice" data-choice="${esc(c)}">${esc(c)}</button>`).join("")}
+      ${state.dialogFeedback?`<div class="feedback ${state.dialogFeedback.good?"good":"bad"}">${esc(state.dialogFeedback.text)}</div>`:""}
+      <div class="actions">
+        <button class="secondary" id="listenNpc">🔊 Gegenüber anhören</button>
+        <button class="secondary" id="backSituations">Zur Übersicht</button>
       </div>
-    </section>
-
-    <nav class="tabs" id="tabs">
-      <button class="tab active" data-tab="situationen">Situationen</button>
-      <button class="tab" data-tab="karten">Vokabelkarten</button>
-      <button class="tab" data-tab="quiz">Quiz</button>
-      <button class="tab" data-tab="verben">Verben</button>
-      <button class="tab" data-tab="dialoge">Mini-Dialoge</button>
-    </nav>
-
-    <section id="situationen" class="panel"></section>
-
-    <section id="karten" class="panel hidden">
-      <div class="grid side-main">
-        <div class="card">
-          <label class="label" for="topicSelect">Thema</label>
-          <select id="topicSelect"></select>
-          <label class="label" for="typeSelect">Wortart</label>
-          <select id="typeSelect"></select>
-          <p class="de">Tipp: Erst Französisch hören, dann laut nachsprechen, dann Karte umdrehen.</p>
-        </div>
-        <div class="card" id="flashcard"></div>
-      </div>
-    </section>
-
-    <section id="quiz" class="panel hidden">
-      <div class="grid main-side">
-        <div class="card" id="quizCard"></div>
-        <div class="card">
-          <h2>Warum dieses Quiz?</h2>
-          <p class="de">Für Reisen zählt Wiedererkennen unter leichtem Druck: Schild, Speisekarte, Rezeption, fremde Aussprache. Das Quiz trainiert schnelle Bedeutung, nicht Grammatikperfektion.</p>
-          <button class="primary" id="newQuiz">Neue Frage</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="verben" class="panel hidden">
-      <div class="grid verb-layout">
-        <div class="card">
-          <label class="label" for="verbSelect">Verb</label>
-          <select id="verbSelect"></select>
-          <label class="label" for="tenseSelect">Zeit / Form</label>
-          <select id="tenseSelect"></select>
-          <p class="de"><strong>Warum wichtig?</strong> <span id="verbReason"></span></p>
-          <div class="example"><strong>Mustersatz:</strong> <span id="verbPattern"></span></div>
-        </div>
-        <div class="card" id="verbCard"></div>
-      </div>
-    </section>
-
-    <section id="dialoge" class="panel hidden">
-      <div class="grid main-side">
-        <div class="card" id="missionCard"></div>
-        <div class="card">
-          <h2>So übt ihr zusammen</h2>
-          <ol>
-            <li>Kind wählt die Antwort aus.</li>
-            <li>Erwachsener spricht den Satz langsam nach.</li>
-            <li>Kind spielt die französische Person.</li>
-            <li>Nach drei richtigen Missionen gibt es eine echte Urlaubsrolle: Bäckerei, Eis, Camping-Rezeption.</li>
-          </ol>
-        </div>
-      </div>
-    </section>
-
-    <footer class="card">
-      <strong>Lernprinzip:</strong> Erst nützliche Chunks wie „Je voudrais…“, „Où est…“, „Vous pouvez répéter ?“, dann einzelne Wörter. So könnt ihr auch mit wenigen Vokabeln echte Situationen bewältigen.
-    </footer>
-  </main>
-
-  <script>
-    const vocabulary = [
-      { id: 1, type: "Nomen", topic: "Ankommen & Orientierung", fr: "la route", de: "die Straße / Route", example: "Nous cherchons la route vers le camping.", exampleDe: "Wir suchen die Straße zum Campingplatz.", level: "Basis" },
-      { id: 2, type: "Nomen", topic: "Ankommen & Orientierung", fr: "la sortie", de: "die Ausfahrt / der Ausgang", example: "Quelle sortie devons-nous prendre ?", exampleDe: "Welche Ausfahrt müssen wir nehmen?", level: "Basis" },
-      { id: 3, type: "Nomen", topic: "Ankommen & Orientierung", fr: "le plan", de: "der Plan / Stadtplan", example: "Avez-vous un plan de la ville ?", exampleDe: "Haben Sie einen Stadtplan?", level: "Basis" },
-      { id: 4, type: "Nomen", topic: "Ankommen & Orientierung", fr: "l’adresse", de: "die Adresse", example: "Voici l’adresse de notre logement.", exampleDe: "Hier ist die Adresse unserer Unterkunft.", level: "Basis" },
-      { id: 5, type: "Nomen", topic: "Ankommen & Orientierung", fr: "la gare", de: "der Bahnhof", example: "La gare est loin d’ici ?", exampleDe: "Ist der Bahnhof weit von hier?", level: "Basis" },
-      { id: 6, type: "Nomen", topic: "Ankommen & Orientierung", fr: "le parking", de: "der Parkplatz", example: "Où est le parking le plus proche ?", exampleDe: "Wo ist der nächste Parkplatz?", level: "Basis" },
-      { id: 7, type: "Nomen", topic: "Auto & Buchung", fr: "la voiture", de: "das Auto", example: "Nous avons réservé une voiture.", exampleDe: "Wir haben ein Auto reserviert.", level: "Basis" },
-      { id: 8, type: "Nomen", topic: "Auto & Buchung", fr: "le permis de conduire", de: "der Führerschein", example: "Voici mon permis de conduire.", exampleDe: "Hier ist mein Führerschein.", level: "Wichtig" },
-      { id: 9, type: "Nomen", topic: "Auto & Buchung", fr: "l’assurance", de: "die Versicherung", example: "L’assurance est incluse ?", exampleDe: "Ist die Versicherung inklusive?", level: "Wichtig" },
-      { id: 10, type: "Nomen", topic: "Auto & Buchung", fr: "la caution", de: "die Kaution", example: "Quel est le montant de la caution ?", exampleDe: "Wie hoch ist die Kaution?", level: "Wichtig" },
-      { id: 11, type: "Nomen", topic: "Auto & Buchung", fr: "le plein", de: "der volle Tank", example: "Je dois rendre la voiture avec le plein ?", exampleDe: "Muss ich das Auto vollgetankt zurückgeben?", level: "Wichtig" },
-      { id: 12, type: "Nomen", topic: "Auto & Buchung", fr: "les clés", de: "die Schlüssel", example: "Où dois-je rendre les clés ?", exampleDe: "Wo muss ich die Schlüssel zurückgeben?", level: "Basis" },
-      { id: 13, type: "Nomen", topic: "Camping", fr: "le camping", de: "der Campingplatz", example: "Nous cherchons l’accueil du camping.", exampleDe: "Wir suchen die Rezeption des Campingplatzes.", level: "Basis" },
-      { id: 14, type: "Nomen", topic: "Camping", fr: "l’emplacement", de: "der Stellplatz", example: "Nous avons réservé un emplacement.", exampleDe: "Wir haben einen Stellplatz reserviert.", level: "Wichtig" },
-      { id: 15, type: "Nomen", topic: "Camping", fr: "la tente", de: "das Zelt", example: "Nous avons une petite tente.", exampleDe: "Wir haben ein kleines Zelt.", level: "Basis" },
-      { id: 16, type: "Nomen", topic: "Camping", fr: "l’électricité", de: "der Strom", example: "Est-ce qu’il y a l’électricité ?", exampleDe: "Gibt es Strom?", level: "Wichtig" },
-      { id: 17, type: "Nomen", topic: "Camping", fr: "les sanitaires", de: "die Sanitäranlagen", example: "Où sont les sanitaires ?", exampleDe: "Wo sind die Sanitäranlagen?", level: "Wichtig" },
-      { id: 18, type: "Nomen", topic: "Camping", fr: "la piscine", de: "der Pool", example: "La piscine est ouverte jusqu’à quelle heure ?", exampleDe: "Bis wann ist der Pool geöffnet?", level: "Basis" },
-      { id: 19, type: "Nomen", topic: "Restaurant & Café", fr: "une table", de: "ein Tisch", example: "Une table pour deux, s’il vous plaît.", exampleDe: "Einen Tisch für zwei, bitte.", level: "Basis" },
-      { id: 20, type: "Nomen", topic: "Restaurant & Café", fr: "la carte", de: "die Speisekarte", example: "La carte, s’il vous plaît.", exampleDe: "Die Speisekarte, bitte.", level: "Basis" },
-      { id: 21, type: "Nomen", topic: "Restaurant & Café", fr: "l’addition", de: "die Rechnung", example: "L’addition, s’il vous plaît.", exampleDe: "Die Rechnung, bitte.", level: "Basis" },
-      { id: 22, type: "Nomen", topic: "Restaurant & Café", fr: "un verre d’eau", de: "ein Glas Wasser", example: "Un verre d’eau, s’il vous plaît.", exampleDe: "Ein Glas Wasser, bitte.", level: "Basis" },
-      { id: 23, type: "Nomen", topic: "Restaurant & Café", fr: "le menu enfant", de: "das Kindermenü", example: "Avez-vous un menu enfant ?", exampleDe: "Haben Sie ein Kindermenü?", level: "Wichtig" },
-      { id: 24, type: "Nomen", topic: "Restaurant & Café", fr: "une glace", de: "ein Eis", example: "Je voudrais une glace à la vanille.", exampleDe: "Ich hätte gerne ein Vanilleeis.", level: "Basis" },
-      { id: 25, type: "Nomen", topic: "Strand & Freizeit", fr: "la plage", de: "der Strand", example: "La plage est très belle.", exampleDe: "Der Strand ist sehr schön.", level: "Basis" },
-      { id: 26, type: "Nomen", topic: "Strand & Freizeit", fr: "la mer", de: "das Meer", example: "La mer est froide aujourd’hui.", exampleDe: "Das Meer ist heute kalt.", level: "Basis" },
-      { id: 27, type: "Nomen", topic: "Strand & Freizeit", fr: "les vagues", de: "die Wellen", example: "Les vagues sont grandes.", exampleDe: "Die Wellen sind groß.", level: "Basis" },
-      { id: 28, type: "Nomen", topic: "Strand & Freizeit", fr: "la serviette", de: "das Handtuch", example: "J’ai oublié ma serviette.", exampleDe: "Ich habe mein Handtuch vergessen.", level: "Basis" },
-      { id: 29, type: "Nomen", topic: "Strand & Freizeit", fr: "la crème solaire", de: "die Sonnencreme", example: "Tu as mis de la crème solaire ?", exampleDe: "Hast du Sonnencreme aufgetragen?", level: "Wichtig" },
-      { id: 30, type: "Nomen", topic: "Strand & Freizeit", fr: "un château de sable", de: "eine Sandburg", example: "On construit un château de sable ?", exampleDe: "Bauen wir eine Sandburg?", level: "Kind" },
-      { id: 31, type: "Nomen", topic: "Stadt & Einkaufen", fr: "la boulangerie", de: "die Bäckerei", example: "Il y a une boulangerie près d’ici ?", exampleDe: "Gibt es hier in der Nähe eine Bäckerei?", level: "Basis" },
-      { id: 32, type: "Nomen", topic: "Stadt & Einkaufen", fr: "le marché", de: "der Markt", example: "Le marché est ouvert le matin.", exampleDe: "Der Markt ist morgens geöffnet.", level: "Basis" },
-      { id: 33, type: "Nomen", topic: "Stadt & Einkaufen", fr: "le prix", de: "der Preis", example: "Quel est le prix ?", exampleDe: "Wie hoch ist der Preis?", level: "Basis" },
-      { id: 34, type: "Nomen", topic: "Stadt & Einkaufen", fr: "un sac", de: "eine Tasche / Tüte", example: "Un sac, s’il vous plaît.", exampleDe: "Eine Tüte, bitte.", level: "Basis" },
-      { id: 35, type: "Nomen", topic: "Notfall & Gesundheit", fr: "la pharmacie", de: "die Apotheke", example: "Où est la pharmacie la plus proche ?", exampleDe: "Wo ist die nächste Apotheke?", level: "Wichtig" },
-      { id: 36, type: "Nomen", topic: "Notfall & Gesundheit", fr: "le médecin", de: "der Arzt / die Ärztin", example: "Nous avons besoin d’un médecin.", exampleDe: "Wir brauchen einen Arzt / eine Ärztin.", level: "Wichtig" },
-      { id: 37, type: "Verb", topic: "Alltag & Bitten", fr: "être", de: "sein", example: "Je suis avec mon enfant.", exampleDe: "Ich bin mit meinem Kind unterwegs.", level: "Basis" },
-      { id: 38, type: "Verb", topic: "Alltag & Bitten", fr: "avoir", de: "haben", example: "Nous avons une réservation.", exampleDe: "Wir haben eine Reservierung.", level: "Basis" },
-      { id: 39, type: "Verb", topic: "Alltag & Bitten", fr: "vouloir", de: "wollen / möchten", example: "Je voudrais payer par carte.", exampleDe: "Ich möchte mit Karte zahlen.", level: "Basis" },
-      { id: 40, type: "Verb", topic: "Alltag & Bitten", fr: "pouvoir", de: "können / dürfen", example: "Est-ce qu’on peut entrer ?", exampleDe: "Können wir hineingehen?", level: "Basis" },
-      { id: 41, type: "Verb", topic: "Alltag & Bitten", fr: "devoir", de: "müssen / sollen", example: "Nous devons partir demain.", exampleDe: "Wir müssen morgen abreisen.", level: "Wichtig" },
-      { id: 42, type: "Verb", topic: "Buchungen", fr: "réserver", de: "reservieren / buchen", example: "Je voudrais réserver une table.", exampleDe: "Ich möchte einen Tisch reservieren.", level: "Wichtig" },
-      { id: 43, type: "Verb", topic: "Buchungen", fr: "louer", de: "mieten", example: "Nous voulons louer une voiture.", exampleDe: "Wir möchten ein Auto mieten.", level: "Wichtig" },
-      { id: 44, type: "Verb", topic: "Buchungen", fr: "payer", de: "bezahlen", example: "Je peux payer par carte ?", exampleDe: "Kann ich mit Karte bezahlen?", level: "Basis" },
-      { id: 45, type: "Verb", topic: "Orientierung", fr: "chercher", de: "suchen", example: "Nous cherchons la plage.", exampleDe: "Wir suchen den Strand.", level: "Basis" },
-      { id: 46, type: "Verb", topic: "Orientierung", fr: "trouver", de: "finden", example: "J’ai trouvé le parking.", exampleDe: "Ich habe den Parkplatz gefunden.", level: "Basis" },
-      { id: 47, type: "Verb", topic: "Kommunikation", fr: "parler", de: "sprechen", example: "Je parle un peu français.", exampleDe: "Ich spreche ein bisschen Französisch.", level: "Basis" },
-      { id: 48, type: "Verb", topic: "Kommunikation", fr: "comprendre", de: "verstehen", example: "Je ne comprends pas très bien.", exampleDe: "Ich verstehe nicht sehr gut.", level: "Wichtig" },
-      { id: 49, type: "Verb", topic: "Kommunikation", fr: "répéter", de: "wiederholen", example: "Vous pouvez répéter, s’il vous plaît ?", exampleDe: "Können Sie das bitte wiederholen?", level: "Wichtig" },
-      { id: 50, type: "Verb", topic: "Strand & Freizeit", fr: "nager", de: "schwimmen", example: "Tu veux nager ?", exampleDe: "Willst du schwimmen?", level: "Kind" },
-      { id: 51, type: "Verb", topic: "Strand & Freizeit", fr: "jouer", de: "spielen", example: "On peut jouer ici ?", exampleDe: "Kann man hier spielen?", level: "Kind" },
-      { id: 52, type: "Verb", topic: "Stadt & Einkaufen", fr: "acheter", de: "kaufen", example: "Je voudrais acheter du pain.", exampleDe: "Ich möchte Brot kaufen.", level: "Basis" },
-      { id: 53, type: "Adjektiv", topic: "Beschreiben", fr: "petit / petite", de: "klein", example: "Nous avons une petite tente.", exampleDe: "Wir haben ein kleines Zelt.", level: "Basis" },
-      { id: 54, type: "Adjektiv", topic: "Beschreiben", fr: "grand / grande", de: "groß", example: "Les vagues sont grandes.", exampleDe: "Die Wellen sind groß.", level: "Basis" },
-      { id: 55, type: "Adjektiv", topic: "Beschreiben", fr: "chaud / chaude", de: "warm / heiß", example: "Il fait chaud aujourd’hui.", exampleDe: "Es ist heute heiß.", level: "Basis" },
-      { id: 56, type: "Adjektiv", topic: "Beschreiben", fr: "froid / froide", de: "kalt", example: "L’eau est froide.", exampleDe: "Das Wasser ist kalt.", level: "Basis" },
-      { id: 57, type: "Adjektiv", topic: "Beschreiben", fr: "cher / chère", de: "teuer", example: "C’est un peu cher.", exampleDe: "Das ist ein bisschen teuer.", level: "Wichtig" },
-      { id: 58, type: "Adjektiv", topic: "Beschreiben", fr: "gratuit / gratuite", de: "kostenlos", example: "Le parking est gratuit ?", exampleDe: "Ist der Parkplatz kostenlos?", level: "Wichtig" },
-      { id: 59, type: "Adjektiv", topic: "Beschreiben", fr: "ouvert / ouverte", de: "geöffnet", example: "La piscine est ouverte ?", exampleDe: "Ist der Pool geöffnet?", level: "Basis" },
-      { id: 60, type: "Adjektiv", topic: "Beschreiben", fr: "fermé / fermée", de: "geschlossen", example: "Le restaurant est fermé.", exampleDe: "Das Restaurant ist geschlossen.", level: "Basis" },
-      { id: 61, type: "Sonstiges", topic: "Höflichkeit", fr: "bonjour", de: "guten Tag / hallo", example: "Bonjour, nous avons une réservation.", exampleDe: "Guten Tag, wir haben eine Reservierung.", level: "Basis" },
-      { id: 62, type: "Sonstiges", topic: "Höflichkeit", fr: "s’il vous plaît", de: "bitte", example: "La carte, s’il vous plaît.", exampleDe: "Die Speisekarte, bitte.", level: "Basis" },
-      { id: 63, type: "Sonstiges", topic: "Höflichkeit", fr: "merci", de: "danke", example: "Merci beaucoup !", exampleDe: "Vielen Dank!", level: "Basis" },
-      { id: 64, type: "Sonstiges", topic: "Höflichkeit", fr: "excusez-moi", de: "entschuldigen Sie", example: "Excusez-moi, où sont les toilettes ?", exampleDe: "Entschuldigen Sie, wo sind die Toiletten?", level: "Basis" },
-      { id: 65, type: "Sonstiges", topic: "Höflichkeit", fr: "je voudrais", de: "ich hätte gern / ich möchte", example: "Je voudrais deux croissants.", exampleDe: "Ich hätte gerne zwei Croissants.", level: "Basis" },
-      { id: 66, type: "Sonstiges", topic: "Kommunikation", fr: "plus lentement", de: "langsamer", example: "Plus lentement, s’il vous plaît.", exampleDe: "Langsamer, bitte.", level: "Wichtig" },
-      { id: 67, type: "Sonstiges", topic: "Kommunikation", fr: "combien ?", de: "wie viel?", example: "Ça coûte combien ?", exampleDe: "Wie viel kostet das?", level: "Basis" },
-      { id: 68, type: "Sonstiges", topic: "Kommunikation", fr: "où ?", de: "wo?", example: "Où est la plage ?", exampleDe: "Wo ist der Strand?", level: "Basis" }
-    ];
-
-    const verbs = [
-      { infinitive: "être", de: "sein", reason: "für Identität, Zustand, Öffnungszeiten und einfache Aussagen", pattern: "Je suis avec mon enfant. / C’est ouvert ?", tenses: { present: { label: "Präsens", forms: ["je suis", "tu es", "il/elle est", "nous sommes", "vous êtes", "ils/elles sont"] }, nearFuture: { label: "nahe Zukunft", forms: ["je vais être", "tu vas être", "il/elle va être", "nous allons être", "vous allez être", "ils/elles vont être"] }, passeCompose: { label: "Vergangenheit", forms: ["j’ai été", "tu as été", "il/elle a été", "nous avons été", "vous avez été", "ils/elles ont été"] } } },
-      { infinitive: "avoir", de: "haben", reason: "für Reservierungen, Alter, Hunger, Durst und Besitz", pattern: "Nous avons une réservation. / J’ai faim.", tenses: { present: { label: "Präsens", forms: ["j’ai", "tu as", "il/elle a", "nous avons", "vous avez", "ils/elles ont"] }, nearFuture: { label: "nahe Zukunft", forms: ["je vais avoir", "tu vas avoir", "il/elle va avoir", "nous allons avoir", "vous allez avoir", "ils/elles vont avoir"] }, passeCompose: { label: "Vergangenheit", forms: ["j’ai eu", "tu as eu", "il/elle a eu", "nous avons eu", "vous avez eu", "ils/elles ont eu"] } } },
-      { infinitive: "vouloir", de: "wollen / möchten", reason: "für höfliche Wünsche; im Urlaub extrem nützlich", pattern: "Je voudrais une table. / Tu veux une glace ?", tenses: { present: { label: "Präsens", forms: ["je veux", "tu veux", "il/elle veut", "nous voulons", "vous voulez", "ils/elles veulent"] }, polite: { label: "höflich", forms: ["je voudrais", "tu voudrais", "il/elle voudrait", "nous voudrions", "vous voudriez", "ils/elles voudraient"] }, nearFuture: { label: "nahe Zukunft", forms: ["je vais vouloir", "tu vas vouloir", "il/elle va vouloir", "nous allons vouloir", "vous allez vouloir", "ils/elles vont vouloir"] } } },
-      { infinitive: "pouvoir", de: "können / dürfen", reason: "für Fragen nach Erlaubnis, Möglichkeiten und Hilfe", pattern: "Vous pouvez répéter ? / On peut payer par carte ?", tenses: { present: { label: "Präsens", forms: ["je peux", "tu peux", "il/elle peut", "nous pouvons", "vous pouvez", "ils/elles peuvent"] }, polite: { label: "höflich", forms: ["je pourrais", "tu pourrais", "il/elle pourrait", "nous pourrions", "vous pourriez", "ils/elles pourraient"] }, nearFuture: { label: "nahe Zukunft", forms: ["je vais pouvoir", "tu vas pouvoir", "il/elle va pouvoir", "nous allons pouvoir", "vous allez pouvoir", "ils/elles vont pouvoir"] } } },
-      { infinitive: "réserver", de: "reservieren / buchen", reason: "für Camping, Restaurant, Auto und Ausflüge", pattern: "Nous avons réservé un emplacement.", tenses: { present: { label: "Präsens", forms: ["je réserve", "tu réserves", "il/elle réserve", "nous réservons", "vous réservez", "ils/elles réservent"] }, nearFuture: { label: "nahe Zukunft", forms: ["je vais réserver", "tu vas réserver", "il/elle va réserver", "nous allons réserver", "vous allez réserver", "ils/elles vont réserver"] }, passeCompose: { label: "Vergangenheit", forms: ["j’ai réservé", "tu as réservé", "il/elle a réservé", "nous avons réservé", "vous avez réservé", "ils/elles ont réservé"] } } },
-      { infinitive: "payer", de: "bezahlen", reason: "für Kasse, Café, Restaurant und Gebühren", pattern: "Je peux payer par carte ?", tenses: { present: { label: "Präsens", forms: ["je paie", "tu paies", "il/elle paie", "nous payons", "vous payez", "ils/elles paient"] }, nearFuture: { label: "nahe Zukunft", forms: ["je vais payer", "tu vas payer", "il/elle va payer", "nous allons payer", "vous allez payer", "ils/elles vont payer"] }, passeCompose: { label: "Vergangenheit", forms: ["j’ai payé", "tu as payé", "il/elle a payé", "nous avons payé", "vous avez payé", "ils/elles ont payé"] } } }
-    ];
-
-    const situations = [
-      { title: "Auto abholen", icon: "🚗", goal: "Reservierung, Versicherung, Kaution und Rückgabe klären", phrases: [["Bonjour, nous avons réservé une voiture.", "Guten Tag, wir haben ein Auto reserviert."], ["L’assurance est incluse ?", "Ist die Versicherung inklusive?"], ["Quel est le montant de la caution ?", "Wie hoch ist die Kaution?"], ["Je dois rendre la voiture avec le plein ?", "Muss ich das Auto vollgetankt zurückgeben?"], ["Où dois-je rendre les clés ?", "Wo muss ich die Schlüssel zurückgeben?"]] },
-      { title: "Camping ankommen", icon: "⛺", goal: "einchecken, Stellplatz finden, Regeln verstehen", phrases: [["Bonjour, nous avons réservé un emplacement.", "Guten Tag, wir haben einen Stellplatz reserviert."], ["Où est notre emplacement ?", "Wo ist unser Stellplatz?"], ["Est-ce qu’il y a l’électricité ?", "Gibt es Strom?"], ["Où sont les sanitaires ?", "Wo sind die Sanitäranlagen?"], ["La piscine est ouverte jusqu’à quelle heure ?", "Bis wann ist der Pool geöffnet?"]] },
-      { title: "Restaurant & Café", icon: "🥐", goal: "höflich bestellen, nach Kindermenü fragen, zahlen", phrases: [["Une table pour deux, s’il vous plaît.", "Einen Tisch für zwei, bitte."], ["Avez-vous un menu enfant ?", "Haben Sie ein Kindermenü?"], ["Je voudrais une carafe d’eau.", "Ich hätte gerne eine Karaffe Wasser."], ["C’était très bon, merci.", "Es war sehr lecker, danke."], ["L’addition, s’il vous plaît.", "Die Rechnung, bitte."]] },
-      { title: "Small Talk am Strand", icon: "🏖️", goal: "nett Kontakt aufnehmen und mit Kindern spielen", phrases: [["Bonjour, vous êtes d’ici ?", "Hallo, sind Sie von hier?"], ["La plage est très belle.", "Der Strand ist sehr schön."], ["Tu veux jouer ?", "Möchtest du spielen?"], ["On construit un château de sable ?", "Bauen wir eine Sandburg?"], ["La mer est froide aujourd’hui.", "Das Meer ist heute kalt."]] },
-      { title: "In der Stadt", icon: "🏙️", goal: "orientieren, einkaufen, Preise verstehen", phrases: [["Excusez-moi, où est la boulangerie ?", "Entschuldigen Sie, wo ist die Bäckerei?"], ["Je voudrais deux croissants.", "Ich hätte gerne zwei Croissants."], ["Ça coûte combien ?", "Wie viel kostet das?"], ["Vous avez un sac ?", "Haben Sie eine Tüte?"], ["Merci, bonne journée !", "Danke, schönen Tag!"]] },
-      { title: "Wenn man etwas nicht versteht", icon: "💬", goal: "sicher nachfragen statt blockieren", phrases: [["Je parle un peu français.", "Ich spreche ein bisschen Französisch."], ["Je ne comprends pas très bien.", "Ich verstehe nicht sehr gut."], ["Vous pouvez répéter, s’il vous plaît ?", "Können Sie das bitte wiederholen?"], ["Plus lentement, s’il vous plaît.", "Langsamer, bitte."], ["Vous parlez allemand ou anglais ?", "Sprechen Sie Deutsch oder Englisch?"]] }
-    ];
-
-    const miniQuests = [
-      { prompt: "Ihr kommt am Campingplatz an. Was sagst du zuerst?", answer: "Bonjour, nous avons réservé un emplacement.", choices: ["Bonjour, nous avons réservé un emplacement.", "La mer est froide aujourd’hui.", "Je voudrais une glace."] },
-      { prompt: "Du möchtest im Café bezahlen. Was passt?", answer: "L’addition, s’il vous plaît.", choices: ["Où sont les sanitaires ?", "L’addition, s’il vous plaît.", "Tu veux jouer ?"] },
-      { prompt: "Dein Kind möchte mit einem anderen Kind spielen. Was ist einfach und freundlich?", answer: "Tu veux jouer ?", choices: ["Tu veux jouer ?", "Quel est le montant de la caution ?", "Je dois rendre les clés ?"] },
-      { prompt: "Du hast die Antwort nicht verstanden. Was hilft?", answer: "Vous pouvez répéter, s’il vous plaît ?", choices: ["Vous pouvez répéter, s’il vous plaît ?", "Je voudrais deux croissants.", "Nous avons une tente."] },
-      { prompt: "Beim Mietwagen willst du wissen, ob Versicherung dabei ist.", answer: "L’assurance est incluse ?", choices: ["L’assurance est incluse ?", "La plage est belle.", "Ça coûte combien de croissants ?"] }
-    ];
-
-
-    vocabulary.push(
-      { id: 69, type: "Nomen", topic: "Unterkunft", fr: "la réservation", de: "die Reservierung", example: "Nous avons une réservation pour deux nuits.", exampleDe: "Wir haben eine Reservierung für zwei Nächte.", level: "Wichtig" },
-      { id: 70, type: "Nomen", topic: "Unterkunft", fr: "la nuit", de: "die Nacht", example: "Nous restons trois nuits.", exampleDe: "Wir bleiben drei Nächte.", level: "Basis" },
-      { id: 71, type: "Nomen", topic: "Unterkunft", fr: "l’accueil", de: "die Rezeption / der Empfang", example: "L’accueil est encore ouvert ?", exampleDe: "Ist die Rezeption noch geöffnet?", level: "Wichtig" },
-      { id: 72, type: "Nomen", topic: "Unterkunft", fr: "la chambre", de: "das Zimmer", example: "La chambre est prête ?", exampleDe: "Ist das Zimmer fertig?", level: "Basis" },
-      { id: 73, type: "Nomen", topic: "Unterkunft", fr: "la clé", de: "der Schlüssel", example: "Voici la clé de la chambre.", exampleDe: "Hier ist der Zimmerschlüssel.", level: "Basis" },
-      { id: 74, type: "Nomen", topic: "Unterkunft", fr: "le drap", de: "das Bettlaken", example: "Il manque un drap.", exampleDe: "Ein Bettlaken fehlt.", level: "Zusatz" },
-      { id: 75, type: "Nomen", topic: "Unterkunft", fr: "la couverture", de: "die Decke", example: "Avez-vous une couverture supplémentaire ?", exampleDe: "Haben Sie eine zusätzliche Decke?", level: "Zusatz" },
-      { id: 76, type: "Nomen", topic: "Unterkunft", fr: "le petit déjeuner", de: "das Frühstück", example: "Le petit déjeuner est inclus ?", exampleDe: "Ist das Frühstück inklusive?", level: "Basis" },
-      { id: 77, type: "Nomen", topic: "Unterkunft", fr: "le départ", de: "die Abreise", example: "Le départ est à quelle heure ?", exampleDe: "Um wie viel Uhr ist die Abreise?", level: "Wichtig" },
-      { id: 78, type: "Nomen", topic: "Unterkunft", fr: "l’arrivée", de: "die Ankunft", example: "Notre arrivée est prévue vers dix-sept heures.", exampleDe: "Unsere Ankunft ist gegen siebzehn Uhr geplant.", level: "Zusatz" },
-
-      { id: 79, type: "Nomen", topic: "Camping", fr: "la borne électrique", de: "die Stromsäule", example: "Où est la borne électrique ?", exampleDe: "Wo ist die Stromsäule?", level: "Wichtig" },
-      { id: 80, type: "Nomen", topic: "Camping", fr: "la rallonge", de: "das Verlängerungskabel", example: "Nous avons besoin d’une rallonge.", exampleDe: "Wir brauchen ein Verlängerungskabel.", level: "Zusatz" },
-      { id: 81, type: "Nomen", topic: "Camping", fr: "l’ombre", de: "der Schatten", example: "Y a-t-il un emplacement à l’ombre ?", exampleDe: "Gibt es einen Stellplatz im Schatten?", level: "Wichtig" },
-      { id: 82, type: "Nomen", topic: "Camping", fr: "le soleil", de: "die Sonne", example: "L’emplacement est en plein soleil.", exampleDe: "Der Stellplatz liegt in voller Sonne.", level: "Basis" },
-      { id: 83, type: "Nomen", topic: "Camping", fr: "le bruit", de: "der Lärm", example: "Il y a beaucoup de bruit la nuit ?", exampleDe: "Gibt es nachts viel Lärm?", level: "Zusatz" },
-      { id: 84, type: "Nomen", topic: "Camping", fr: "le calme", de: "die Ruhe", example: "Nous cherchons un endroit calme.", exampleDe: "Wir suchen einen ruhigen Platz.", level: "Wichtig" },
-      { id: 85, type: "Nomen", topic: "Camping", fr: "la machine à laver", de: "die Waschmaschine", example: "Vous avez une machine à laver ?", exampleDe: "Haben Sie eine Waschmaschine?", level: "Zusatz" },
-      { id: 86, type: "Nomen", topic: "Camping", fr: "les déchets", de: "der Müll", example: "Où doit-on mettre les déchets ?", exampleDe: "Wo sollen wir den Müll hinbringen?", level: "Zusatz" },
-      { id: 87, type: "Nomen", topic: "Camping", fr: "le règlement", de: "die Regeln / Platzordnung", example: "Y a-t-il un règlement du camping ?", exampleDe: "Gibt es eine Campingplatzordnung?", level: "Zusatz" },
-      { id: 88, type: "Nomen", topic: "Camping", fr: "le bracelet", de: "das Armband", example: "Faut-il porter le bracelet à la piscine ?", exampleDe: "Muss man das Armband am Pool tragen?", level: "Zusatz" },
-
-      { id: 89, type: "Nomen", topic: "Essen & Trinken", fr: "l’eau plate", de: "stilles Wasser", example: "Une bouteille d’eau plate, s’il vous plaît.", exampleDe: "Eine Flasche stilles Wasser, bitte.", level: "Basis" },
-      { id: 90, type: "Nomen", topic: "Essen & Trinken", fr: "l’eau gazeuse", de: "Sprudelwasser", example: "Vous avez de l’eau gazeuse ?", exampleDe: "Haben Sie Sprudelwasser?", level: "Basis" },
-      { id: 91, type: "Nomen", topic: "Essen & Trinken", fr: "une carafe d’eau", de: "eine Karaffe Leitungswasser", example: "Une carafe d’eau, s’il vous plaît.", exampleDe: "Eine Karaffe Wasser, bitte.", level: "Wichtig" },
-      { id: 92, type: "Nomen", topic: "Essen & Trinken", fr: "le pain", de: "das Brot", example: "Je voudrais une baguette, s’il vous plaît.", exampleDe: "Ich hätte gerne ein Baguette, bitte.", level: "Basis" },
-      { id: 93, type: "Nomen", topic: "Essen & Trinken", fr: "le croissant", de: "das Croissant", example: "Deux croissants, s’il vous plaît.", exampleDe: "Zwei Croissants, bitte.", level: "Basis" },
-      { id: 94, type: "Nomen", topic: "Essen & Trinken", fr: "la crêpe", de: "der Crêpe", example: "Je voudrais une crêpe au sucre.", exampleDe: "Ich hätte gerne einen Crêpe mit Zucker.", level: "Kind" },
-      { id: 95, type: "Nomen", topic: "Essen & Trinken", fr: "la fraise", de: "die Erdbeere", example: "Une glace à la fraise, s’il vous plaît.", exampleDe: "Ein Erdbeereis, bitte.", level: "Kind" },
-      { id: 96, type: "Nomen", topic: "Essen & Trinken", fr: "le chocolat", de: "die Schokolade", example: "Mon enfant aime le chocolat.", exampleDe: "Mein Kind mag Schokolade.", level: "Kind" },
-      { id: 97, type: "Nomen", topic: "Essen & Trinken", fr: "le fromage", de: "der Käse", example: "Nous voudrions goûter un fromage local.", exampleDe: "Wir möchten einen lokalen Käse probieren.", level: "Zusatz" },
-      { id: 98, type: "Nomen", topic: "Essen & Trinken", fr: "les frites", de: "die Pommes", example: "Le menu enfant a des frites ?", exampleDe: "Hat das Kindermenü Pommes?", level: "Kind" },
-      { id: 99, type: "Nomen", topic: "Essen & Trinken", fr: "la glace à la vanille", de: "das Vanilleeis", example: "Une glace à la vanille, s’il vous plaît.", exampleDe: "Ein Vanilleeis, bitte.", level: "Kind" },
-      { id: 100, type: "Nomen", topic: "Essen & Trinken", fr: "l’allergie", de: "die Allergie", example: "Mon enfant a une allergie.", exampleDe: "Mein Kind hat eine Allergie.", level: "Wichtig" },
-      { id: 101, type: "Nomen", topic: "Essen & Trinken", fr: "les noix", de: "die Nüsse", example: "Est-ce qu’il y a des noix dedans ?", exampleDe: "Sind da Nüsse drin?", level: "Wichtig" },
-      { id: 102, type: "Nomen", topic: "Essen & Trinken", fr: "le lait", de: "die Milch", example: "Est-ce qu’il y a du lait dedans ?", exampleDe: "Ist da Milch drin?", level: "Wichtig" },
-      { id: 103, type: "Nomen", topic: "Essen & Trinken", fr: "sans viande", de: "ohne Fleisch", example: "Avez-vous quelque chose sans viande ?", exampleDe: "Haben Sie etwas ohne Fleisch?", level: "Wichtig" },
-
-      { id: 104, type: "Nomen", topic: "Einkaufen & Bezahlen", fr: "la carte bancaire", de: "die Bankkarte", example: "Je peux payer par carte bancaire ?", exampleDe: "Kann ich mit Bankkarte bezahlen?", level: "Basis" },
-      { id: 105, type: "Nomen", topic: "Einkaufen & Bezahlen", fr: "l’argent liquide", de: "das Bargeld", example: "Vous acceptez l’argent liquide ?", exampleDe: "Akzeptieren Sie Bargeld?", level: "Basis" },
-      { id: 106, type: "Nomen", topic: "Einkaufen & Bezahlen", fr: "le reçu", de: "der Beleg / Kassenbon", example: "Je peux avoir le reçu ?", exampleDe: "Kann ich den Beleg bekommen?", level: "Zusatz" },
-      { id: 107, type: "Nomen", topic: "Einkaufen & Bezahlen", fr: "la monnaie", de: "das Wechselgeld", example: "Voici votre monnaie.", exampleDe: "Hier ist Ihr Wechselgeld.", level: "Zusatz" },
-      { id: 108, type: "Nomen", topic: "Einkaufen & Bezahlen", fr: "la caisse", de: "die Kasse", example: "La caisse est là-bas.", exampleDe: "Die Kasse ist dort drüben.", level: "Basis" },
-      { id: 109, type: "Nomen", topic: "Einkaufen & Bezahlen", fr: "la taille", de: "die Größe", example: "Vous avez une autre taille ?", exampleDe: "Haben Sie eine andere Größe?", level: "Zusatz" },
-      { id: 110, type: "Nomen", topic: "Einkaufen & Bezahlen", fr: "la couleur", de: "die Farbe", example: "Mon enfant aime cette couleur.", exampleDe: "Mein Kind mag diese Farbe.", level: "Kind" },
-
-      { id: 111, type: "Nomen", topic: "Strand & Freizeit", fr: "le maillot de bain", de: "der Badeanzug / die Badehose", example: "J’ai oublié mon maillot de bain.", exampleDe: "Ich habe meine Badesachen vergessen.", level: "Basis" },
-      { id: 112, type: "Nomen", topic: "Strand & Freizeit", fr: "les lunettes de soleil", de: "die Sonnenbrille", example: "Où sont mes lunettes de soleil ?", exampleDe: "Wo ist meine Sonnenbrille?", level: "Basis" },
-      { id: 113, type: "Nomen", topic: "Strand & Freizeit", fr: "le chapeau", de: "der Hut", example: "Mets ton chapeau, s’il te plaît.", exampleDe: "Setz bitte deinen Hut auf.", level: "Kind" },
-      { id: 114, type: "Nomen", topic: "Strand & Freizeit", fr: "le parasol", de: "der Sonnenschirm", example: "On peut louer un parasol ?", exampleDe: "Kann man einen Sonnenschirm mieten?", level: "Basis" },
-      { id: 115, type: "Nomen", topic: "Strand & Freizeit", fr: "la bouée", de: "der Schwimmring", example: "Tu veux la bouée ?", exampleDe: "Möchtest du den Schwimmring?", level: "Kind" },
-      { id: 116, type: "Nomen", topic: "Strand & Freizeit", fr: "le seau", de: "der Eimer", example: "Où est le seau ?", exampleDe: "Wo ist der Eimer?", level: "Kind" },
-      { id: 117, type: "Nomen", topic: "Strand & Freizeit", fr: "la pelle", de: "die Schaufel", example: "J’ai une pelle pour le sable.", exampleDe: "Ich habe eine Schaufel für den Sand.", level: "Kind" },
-      { id: 118, type: "Nomen", topic: "Strand & Freizeit", fr: "les coquillages", de: "die Muscheln", example: "On cherche des coquillages ?", exampleDe: "Suchen wir Muscheln?", level: "Kind" },
-      { id: 119, type: "Nomen", topic: "Strand & Freizeit", fr: "le maître-nageur", de: "der Bademeister", example: "Où est le maître-nageur ?", exampleDe: "Wo ist der Bademeister?", level: "Wichtig" },
-      { id: 120, type: "Nomen", topic: "Strand & Freizeit", fr: "le drapeau rouge", de: "die rote Flagge", example: "Le drapeau rouge veut dire baignade interdite.", exampleDe: "Die rote Flagge bedeutet Baden verboten.", level: "Wichtig" },
-
-      { id: 121, type: "Nomen", topic: "Stadt & Orientierung", fr: "le centre-ville", de: "die Innenstadt", example: "Comment aller au centre-ville ?", exampleDe: "Wie kommt man in die Innenstadt?", level: "Basis" },
-      { id: 122, type: "Nomen", topic: "Stadt & Orientierung", fr: "la rue", de: "die Straße", example: "Cette rue est piétonne.", exampleDe: "Diese Straße ist eine Fußgängerzone.", level: "Basis" },
-      { id: 123, type: "Nomen", topic: "Stadt & Orientierung", fr: "la place", de: "der Platz", example: "Le marché est sur la place.", exampleDe: "Der Markt ist auf dem Platz.", level: "Basis" },
-      { id: 124, type: "Nomen", topic: "Stadt & Orientierung", fr: "le feu", de: "die Ampel", example: "Tournez à gauche au feu.", exampleDe: "Biegen Sie an der Ampel links ab.", level: "Zusatz" },
-      { id: 125, type: "Nomen", topic: "Stadt & Orientierung", fr: "le rond-point", de: "der Kreisverkehr", example: "Prenez la deuxième sortie au rond-point.", exampleDe: "Nehmen Sie im Kreisverkehr die zweite Ausfahrt.", level: "Wichtig" },
-      { id: 126, type: "Nomen", topic: "Stadt & Orientierung", fr: "à gauche", de: "links", example: "La plage est à gauche.", exampleDe: "Der Strand ist links.", level: "Basis" },
-      { id: 127, type: "Nomen", topic: "Stadt & Orientierung", fr: "à droite", de: "rechts", example: "Tournez à droite, s’il vous plaît.", exampleDe: "Biegen Sie bitte rechts ab.", level: "Basis" },
-      { id: 128, type: "Nomen", topic: "Stadt & Orientierung", fr: "tout droit", de: "geradeaus", example: "Continuez tout droit.", exampleDe: "Gehen / fahren Sie geradeaus weiter.", level: "Basis" },
-      { id: 129, type: "Nomen", topic: "Stadt & Orientierung", fr: "près de", de: "in der Nähe von", example: "C’est près de la gare.", exampleDe: "Es ist in der Nähe des Bahnhofs.", level: "Basis" },
-      { id: 130, type: "Nomen", topic: "Stadt & Orientierung", fr: "loin de", de: "weit weg von", example: "Le camping est loin de la plage ?", exampleDe: "Ist der Campingplatz weit vom Strand weg?", level: "Basis" },
-
-      { id: 131, type: "Nomen", topic: "Zeit & Planung", fr: "aujourd’hui", de: "heute", example: "Aujourd’hui, nous allons à la plage.", exampleDe: "Heute gehen wir an den Strand.", level: "Basis" },
-      { id: 132, type: "Nomen", topic: "Zeit & Planung", fr: "demain", de: "morgen", example: "Demain, nous partons tôt.", exampleDe: "Morgen fahren wir früh los.", level: "Basis" },
-      { id: 133, type: "Nomen", topic: "Zeit & Planung", fr: "hier", de: "gestern", example: "Hier, nous avons visité la ville.", exampleDe: "Gestern haben wir die Stadt besucht.", level: "Basis" },
-      { id: 134, type: "Nomen", topic: "Zeit & Planung", fr: "le matin", de: "der Morgen / vormittags", example: "Le marché est ouvert le matin.", exampleDe: "Der Markt ist vormittags geöffnet.", level: "Basis" },
-      { id: 135, type: "Nomen", topic: "Zeit & Planung", fr: "l’après-midi", de: "der Nachmittag", example: "Nous revenons l’après-midi.", exampleDe: "Wir kommen am Nachmittag zurück.", level: "Basis" },
-      { id: 136, type: "Nomen", topic: "Zeit & Planung", fr: "le soir", de: "der Abend", example: "Le soir, il fait plus frais.", exampleDe: "Abends ist es kühler.", level: "Basis" },
-      { id: 137, type: "Nomen", topic: "Zeit & Planung", fr: "maintenant", de: "jetzt", example: "Nous voulons payer maintenant.", exampleDe: "Wir möchten jetzt bezahlen.", level: "Basis" },
-      { id: 138, type: "Nomen", topic: "Zeit & Planung", fr: "plus tard", de: "später", example: "Nous revenons plus tard.", exampleDe: "Wir kommen später zurück.", level: "Basis" },
-      { id: 139, type: "Nomen", topic: "Zeit & Planung", fr: "à quelle heure ?", de: "um wie viel Uhr?", example: "À quelle heure ouvre la piscine ?", exampleDe: "Um wie viel Uhr öffnet der Pool?", level: "Wichtig" },
-      { id: 140, type: "Nomen", topic: "Zeit & Planung", fr: "combien de temps ?", de: "wie lange?", example: "Combien de temps faut-il ?", exampleDe: "Wie lange dauert es?", level: "Wichtig" },
-
-      { id: 141, type: "Nomen", topic: "Notfall & Gesundheit", fr: "l’aide", de: "die Hilfe", example: "J’ai besoin d’aide.", exampleDe: "Ich brauche Hilfe.", level: "Wichtig" },
-      { id: 142, type: "Nomen", topic: "Notfall & Gesundheit", fr: "les toilettes", de: "die Toilette", example: "Où sont les toilettes ?", exampleDe: "Wo sind die Toiletten?", level: "Basis" },
-      { id: 143, type: "Nomen", topic: "Notfall & Gesundheit", fr: "la douleur", de: "der Schmerz", example: "Mon enfant a mal au ventre.", exampleDe: "Mein Kind hat Bauchschmerzen.", level: "Wichtig" },
-      { id: 144, type: "Nomen", topic: "Notfall & Gesundheit", fr: "le ventre", de: "der Bauch", example: "J’ai mal au ventre.", exampleDe: "Ich habe Bauchschmerzen.", level: "Wichtig" },
-      { id: 145, type: "Nomen", topic: "Notfall & Gesundheit", fr: "la tête", de: "der Kopf", example: "J’ai mal à la tête.", exampleDe: "Ich habe Kopfschmerzen.", level: "Wichtig" },
-      { id: 146, type: "Nomen", topic: "Notfall & Gesundheit", fr: "la fièvre", de: "das Fieber", example: "Mon enfant a de la fièvre.", exampleDe: "Mein Kind hat Fieber.", level: "Wichtig" },
-      { id: 147, type: "Nomen", topic: "Notfall & Gesundheit", fr: "le pansement", de: "das Pflaster", example: "Avez-vous un pansement ?", exampleDe: "Haben Sie ein Pflaster?", level: "Wichtig" },
-      { id: 148, type: "Nomen", topic: "Notfall & Gesundheit", fr: "la piqûre", de: "der Stich", example: "C’est une piqûre d’insecte.", exampleDe: "Das ist ein Insektenstich.", level: "Zusatz" },
-      { id: 149, type: "Nomen", topic: "Notfall & Gesundheit", fr: "la brûlure", de: "die Verbrennung", example: "C’est une petite brûlure.", exampleDe: "Das ist eine kleine Verbrennung.", level: "Zusatz" },
-      { id: 150, type: "Nomen", topic: "Notfall & Gesundheit", fr: "urgent", de: "dringend", example: "C’est urgent, s’il vous plaît.", exampleDe: "Es ist dringend, bitte.", level: "Wichtig" },
-
-      { id: 151, type: "Verb", topic: "Alltag & Bitten", fr: "aimer", de: "mögen / lieben", example: "Mon enfant aime la plage.", exampleDe: "Mein Kind mag den Strand.", level: "Basis" },
-      { id: 152, type: "Verb", topic: "Alltag & Bitten", fr: "préférer", de: "bevorzugen / lieber mögen", example: "Je préfère une table à l’ombre.", exampleDe: "Ich hätte lieber einen Tisch im Schatten.", level: "Wichtig" },
-      { id: 153, type: "Verb", topic: "Alltag & Bitten", fr: "donner", de: "geben", example: "Vous pouvez me donner un plan ?", exampleDe: "Können Sie mir einen Plan geben?", level: "Basis" },
-      { id: 154, type: "Verb", topic: "Alltag & Bitten", fr: "prendre", de: "nehmen", example: "Je prends une crêpe au sucre.", exampleDe: "Ich nehme einen Crêpe mit Zucker.", level: "Basis" },
-      { id: 155, type: "Verb", topic: "Alltag & Bitten", fr: "mettre", de: "stellen / legen / anziehen / auftragen", example: "Mets de la crème solaire, s’il te plaît.", exampleDe: "Trag bitte Sonnencreme auf.", level: "Wichtig" },
-      { id: 156, type: "Verb", topic: "Alltag & Bitten", fr: "attendre", de: "warten", example: "On attend ici ?", exampleDe: "Warten wir hier?", level: "Basis" },
-      { id: 157, type: "Verb", topic: "Alltag & Bitten", fr: "demander", de: "fragen / bitten", example: "Je vais demander à l’accueil.", exampleDe: "Ich frage an der Rezeption.", level: "Basis" },
-      { id: 158, type: "Verb", topic: "Alltag & Bitten", fr: "ouvrir", de: "öffnen", example: "À quelle heure ouvrez-vous ?", exampleDe: "Um wie viel Uhr öffnen Sie?", level: "Wichtig" },
-      { id: 159, type: "Verb", topic: "Alltag & Bitten", fr: "fermer", de: "schließen", example: "Vous fermez à quelle heure ?", exampleDe: "Um wie viel Uhr schließen Sie?", level: "Wichtig" },
-      { id: 160, type: "Verb", topic: "Alltag & Bitten", fr: "revenir", de: "zurückkommen", example: "Nous revenons plus tard.", exampleDe: "Wir kommen später zurück.", level: "Basis" },
-      { id: 161, type: "Verb", topic: "Alltag & Bitten", fr: "partir", de: "losfahren / abreisen", example: "Nous partons demain matin.", exampleDe: "Wir reisen morgen früh ab.", level: "Basis" },
-      { id: 162, type: "Verb", topic: "Alltag & Bitten", fr: "arriver", de: "ankommen", example: "Nous arrivons vers cinq heures.", exampleDe: "Wir kommen gegen fünf Uhr an.", level: "Basis" },
-      { id: 163, type: "Verb", topic: "Alltag & Bitten", fr: "goûter", de: "probieren", example: "Je peux goûter ?", exampleDe: "Kann ich probieren?", level: "Kind" },
-      { id: 164, type: "Verb", topic: "Alltag & Bitten", fr: "choisir", de: "auswählen", example: "Tu peux choisir un parfum de glace.", exampleDe: "Du kannst eine Eissorte auswählen.", level: "Kind" },
-      { id: 165, type: "Verb", topic: "Alltag & Bitten", fr: "aider", de: "helfen", example: "Vous pouvez nous aider ?", exampleDe: "Können Sie uns helfen?", level: "Wichtig" },
-      { id: 166, type: "Verb", topic: "Alltag & Bitten", fr: "appeler", de: "anrufen / rufen", example: "Pouvez-vous appeler un médecin ?", exampleDe: "Können Sie einen Arzt rufen?", level: "Wichtig" },
-      { id: 167, type: "Verb", topic: "Alltag & Bitten", fr: "perdre", de: "verlieren", example: "J’ai perdu mon téléphone.", exampleDe: "Ich habe mein Handy verloren.", level: "Wichtig" },
-      { id: 168, type: "Verb", topic: "Alltag & Bitten", fr: "oublier", de: "vergessen", example: "J’ai oublié ma serviette.", exampleDe: "Ich habe mein Handtuch vergessen.", level: "Basis" },
-
-      { id: 169, type: "Adjektiv", topic: "Beschreiben", fr: "propre", de: "sauber", example: "Les sanitaires sont propres.", exampleDe: "Die Sanitäranlagen sind sauber.", level: "Wichtig" },
-      { id: 170, type: "Adjektiv", topic: "Beschreiben", fr: "sale", de: "schmutzig", example: "La table est un peu sale.", exampleDe: "Der Tisch ist etwas schmutzig.", level: "Zusatz" },
-      { id: 171, type: "Adjektiv", topic: "Beschreiben", fr: "calme", de: "ruhig", example: "Nous cherchons un endroit calme.", exampleDe: "Wir suchen einen ruhigen Ort.", level: "Wichtig" },
-      { id: 172, type: "Adjektiv", topic: "Beschreiben", fr: "bruyant / bruyante", de: "laut", example: "C’est un peu bruyant ici.", exampleDe: "Es ist hier etwas laut.", level: "Zusatz" },
-      { id: 173, type: "Adjektiv", topic: "Beschreiben", fr: "facile", de: "einfach", example: "C’est facile à trouver.", exampleDe: "Es ist einfach zu finden.", level: "Basis" },
-      { id: 174, type: "Adjektiv", topic: "Beschreiben", fr: "difficile", de: "schwierig", example: "C’est difficile pour moi en français.", exampleDe: "Das ist für mich auf Französisch schwierig.", level: "Wichtig" },
-      { id: 175, type: "Adjektiv", topic: "Beschreiben", fr: "joli / jolie", de: "hübsch / schön", example: "C’est une jolie ville.", exampleDe: "Das ist eine schöne Stadt.", level: "Basis" },
-      { id: 176, type: "Adjektiv", topic: "Beschreiben", fr: "délicieux / délicieuse", de: "lecker", example: "La crêpe est délicieuse.", exampleDe: "Der Crêpe ist lecker.", level: "Kind" },
-      { id: 177, type: "Adjektiv", topic: "Beschreiben", fr: "sucré / sucrée", de: "süß / gezuckert", example: "C’est très sucré.", exampleDe: "Das ist sehr süß.", level: "Kind" },
-      { id: 178, type: "Adjektiv", topic: "Beschreiben", fr: "salé / salée", de: "salzig / herzhaft", example: "Vous avez une crêpe salée ?", exampleDe: "Haben Sie einen herzhaften Crêpe?", level: "Zusatz" },
-      { id: 179, type: "Adjektiv", topic: "Beschreiben", fr: "plein / pleine", de: "voll", example: "Le parking est plein.", exampleDe: "Der Parkplatz ist voll.", level: "Wichtig" },
-      { id: 180, type: "Adjektiv", topic: "Beschreiben", fr: "vide", de: "leer", example: "La bouteille est vide.", exampleDe: "Die Flasche ist leer.", level: "Basis" },
-      { id: 181, type: "Adjektiv", topic: "Beschreiben", fr: "cassé / cassée", de: "kaputt", example: "La douche est cassée.", exampleDe: "Die Dusche ist kaputt.", level: "Wichtig" },
-      { id: 182, type: "Adjektiv", topic: "Beschreiben", fr: "perdu / perdue", de: "verloren", example: "Je suis perdu.", exampleDe: "Ich habe mich verlaufen / bin verloren.", level: "Wichtig" },
-
-      { id: 183, type: "Sonstiges", topic: "Satzbausteine", fr: "je peux avoir… ?", de: "kann ich … bekommen?", example: "Je peux avoir un verre d’eau ?", exampleDe: "Kann ich ein Glas Wasser bekommen?", level: "Wichtig" },
-      { id: 184, type: "Sonstiges", topic: "Satzbausteine", fr: "est-ce que… ?", de: "Frage-Einleitung: ist es so, dass …?", example: "Est-ce que c’est ouvert ?", exampleDe: "Ist es geöffnet?", level: "Wichtig" },
-      { id: 185, type: "Sonstiges", topic: "Satzbausteine", fr: "il y a…", de: "es gibt …", example: "Il y a une pharmacie près d’ici ?", exampleDe: "Gibt es eine Apotheke in der Nähe?", level: "Wichtig" },
-      { id: 186, type: "Sonstiges", topic: "Satzbausteine", fr: "il n’y a pas…", de: "es gibt kein / keine …", example: "Il n’y a pas d’électricité.", exampleDe: "Es gibt keinen Strom.", level: "Zusatz" },
-      { id: 187, type: "Sonstiges", topic: "Satzbausteine", fr: "j’ai besoin de…", de: "ich brauche …", example: "J’ai besoin d’aide.", exampleDe: "Ich brauche Hilfe.", level: "Wichtig" },
-      { id: 188, type: "Sonstiges", topic: "Satzbausteine", fr: "je cherche…", de: "ich suche …", example: "Je cherche les toilettes.", exampleDe: "Ich suche die Toiletten.", level: "Wichtig" },
-      { id: 189, type: "Sonstiges", topic: "Satzbausteine", fr: "c’est où ?", de: "wo ist das?", example: "La caisse, c’est où ?", exampleDe: "Wo ist die Kasse?", level: "Basis" },
-      { id: 190, type: "Sonstiges", topic: "Satzbausteine", fr: "c’est combien ?", de: "wie viel kostet das?", example: "Cette glace, c’est combien ?", exampleDe: "Wie viel kostet dieses Eis?", level: "Basis" },
-      { id: 191, type: "Sonstiges", topic: "Satzbausteine", fr: "pour mon enfant", de: "für mein Kind", example: "C’est pour mon enfant.", exampleDe: "Das ist für mein Kind.", level: "Wichtig" },
-      { id: 192, type: "Sonstiges", topic: "Satzbausteine", fr: "sans…", de: "ohne …", example: "Sans oignons, s’il vous plaît.", exampleDe: "Ohne Zwiebeln, bitte.", level: "Wichtig" },
-      { id: 193, type: "Sonstiges", topic: "Satzbausteine", fr: "avec…", de: "mit …", example: "Avec du sucre, s’il vous plaît.", exampleDe: "Mit Zucker, bitte.", level: "Basis" },
-      { id: 194, type: "Sonstiges", topic: "Satzbausteine", fr: "un peu", de: "ein bisschen", example: "Je parle un peu français.", exampleDe: "Ich spreche ein bisschen Französisch.", level: "Basis" },
-      { id: 195, type: "Sonstiges", topic: "Satzbausteine", fr: "beaucoup", de: "viel / sehr", example: "Merci beaucoup.", exampleDe: "Vielen Dank.", level: "Basis" },
-      { id: 196, type: "Sonstiges", topic: "Satzbausteine", fr: "trop", de: "zu / zu viel", example: "C’est trop chaud.", exampleDe: "Das ist zu heiß.", level: "Basis" },
-      { id: 197, type: "Sonstiges", topic: "Satzbausteine", fr: "encore", de: "noch / nochmal", example: "Encore une fois, s’il vous plaît.", exampleDe: "Noch einmal, bitte.", level: "Wichtig" },
-      { id: 198, type: "Sonstiges", topic: "Satzbausteine", fr: "d’accord", de: "einverstanden / okay", example: "D’accord, merci.", exampleDe: "Okay, danke.", level: "Basis" },
-      { id: 199, type: "Sonstiges", topic: "Satzbausteine", fr: "ce n’est pas grave", de: "nicht schlimm", example: "Ce n’est pas grave, merci.", exampleDe: "Nicht schlimm, danke.", level: "Zusatz" },
-      { id: 200, type: "Sonstiges", topic: "Satzbausteine", fr: "bonne journée", de: "schönen Tag", example: "Merci, bonne journée !", exampleDe: "Danke, schönen Tag!", level: "Basis" }
-    );
-
-    situations.push(
-      { title: "Bäckerei morgens", icon: "🥖", goal: "Brot, Croissants und kleine Mengen freundlich kaufen", phrases: [["Bonjour, je voudrais une baguette, s’il vous plaît.", "Guten Tag, ich hätte gerne ein Baguette, bitte."], ["Deux croissants et un pain au chocolat, s’il vous plaît.", "Zwei Croissants und ein Schokobrötchen, bitte."], ["C’est pour emporter.", "Das ist zum Mitnehmen."], ["Je peux payer par carte ?", "Kann ich mit Karte bezahlen?"], ["Merci, bonne journée !", "Danke, schönen Tag!"]] },
-      { title: "Eis kaufen", icon: "🍦", goal: "Kind kann selbst eine Eissorte auswählen", phrases: [["Bonjour, une glace, s’il vous plaît.", "Hallo, ein Eis, bitte."], ["Une boule à la vanille et une boule à la fraise.", "Eine Kugel Vanille und eine Kugel Erdbeere."], ["Dans un cornet, s’il vous plaît.", "In einer Waffel, bitte."], ["Ça coûte combien ?", "Wie viel kostet das?"], ["Merci beaucoup !", "Vielen Dank!"]] },
-      { title: "Auf dem Markt", icon: "🍓", goal: "Obst, Käse und lokale Dinge probieren oder kaufen", phrases: [["Bonjour, je peux goûter ?", "Guten Tag, kann ich probieren?"], ["Je voudrais des fraises, s’il vous plaît.", "Ich hätte gerne Erdbeeren, bitte."], ["Combien ça coûte le kilo ?", "Wie viel kostet das Kilo?"], ["C’est local ?", "Ist das aus der Region?"], ["Un petit morceau de fromage, s’il vous plaît.", "Ein kleines Stück Käse, bitte."]] },
-      { title: "Nach dem Weg fragen", icon: "🧭", goal: "links, rechts, geradeaus und Nähe verstehen", phrases: [["Excusez-moi, comment aller à la plage ?", "Entschuldigen Sie, wie kommt man zum Strand?"], ["C’est loin d’ici ?", "Ist das weit von hier?"], ["Il faut aller tout droit ?", "Muss man geradeaus gehen?"], ["À gauche ou à droite ?", "Links oder rechts?"], ["Merci pour votre aide.", "Danke für Ihre Hilfe."]] },
-      { title: "Toilette & kurze Pausen", icon: "🚻", goal: "schnell und höflich fragen, besonders mit Kind", phrases: [["Excusez-moi, où sont les toilettes ?", "Entschuldigen Sie, wo sind die Toiletten?"], ["C’est pour mon enfant.", "Es ist für mein Kind."], ["On peut utiliser les toilettes ?", "Dürfen wir die Toilette benutzen?"], ["Il faut payer ?", "Muss man bezahlen?"], ["Merci beaucoup.", "Vielen Dank."]] },
-      { title: "Kleines Problem lösen", icon: "🛠️", goal: "ruhig erklären, wenn etwas fehlt oder kaputt ist", phrases: [["Excusez-moi, il y a un petit problème.", "Entschuldigen Sie, es gibt ein kleines Problem."], ["La douche est cassée.", "Die Dusche ist kaputt."], ["Il manque une couverture.", "Eine Decke fehlt."], ["Vous pouvez nous aider ?", "Können Sie uns helfen?"], ["Merci, ce n’est pas grave.", "Danke, nicht schlimm."]] },
-      { title: "Gesundheit & Apotheke", icon: "💊", goal: "bei Fieber, Bauchweh, Sonnenbrand oder Stich Hilfe bekommen", phrases: [["Où est la pharmacie la plus proche ?", "Wo ist die nächste Apotheke?"], ["Mon enfant a mal au ventre.", "Mein Kind hat Bauchschmerzen."], ["Mon enfant a de la fièvre.", "Mein Kind hat Fieber."], ["Avez-vous un pansement ?", "Haben Sie ein Pflaster?"], ["C’est une piqûre d’insecte.", "Das ist ein Insektenstich."]] },
-      { title: "Spielplatz & andere Kinder", icon: "🛝", goal: "Kinder können einfach Kontakt aufnehmen", phrases: [["Bonjour, je m’appelle…", "Hallo, ich heiße …"], ["Tu veux jouer ?", "Willst du spielen?"], ["On joue au ballon ?", "Spielen wir Ball?"], ["C’est à toi.", "Du bist dran."], ["Au revoir, à bientôt !", "Tschüss, bis bald!"]] },
-      { title: "Wetter & Tagesplan", icon: "🌦️", goal: "einfache Planung für Strand, Stadt und Camping", phrases: [["Il fait chaud aujourd’hui.", "Es ist heute heiß."], ["Demain, nous allons visiter la ville.", "Morgen besichtigen wir die Stadt."], ["On va à la plage maintenant ?", "Gehen wir jetzt an den Strand?"], ["Nous revenons plus tard.", "Wir kommen später zurück."], ["À quelle heure ouvre la piscine ?", "Um wie viel Uhr öffnet der Pool?"]] },
-      { title: "Allergie & Essen sicher bestellen", icon: "🥜", goal: "wichtige Zutaten vermeiden", phrases: [["Mon enfant a une allergie.", "Mein Kind hat eine Allergie."], ["Est-ce qu’il y a des noix dedans ?", "Sind da Nüsse drin?"], ["Sans lait, s’il vous plaît.", "Ohne Milch, bitte."], ["Sans viande, s’il vous plaît.", "Ohne Fleisch, bitte."], ["C’est possible ?", "Ist das möglich?"]] }
-    );
-
-    miniQuests.push(
-      { prompt: "Dein Kind möchte in der Bäckerei selbst bestellen. Was passt?", answer: "Bonjour, je voudrais un croissant, s’il vous plaît.", choices: ["Bonjour, je voudrais un croissant, s’il vous plaît.", "Où est le maître-nageur ?", "La douche est cassée."] },
-      { prompt: "Ihr sucht einen Stellplatz im Schatten.", answer: "Y a-t-il un emplacement à l’ombre ?", choices: ["Y a-t-il un emplacement à l’ombre ?", "Une boule à la vanille.", "C’est à toi."] },
-      { prompt: "Dein Kind hat Bauchschmerzen. Was sagst du?", answer: "Mon enfant a mal au ventre.", choices: ["Mon enfant a mal au ventre.", "Le parking est gratuit ?", "Je peux goûter ?"] },
-      { prompt: "Ihr wollt wissen, wann der Pool öffnet.", answer: "À quelle heure ouvre la piscine ?", choices: ["À quelle heure ouvre la piscine ?", "Je suis perdu.", "Sans oignons, s’il vous plaît."] },
-      { prompt: "Beim Eis: Dein Kind möchte Vanille und Erdbeere.", answer: "Une boule à la vanille et une boule à la fraise.", choices: ["Une boule à la vanille et une boule à la fraise.", "Il y a beaucoup de bruit la nuit ?", "Voici mon permis de conduire."] },
-      { prompt: "Du willst fragen, ob Nüsse im Essen sind.", answer: "Est-ce qu’il y a des noix dedans ?", choices: ["Est-ce qu’il y a des noix dedans ?", "C’est près de la gare.", "Nous revenons plus tard."] },
-      { prompt: "Ihr fragt nach dem Weg zum Strand.", answer: "Excusez-moi, comment aller à la plage ?", choices: ["Excusez-moi, comment aller à la plage ?", "Je voudrais une couverture.", "C’est très sucré."] },
-      { prompt: "Etwas ist kaputt. Was ist ein guter Einstieg?", answer: "Excusez-moi, il y a un petit problème.", choices: ["Excusez-moi, il y a un petit problème.", "Tu veux la bouée ?", "Deux croissants, s’il vous plaît."] },
-      { prompt: "Dein Kind möchte mit einem französischen Kind Ball spielen.", answer: "On joue au ballon ?", choices: ["On joue au ballon ?", "Je peux payer par carte bancaire ?", "L’assurance est incluse ?"] },
-      { prompt: "Du brauchst schnell Hilfe.", answer: "J’ai besoin d’aide.", choices: ["J’ai besoin d’aide.", "Le marché est ouvert le matin.", "C’est une jolie ville."] }
-    );
-
-    const pronouns = ["je", "tu", "il/elle", "nous", "vous", "ils/elles"];
-    let state = {
-      tab: "situationen",
-      topic: "Alle",
-      type: "Alle",
-      cardIndex: 0,
-      showBack: false,
-      score: Number(localStorage.getItem("franceScore") || 0),
-      streak: 0,
-      quiz: null,
-      quizFeedback: "",
-      verbPick: 0,
-      tense: "present",
-      questIndex: 0,
-      questFeedback: ""
-    };
-
-    function el(id) { return document.getElementById(id); }
-    function shuffle(array) { return [...array].sort(() => Math.random() - 0.5); }
-    function escapeHtml(str) {
-      return String(str).replace(/[&<>"]/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[ch]));
+    </div>`;
+  el("listenNpc").onclick=()=>speak(npc);
+  el("backSituations").onclick=backToSituations;
+  el("dialogView").querySelectorAll("[data-choice]").forEach(btn=>btn.onclick=()=>{
+    if(state.lockNext) return;
+    const ok=btn.dataset.choice===correct;
+    if(ok){
+      btn.classList.add("correct"); state.dialogFeedback={good:true,text:"Richtig. Der Satz wird vorgelesen, dann geht es weiter."}; score(2); speak(correct); state.lockNext=true;
+      setTimeout(()=>{ state.dialogStep++; state.dialogFeedback=null; state.lockNext=false; renderDialog(); }, 1900);
+    } else {
+      btn.classList.add("wrong"); state.dialogFeedback={good:false,text:"Noch nicht ganz. Lies die Situation noch einmal und probiere eine passendere Antwort."}; renderDialog();
     }
-    function speak(text) {
-      if (!window.speechSynthesis) return;
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = "fr-FR";
-      u.rate = 0.86;
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(u);
-    }
-    function addScore(points) {
-      state.score += points;
-      localStorage.setItem("franceScore", String(state.score));
-      renderScore();
-    }
-    function renderScore() {
-      el("score").textContent = state.score;
-      el("streak").textContent = state.streak;
-      el("scorebar").style.width = Math.min(100, state.score % 100) + "%";
-    }
-    function filteredVocabulary() {
-      return vocabulary.filter(v => (state.topic === "Alle" || v.topic === state.topic) && (state.type === "Alle" || v.type === state.type));
-    }
-    function makeQuiz(pool = vocabulary) {
-      const item = pool[Math.floor(Math.random() * pool.length)];
-      const wrong = shuffle(pool.filter(v => v.id !== item.id)).slice(0, 3).map(v => v.de);
-      return { item, choices: shuffle([item.de, ...wrong]) };
-    }
+  });
+}
+function backToSituations(){
+  state.activeDialog=null; el("dialogView").classList.add("hidden"); el("situationList").classList.remove("hidden"); renderSituations();
+}
 
-    function init() {
-      state.quiz = makeQuiz();
-      renderScore();
-      renderTabs();
-      renderSituations();
-      renderFilters();
-      renderFlashcard();
-      renderQuiz();
-      renderVerbSelectors();
-      renderVerbCard();
-      renderMission();
-
-      el("tabs").addEventListener("click", e => {
-        const btn = e.target.closest("button[data-tab]");
-        if (!btn) return;
-        state.tab = btn.dataset.tab;
-        renderTabs();
-      });
-      el("topicSelect").addEventListener("change", e => { state.topic = e.target.value; state.cardIndex = 0; state.showBack = false; renderFlashcard(); });
-      el("typeSelect").addEventListener("change", e => { state.type = e.target.value; state.cardIndex = 0; state.showBack = false; renderFlashcard(); });
-      el("newQuiz").addEventListener("click", () => { state.quizFeedback = ""; state.quiz = makeQuiz(filteredVocabulary().length >= 4 ? filteredVocabulary() : vocabulary); renderQuiz(); });
-      el("verbSelect").addEventListener("change", e => { state.verbPick = Number(e.target.value); state.tense = Object.keys(verbs[state.verbPick].tenses)[0]; renderVerbSelectors(); renderVerbCard(); });
-      el("tenseSelect").addEventListener("change", e => { state.tense = e.target.value; renderVerbCard(); });
-    }
-
-    function renderTabs() {
-      document.querySelectorAll(".tab").forEach(btn => btn.classList.toggle("active", btn.dataset.tab === state.tab));
-      document.querySelectorAll(".panel").forEach(panel => panel.classList.toggle("hidden", panel.id !== state.tab));
-    }
-
-    function renderSituations() {
-      el("situationen").innerHTML = `<div class="grid grid-3">${situations.map(s => `
-        <article class="card">
-          <div class="situation-head">
-            <div class="icon">${s.icon}</div>
-            <div><h2>${escapeHtml(s.title)}</h2><p class="goal">Ziel: ${escapeHtml(s.goal)}</p></div>
-          </div>
-          ${s.phrases.map(([fr, de]) => `<button class="phrase" data-say="${escapeHtml(fr)}"><div class="fr">${escapeHtml(fr)}</div><div class="de">${escapeHtml(de)}</div></button>`).join("")}
-        </article>`).join("")}</div>`;
-      el("situationen").querySelectorAll("[data-say]").forEach(b => b.addEventListener("click", () => speak(b.dataset.say)));
-    }
-
-    function renderFilters() {
-      const topics = ["Alle", ...Array.from(new Set(vocabulary.map(v => v.topic)))];
-      const types = ["Alle", "Nomen", "Verb", "Adjektiv", "Sonstiges"];
-      el("topicSelect").innerHTML = topics.map(t => `<option>${escapeHtml(t)}</option>`).join("");
-      el("typeSelect").innerHTML = types.map(t => `<option>${escapeHtml(t)}</option>`).join("");
-    }
-
-    function renderFlashcard() {
-      const pool = filteredVocabulary();
-      if (!pool.length) { el("flashcard").innerHTML = "<p>Keine Karten gefunden.</p>"; return; }
-      const card = pool[state.cardIndex % pool.length];
-      el("flashcard").innerHTML = `
-        <div class="badges"><span class="badge">${escapeHtml(card.type)}</span><span class="badge">${escapeHtml(card.topic)}</span><span class="badge">${escapeHtml(card.level)}</span></div>
-        <button class="primary" id="speakCard">🔊 anhören</button>
-        <div class="big-word">${escapeHtml(card.fr)}</div>
-        ${state.showBack ? `<div class="meaning">${escapeHtml(card.de)}</div>` : ""}
-        <div class="example"><div class="fr">${escapeHtml(card.example)}</div>${state.showBack ? `<div class="de">${escapeHtml(card.exampleDe)}</div>` : ""}</div>
-        <div class="actions">
-          <button class="secondary" id="flipCard">${state.showBack ? "Vorderseite" : "Umdrehen"}</button>
-          <button class="primary" id="nextCard">Nächste Karte</button>
-          <button class="secondary" id="knownCard">Konnte ich ✅</button>
-        </div>`;
-      el("speakCard").onclick = () => speak(card.fr);
-      el("flipCard").onclick = () => { state.showBack = !state.showBack; renderFlashcard(); };
-      el("nextCard").onclick = () => { state.showBack = false; state.cardIndex = (state.cardIndex + 1) % pool.length; renderFlashcard(); };
-      el("knownCard").onclick = () => { addScore(1); state.showBack = false; state.cardIndex = (state.cardIndex + 1) % pool.length; renderFlashcard(); };
-    }
-
-    function renderQuiz() {
-      const q = state.quiz;
-      el("quizCard").innerHTML = `
-        <div class="badges"><span class="badge">${escapeHtml(q.item.type)}</span><span class="badge">${escapeHtml(q.item.topic)}</span></div>
-        <div class="tiny-title" style="margin-top:16px">Was bedeutet?</div>
-        <button class="big-word" style="background:transparent;padding:0;text-align:left" id="speakQuiz">${escapeHtml(q.item.fr)} 🔊</button>
-        <div class="grid grid-2" style="margin-top:26px">
-          ${q.choices.map(c => `<button class="choice" data-choice="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join("")}
-        </div>
-        ${state.quizFeedback ? `<div class="feedback ${state.quizFeedback.good ? "good" : "bad"}">${escapeHtml(state.quizFeedback.text)}</div>` : ""}`;
-      el("speakQuiz").onclick = () => speak(q.item.fr);
-      el("quizCard").querySelectorAll("[data-choice]").forEach(btn => btn.onclick = () => {
-        const ok = btn.dataset.choice === q.item.de;
-        if (ok) { addScore(2); state.streak += 1; } else { state.streak = 0; }
-        state.quizFeedback = { good: ok, text: ok ? "Richtig!" : `Fast: ${q.item.fr} = ${q.item.de}` };
-        state.quiz = makeQuiz(filteredVocabulary().length >= 4 ? filteredVocabulary() : vocabulary);
-        renderScore();
-        renderQuiz();
-      });
-    }
-
-    function renderVerbSelectors() {
-      el("verbSelect").innerHTML = verbs.map((v, i) => `<option value="${i}" ${i === state.verbPick ? "selected" : ""}>${escapeHtml(v.infinitive)} – ${escapeHtml(v.de)}</option>`).join("");
-      const verb = verbs[state.verbPick];
-      el("tenseSelect").innerHTML = Object.entries(verb.tenses).map(([key, val]) => `<option value="${key}" ${key === state.tense ? "selected" : ""}>${escapeHtml(val.label)}</option>`).join("");
-      el("verbReason").textContent = verb.reason;
-      el("verbPattern").textContent = verb.pattern;
-    }
-
-    function renderVerbCard() {
-      const verb = verbs[state.verbPick];
-      const tenseObj = verb.tenses[state.tense] || Object.values(verb.tenses)[0];
-      el("verbCard").innerHTML = `
-        <div style="display:flex;justify-content:space-between;gap:12px;align-items:start;flex-wrap:wrap">
-          <div><div class="tiny-title">${escapeHtml(tenseObj.label)}</div><div class="big-word" style="margin-top:4px">${escapeHtml(verb.infinitive)}</div></div>
-          <button class="primary" id="speakVerbSentence">🔊 Satz</button>
-        </div>
-        <div class="verb-table" style="margin-top:18px">
-          ${tenseObj.forms.map((form, i) => `<button class="conj" data-say="${escapeHtml(form)}"><div class="pronoun">${escapeHtml(pronouns[i])}</div><div class="form">${escapeHtml(form)}</div></button>`).join("")}
-        </div>
-        <div class="tip"><h3>Reise-Fokus</h3><p class="de">Für den Urlaub reichen oft drei Formen besonders gut: <strong>je</strong> für dich, <strong>nous/on</strong> für euch zusammen, <strong>vous</strong> für höfliche Fragen.</p></div>`;
-      el("speakVerbSentence").onclick = () => speak(verb.pattern.split(" / ")[0]);
-      el("verbCard").querySelectorAll("[data-say]").forEach(b => b.onclick = () => speak(b.dataset.say));
-    }
-
-    function renderMission() {
-      const q = miniQuests[state.questIndex];
-      el("missionCard").innerHTML = `
-        <div class="tiny-title">Mini-Mission</div>
-        <h2 style="font-size:2rem;margin-top:8px">${escapeHtml(q.prompt)}</h2>
-        <div style="margin-top:18px">${q.choices.map(c => `<button class="choice" data-mission="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join("")}</div>
-        ${state.questFeedback ? `<div class="feedback ${state.questFeedback.good ? "good" : "bad"}">${escapeHtml(state.questFeedback.text)}</div>` : ""}
-        <button class="primary" id="nextMission">Nächste Mission</button>`;
-      el("missionCard").querySelectorAll("[data-mission]").forEach(btn => btn.onclick = () => {
-        const ok = btn.dataset.mission === q.answer;
-        if (ok) { addScore(3); state.streak += 1; } else { state.streak = 0; }
-        state.questFeedback = { good: ok, text: ok ? "Perfekt – genau das könnt ihr vor Ort sagen." : `Nicht ganz. Besser: ${q.answer}` };
-        speak(btn.dataset.mission);
-        renderScore();
-        renderMission();
-      });
-      el("nextMission").onclick = () => { state.questIndex = (state.questIndex + 1) % miniQuests.length; state.questFeedback = ""; renderMission(); };
-    }
-
-    init();
-  </script>
+init();
+</script>
 </body>
 </html>
